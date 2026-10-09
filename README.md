@@ -6,6 +6,7 @@
 </p>
 
 <p align="center">
+  <a href="https://huytran1120.github.io/ToolCheckMac/"><strong>🌐 Official Website</strong></a> •
   <a href="#english"><strong>English</strong></a> •
   <a href="#tiếng-việt"><strong>Tiếng Việt</strong></a>
 </p>
