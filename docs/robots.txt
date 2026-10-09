@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://huytran1120.github.io/ToolCheckMac/sitemap.xml
