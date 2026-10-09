@@ -814,6 +814,207 @@
       text-decoration: underline;
     }
 
+    /* Hero Trust Strip & Gatekeeper Tip */
+    .hero-trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: -16px;
+      margin-bottom: 20px;
+    }
+
+    .trust-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .gatekeeper-quick-tip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245, 158, 11, 0.08);
+      border: 1px solid rgba(245, 158, 11, 0.25);
+      color: #fbbf24;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      margin-bottom: 32px;
+      max-width: 680px;
+      text-align: left;
+    }
+
+    /* Footer CTA Card */
+    .footer-cta-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.12) 0%, rgba(15, 23, 42, 0.6) 100%);
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      border-radius: 28px;
+      padding: 60px 28px;
+      text-align: center;
+      margin: 60px 0 30px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .footer-cta-card h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: #ffffff;
+    }
+
+    .footer-cta-card p {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+
+    .footer-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .footer-cta-guarantees {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Sticky Bottom Bar CTA */
+    .sticky-cta-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(10, 14, 26, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.5);
+      transform: translateY(110%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 12px 24px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .sticky-cta-bar.visible {
+      transform: translateY(0);
+    }
+
+    .sticky-bar-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .sticky-app-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .sticky-app-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 9px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      flex-shrink: 0;
+    }
+
+    .sticky-text {
+      text-align: left;
+    }
+
+    .sticky-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: #fff;
+    }
+
+    .sticky-tag {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .sticky-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .sticky-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-sticky-download {
+      background: #2563eb;
+      color: #fff;
+      padding: 9px 20px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-sticky-download:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-sticky-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .btn-sticky-close:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     @media (max-width: 860px) {
       .report-showcase-grid {
         grid-template-columns: 1fr;
@@ -830,6 +1031,22 @@
       .download-hub {
         flex-direction: column;
         align-items: stretch;
+      }
+      .sticky-desc {
+        display: none;
+      }
+      .sticky-bar-inner {
+        padding: 4px 0;
+      }
+      .footer-cta-card {
+        padding: 40px 18px;
+      }
+      .footer-cta-actions {
+        flex-direction: column;
+      }
+      .footer-cta-guarantees {
+        flex-direction: column;
+        gap: 8px;
       }
     }
   </style>
@@ -880,6 +1097,19 @@
           <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
           Mã nguồn GitHub
         </a>
+      </div>
+
+      <!-- TRUST STRIP / MICRO-COPY -->
+      <div class="hero-trust-strip">
+        <span class="trust-pill"><span class="trust-icon">🔒</span> 100% Offline • 0 KB gửi mạng</span>
+        <span class="trust-pill"><span class="trust-icon">🛡️</span> Không cần quyền Root / Sudo</span>
+        <span class="trust-pill"><span class="trust-icon">⚡</span> 1.15 MB • Chạy ngay không cần cài đặt</span>
+        <span class="trust-pill"><span class="trust-icon">🍏</span> macOS 14.0+ (M1–M6 & Intel)</span>
+      </div>
+
+      <div class="gatekeeper-quick-tip">
+        <span class="tip-icon">💡</span>
+        <span><strong>Mẹo khởi chạy:</strong> Lần đầu mở trên macOS, chỉ cần <strong>Click chuột phải vào app › chọn Open</strong> là chạy ngay lập tức.</span>
       </div>
 
       <!-- DIRECT DOWNLOAD HUB / VERSION CARD -->
@@ -1185,7 +1415,32 @@
         <div class="faq-card">
           <h4>Tại sao macOS báo "Nhà phát triển chưa được xác minh"?</h4>
           <p>Do đây là phần mềm mã nguồn mở ad-hoc miễn phí, macOS Gatekeeper sẽ hiện cảnh báo an toàn. Bạn chỉ cần <strong>Click chuột phải vào app › chọn Open</strong> là có thể sử dụng bình thường vĩnh viễn.</p>
-        </div>
+      </div>
+    </section>
+
+    <!-- CLOSING FOOTER CTA SECTION (TỐI ƯU CHUYỂN ĐỔI CHỐT HẠ) -->
+    <section class="footer-cta-card">
+      <div class="badge-pill" style="margin-bottom: 16px;">🚀 Thẩm Định Toàn Diện • An Tâm Mua Bán</div>
+      <h2>Đừng Mua MacBook Cũ Nếu Chưa Kiểm Tra Bằng ToolCheckMacBook</h2>
+      <p>
+        Chỉ mất 3 phút với 1 click duy nhất. Bảo vệ bản thân trước nguy cơ mất trắng hàng chục triệu đồng do máy dính MDM công ty, iCloud ẩn hay pin chai kích ảo.
+      </p>
+      <div class="footer-cta-actions">
+        <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" class="btn-primary" style="font-size: 1.1rem; padding: 16px 32px;">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Tải Ngay ToolCheckMacBook-v1.2.0.dmg (1.15 MB)
+        </a>
+        <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.zip" class="btn-secondary">
+          Tải file nén (.zip)
+        </a>
+        <a href="https://github.com/huytran1120/ToolCheckMac" target="_blank" class="btn-secondary">
+          Mã nguồn GitHub ★ Star
+        </a>
+      </div>
+      <div class="footer-cta-guarantees">
+        <span>✓ Hoạt động 100% Offline (Không cần Wi-Fi)</span>
+        <span>✓ Miễn phí & Mã nguồn mở (MIT)</span>
+        <span>✓ Xuất biên bản ảnh PNG Retina 1-click</span>
       </div>
     </section>
   </main>
@@ -1199,5 +1454,59 @@
       100% Offline • Không thu thập dữ liệu • Tải file <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg">ToolCheckMacBook-v1.2.0.dmg</a>.
     </p>
   </footer>
+
+  <!-- STICKY BOTTOM BAR CTA (TỰ ĐỘNG HIỂN THỊ KHI CUỘN) -->
+  <aside id="stickyCtaBar" class="sticky-cta-bar" aria-label="Thanh tải nhanh ứng dụng">
+    <div class="sticky-bar-inner">
+      <div class="sticky-app-info">
+        <img src="assets/app-icon.png" alt="ToolCheckMacBook Icon" class="sticky-app-icon">
+        <div class="sticky-text">
+          <div class="sticky-title">
+            <strong>ToolCheckMacBook v1.2.0</strong>
+            <span class="sticky-tag">Miễn phí • 1.15 MB</span>
+          </div>
+          <div class="sticky-desc">Test Pin IOKit, Màn hình, Bàn phím, SSD & MDM 100% Offline</div>
+        </div>
+      </div>
+      <div class="sticky-actions">
+        <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" class="btn-sticky-download">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Tải Bản .DMG
+        </a>
+        <button id="closeStickyBar" class="btn-sticky-close" type="button" aria-label="Đóng thanh ghim" title="Đóng thanh này">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <script>
+    // Tự động kích hoạt Sticky Bottom Bar khi người dùng cuộn qua Hero
+    (function() {
+      const stickyBar = document.getElementById('stickyCtaBar');
+      const closeBtn = document.getElementById('closeStickyBar');
+      if (!stickyBar) return;
+
+      const isDismissed = sessionStorage.getItem('sticky_cta_dismissed') === 'true';
+
+      if (!isDismissed) {
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 420) {
+            stickyBar.classList.add('visible');
+          } else {
+            stickyBar.classList.remove('visible');
+          }
+        }, { passive: true });
+      }
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+          stickyBar.classList.remove('visible');
+          setTimeout(() => { stickyBar.style.display = 'none'; }, 350);
+          sessionStorage.setItem('sticky_cta_dismissed', 'true');
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
