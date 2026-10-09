@@ -21,3 +21,6 @@ MacCheck-Hardware-Report-*.png
 ToolCheckMacBook-Hardware-Report-*.pdf
 ToolCheckMacBook-Hardware-Report-*.png
 docs/assets/*-raw.png
+
+# AI Agent workspace customizations
+.agents/
