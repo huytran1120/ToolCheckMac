@@ -75,7 +75,7 @@ struct CameraCheckView: View {
 
             if model.permissionDenied {
                 InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-                    text: "Camera permission denied. Please allow MacCheck in \"System Settings › Privacy & Security › Camera\".")
+                    text: "Camera permission denied. Please allow ToolCheckMacBook in \"System Settings › Privacy & Security › Camera\".")
             } else {
                 CameraPreview(session: model.session)
                     .frame(height: 320)

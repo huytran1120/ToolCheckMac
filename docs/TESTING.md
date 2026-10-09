@@ -5,9 +5,9 @@
 ## 发布前基础验证
 
 ```bash
-xcodebuild -project MacCheck.xcodeproj -scheme MacCheck -configuration Release -derivedDataPath build_release CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO
+xcodebuild -project ToolCheckMacBook.xcodeproj -scheme ToolCheckMacBook -configuration Release -derivedDataPath build_release CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO
 ./scripts/build_and_notarize.sh
-hdiutil verify ~/Desktop/MacCheck-1.2.dmg
+hdiutil verify ~/Desktop/ToolCheckMacBook-1.2.dmg
 ```
 
 验证项：
@@ -16,7 +16,7 @@ hdiutil verify ~/Desktop/MacCheck-1.2.dmg
 - 左侧导航所有页面能打开，无明显布局挤压或空白
 - “保存到历史”可以生成历史记录
 - “导出报告”可以导出 PNG 和 PDF
-- DMG 可以挂载，包含 `MacCheck.app` 与 Applications 快捷方式
+- DMG 可以挂载，包含 `ToolCheckMacBook.app` 与 Applications 快捷方式
 
 ## 自动检测项目
 

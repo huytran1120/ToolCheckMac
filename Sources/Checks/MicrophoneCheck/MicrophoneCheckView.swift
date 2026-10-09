@@ -45,7 +45,7 @@ final class MicrophoneCheckModel: ObservableObject {
         permissionDenied = true
         isRunning = false
         statusText = "Microphone permission not granted"
-        errorText = "Please allow MacCheck to access the microphone in System Settings, then reopen this test."
+        errorText = "Please allow ToolCheckMacBook to access the microphone in System Settings, then reopen this test."
     }
 
     func openPrivacySettings() {
@@ -128,7 +128,7 @@ struct MicrophoneCheckView: View {
             if model.permissionDenied {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-                        text: model.errorText ?? "Microphone permission denied. Please allow MacCheck in \"System Settings › Privacy & Security › Microphone\".")
+                        text: model.errorText ?? "Microphone permission denied. Please allow ToolCheckMacBook in \"System Settings › Privacy & Security › Microphone\".")
                     HStack(spacing: DS.Spacing.md) {
                         Button {
                             model.openPrivacySettings()

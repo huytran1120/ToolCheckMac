@@ -15,10 +15,17 @@ struct SavedReport: Codable, Identifiable, Sendable {
 /// 历史记录持久化（无状态）。App 非沙盒，存到 Application Support/MacCheck/history.json。
 enum HistoryStore {
     private static var fileURL: URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("MacCheck", isDirectory: true)
-        try? FileManager.default.createDirectory(at: base, withIntermediateDirectories: true)
-        return base.appendingPathComponent("history.json")
+        let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        let newDir = appSupport.appendingPathComponent("ToolCheckMacBook", isDirectory: true)
+        let oldDir = appSupport.appendingPathComponent("MacCheck", isDirectory: true)
+        let oldFile = oldDir.appendingPathComponent("history.json")
+        let newFile = newDir.appendingPathComponent("history.json")
+
+        try? FileManager.default.createDirectory(at: newDir, withIntermediateDirectories: true)
+        if FileManager.default.fileExists(atPath: oldFile.path) && !FileManager.default.fileExists(atPath: newFile.path) {
+            try? FileManager.default.copyItem(at: oldFile, to: newFile)
+        }
+        return newFile
     }
 
     static func load() -> [SavedReport] {

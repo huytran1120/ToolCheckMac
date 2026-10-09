@@ -30,7 +30,7 @@ final class DiskSpeedCheckModel: ObservableObject {
     }
 
     private func run() async {
-        let path = NSTemporaryDirectory() + "maccheck_speedtest_\(UUID().uuidString).bin"
+        let path = NSTemporaryDirectory() + "toolcheckmacbook_speedtest_\(UUID().uuidString).bin"
         let total = totalBytes, chunk = chunkBytes
 
         // 进度用 AsyncStream 回传，detached 任务不捕获 self（避免 Swift 6 数据竞争）。

@@ -1,6 +1,6 @@
-name: MacCheck
+name: ToolCheckMacBook
 options:
-  bundleIdPrefix: com.berryxia.maccheck
+  bundleIdPrefix: com.berryxia.toolcheckmacbook
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
@@ -15,7 +15,7 @@ settings:
     CODE_SIGN_STYLE: Automatic
 
 targets:
-  MacCheck:
+  ToolCheckMacBook:
     type: application
     platform: macOS
     sources:
@@ -23,7 +23,7 @@ targets:
     info:
       path: Sources/App/Info.plist
       properties:
-        CFBundleDisplayName: MacCheck
+        CFBundleDisplayName: ToolCheckMacBook
         CFBundleShortVersionString: "1.2"
         CFBundleVersion: "3"
         NSCameraUsageDescription: Used for camera testing to verify video clarity and check for sensor defects.
@@ -32,8 +32,8 @@ targets:
         LSApplicationCategoryType: public.app-category.utilities
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.berryxia.maccheck
+        PRODUCT_BUNDLE_IDENTIFIER: com.berryxia.toolcheckmacbook
         INFOPLIST_FILE: Sources/App/Info.plist
         GENERATE_INFOPLIST_FILE: NO
-        CODE_SIGN_ENTITLEMENTS: Sources/App/MacCheck.entitlements
+        CODE_SIGN_ENTITLEMENTS: Sources/App/ToolCheckMacBook.entitlements
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon

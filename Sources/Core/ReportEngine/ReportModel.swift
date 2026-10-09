@@ -58,8 +58,8 @@ struct DeviceProfile: Codable, Sendable {
     var productionDate: String   // Manufacture date estimate or randomized note
 }
 
-/// 完整验机报告。
-struct MacCheckReport: Codable, Sendable {
+/// Complete hardware inspection report.
+struct ToolCheckMacBookReport: Codable, Sendable {
     var generatedAt: Date
     var appVersion: String
     var results: [CheckResult] = []
@@ -86,3 +86,6 @@ struct MacCheckReport: Codable, Sendable {
         results.append(result)
     }
 }
+
+typealias MacCheckReport = ToolCheckMacBookReport
+

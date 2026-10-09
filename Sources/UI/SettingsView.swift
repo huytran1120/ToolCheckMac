@@ -49,7 +49,7 @@ struct SettingsView: View {
                 CheckHeader(
                     icon: "gearshape.fill",
                     title: "Settings",
-                    subtitle: "Adjust MacCheck display preferences. Theme settings are saved locally and applied on next launch."
+                    subtitle: "Adjust ToolCheckMacBook display preferences. Theme settings are saved locally and applied on next launch."
                 )
 
                 Card {

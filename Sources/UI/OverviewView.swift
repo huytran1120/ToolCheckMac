@@ -192,7 +192,7 @@ struct OverviewView: View {
     private var footer: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             DS.Divider()
-            Text("Test Time: \(model.generatedAt.formatted(date: .abbreviated, time: .shortened)) · MacCheck v\(model.report.appVersion)")
+            Text("Test Time: \(model.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(model.report.appVersion)")
             Text("Runs completely locally without network connection or data collection. Results are for reference only and do not constitute a warranty.")
         }
         .font(DS.Font.caption).foregroundStyle(.secondary)

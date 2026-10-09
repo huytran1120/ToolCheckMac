@@ -16,16 +16,16 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-PROJECT="MacCheck.xcodeproj"
-SCHEME="MacCheck"
-APP_NAME="MacCheck"
+PROJECT="ToolCheckMacBook.xcodeproj"
+SCHEME="ToolCheckMacBook"
+APP_NAME="ToolCheckMacBook"
 VERSION="1.2"
 BUILD_DIR="build_release"
 DMG_OUT="$HOME/Desktop/${APP_NAME}-${VERSION}.dmg"
 
 # —— 按需修改：你的 Developer ID 与 notarytool 凭证名 ——
-SIGN_ID="${MACCHECK_SIGN_ID:-Developer ID Application}"   # 留空或未装证书则跳过签名
-NOTARY_PROFILE="${MACCHECK_NOTARY_PROFILE:-maccheck-notary}"
+SIGN_ID="${TOOLCHECKMACBOOK_SIGN_ID:-Developer ID Application}"   # 留空或未装证书则跳过签名
+NOTARY_PROFILE="${TOOLCHECKMACBOOK_NOTARY_PROFILE:-toolcheckmacbook-notary}"
 
 echo "▸ 生成工程"
 command -v xcodegen >/dev/null && xcodegen generate
@@ -55,7 +55,7 @@ STAGE=$(mktemp -d)
 cp -R "$APP" "$STAGE/"
 ln -s /Applications "$STAGE/Applications"
 rm -f "$DMG_OUT"
-hdiutil create -volname "${APP_NAME} 验机宝" -srcfolder "$STAGE" -ov -format UDZO "$DMG_OUT" | tail -1
+hdiutil create -volname "${APP_NAME}" -srcfolder "$STAGE" -ov -format UDZO "$DMG_OUT" | tail -1
 rm -rf "$STAGE"
 
 if [ "$SIGNED" -eq 1 ]; then

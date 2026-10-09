@@ -22,7 +22,7 @@ struct ReportDocumentView: View {
     private var header: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 6) {
-                Text("MacCheck Hardware Report")
+                Text("ToolCheckMacBook Hardware Report")
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.black)
                 Text(profile?.marketingName ?? "")
@@ -86,8 +86,8 @@ struct ReportDocumentView: View {
 
     private var footer: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text("Test Time: \(report.generatedAt.formatted(date: .abbreviated, time: .shortened)) · MacCheck v\(report.appVersion)")
-            Text("This report was generated locally by MacCheck. Fully offline, no data uploaded. For reference only; does not constitute a warranty.")
+            Text("Test Time: \(report.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(report.appVersion)")
+            Text("This report was generated locally by ToolCheckMacBook. Fully offline, no data uploaded. For reference only; does not constitute a warranty.")
         }
         .font(.system(size: 10)).foregroundStyle(.gray)
     }

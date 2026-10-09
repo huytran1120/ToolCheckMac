@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct MacCheckApp: App {
+struct ToolCheckMacBookApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
