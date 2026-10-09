@@ -296,3 +296,4 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 - **ToolCheckMacBook** là công cụ hỗ trợ người dùng tự kiểm tra phần cứng, không thay thế cho kết quả thẩm định kỹ thuật chính thức từ các trung tâm bảo hành ủy quyền của Apple.
 - Một số thông tin phụ thuộc máy chủ Apple (như hạn bảo hành chính hãng AppleCare) cần được kiểm tra trực tiếp trên trang web tra cứu chính thức của Apple.
+# ToolCheckMac
