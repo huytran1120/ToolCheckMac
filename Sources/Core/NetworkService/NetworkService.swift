@@ -1,7 +1,7 @@
 import Foundation
 import CoreWLAN
 
-/// A8/B7-8：无线连接。Wi-Fi 当前连接信息走 CoreWLAN（原生框架），蓝牙控制器状态走 system_profiler。
+/// A8/B7-8: Wireless connectivity. Wi-Fi current connection info via CoreWLAN (native framework), Bluetooth controller status via system_profiler.
 enum NetworkService {
 
     // MARK: - Wi-Fi
@@ -59,7 +59,7 @@ enum NetworkService {
         }
     }
 
-    // MARK: - 蓝牙
+    // MARK: - Bluetooth
 
     private static func bluetoothResult() -> CheckResult {
         let output = ShellRunner.run("/usr/sbin/system_profiler", ["SPBluetoothDataType", "-json"])

@@ -1,11 +1,11 @@
 import Foundation
 
-/// 侧边栏导航项。概览 + 系统自动检测分类 + 硬件交互测试。
+/// Sidebar navigation items. Overview + Automated System Checks + Hardware Interactive Tests.
 enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
     case overview
-    // 系统自动检测
+    // Automated system checks
     case specs, battery, security, storage, network, ports
-    // 硬件交互测试
+    // Hardware interactive tests
     case keyboard, screen, audio, microphone, camera, touchID, trackpad, performance, diskSpeed, portsLive
     case aiModels
     case history
@@ -70,10 +70,10 @@ enum SidebarItem: String, CaseIterable, Identifiable, Hashable {
         }
     }
 
-    /// 需要全屏接管的测试（其余交互测试在详情面板内进行）。
+    /// Tests requiring full-screen takeover (other tests run inside the detail panel).
     var needsFullscreen: Bool { self == .keyboard || self == .screen }
 
-    /// 该分类对应的结果 id（用于聚合状态与详情展示）。
+    /// Corresponding check result IDs for this category (used for status aggregation and detail display).
     var resultIDs: [String] {
         switch self {
         case .overview, .specs: return []
@@ -163,7 +163,7 @@ final class AppModel: ObservableObject {
         item.resultIDs.compactMap { result(id: $0) }
     }
 
-    /// 分类聚合状态：取该分类下最严重的一项；无结果返回 nil（交互测试尚未进行）。
+    /// Category aggregate status: takes the most severe status in this category; returns nil if no results (interactive test not performed).
     func status(for item: SidebarItem) -> CheckStatus? {
         let statuses = results(for: item).map(\.status)
         guard !statuses.isEmpty else { return nil }
@@ -181,7 +181,7 @@ final class AppModel: ObservableObject {
         return ordered
     }
 
-    // MARK: - 历史记录
+    // MARK: - History
 
     func currentBatteryCycles() -> Int? {
         (autoResults["battery.cycleCount"]?.rawDetails["Cycle Count"]

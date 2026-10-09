@@ -1,8 +1,8 @@
-# MacCheck 测试清单
+# ToolCheckMacBook Verification & Testing Checklist
 
-本文档用于发布前自测和门店验机流程复核。自动检测可以通过构建和 App 启动完成，交互测试需要真实 Mac 硬件配合。
+This document is for pre-release verification and store inspection procedures. Automated system checks can be validated via build and launch; interactive tests require physical Mac hardware.
 
-## 发布前基础验证
+## Pre-Release Verification
 
 ```bash
 xcodebuild -project ToolCheckMacBook.xcodeproj -scheme ToolCheckMacBook -configuration Release -derivedDataPath build_release CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO
@@ -10,43 +10,41 @@ xcodebuild -project ToolCheckMacBook.xcodeproj -scheme ToolCheckMacBook -configu
 hdiutil verify ~/Desktop/ToolCheckMacBook-1.2.dmg
 ```
 
-验证项：
+Verification items:
 
-- App 能正常启动，首页自动扫描结束
-- 左侧导航所有页面能打开，无明显布局挤压或空白
-- “保存到历史”可以生成历史记录
-- “导出报告”可以导出 PNG 和 PDF
-- DMG 可以挂载，包含 `ToolCheckMacBook.app` 与 Applications 快捷方式
+- App launches successfully and finishes initial background scan
+- All sidebar pages navigate without clipping, layout overlap, or blank views
+- "Save to History" produces a valid snapshot entry
+- "Export Report" produces valid PNG and PDF files
+- DMG mounts cleanly with `ToolCheckMacBook.app` and Applications symlink
 
-## 自动检测项目
+## Automated Detection Modules
 
-| 模块 | 期望结果 |
+| Module | Expected Behavior |
 | --- | --- |
-| 硬件规格 | 显示机型、序列号、芯片、内存、架构、macOS 版本 |
-| 电池 | 笔记本显示循环次数与健康信息，台式机显示不适用或无数据 |
-| 安全与锁定 | 显示安全芯片、MDM、Apple ID / 激活锁相关提示 |
-| 存储 | 显示容量、可用空间、SMART 或磁盘状态 |
-| 网络 | 显示 Wi-Fi / 蓝牙状态 |
-| 接口 | 显示检测到的 USB / Thunderbolt 控制器或设备 |
-| AI 大模型 | 根据内存给出本地模型可跑性建议 |
+| Hardware Specifications | Displays marketing name, serial number, chip, memory, architecture, macOS version |
+| Battery | Shows cycle count and health percentage on laptops; shows N/A or no data on desktops |
+| Security & Lock | Shows Security Chip tier, MDM enrollment, Apple ID / Activation Lock warnings |
+| Storage | Displays capacity, free space, NVMe SMART status, and TBW |
+| Network | Displays Wi-Fi and Bluetooth controller status and PHY modes |
+| Ports | Displays detected physical USB / Thunderbolt controllers and connected devices |
+| AI Models | Recommends local LLM capability based on Unified Memory |
 
-## 交互测试项目
+## Interactive Hardware Tests
 
-| 模块 | 操作 | 通过标准 |
+| Module | Operation | Acceptance Criteria |
 | --- | --- | --- |
-| 键盘 | 进入全屏，逐个按下实体按键 | 按下按键高亮，无失灵、连击、卡键 |
-| 屏幕 | 切换纯色、灰阶、棋盘格画面 | 无明显坏点、亮点、漏光、色带 |
-| 扬声器 / 耳机 | 播放测试音 | 左右声道与耳机输出正常 |
-| 麦克风 | 授权后录音或观察电平 | 有稳定输入，无异常底噪 |
-| 摄像头 | 授权后查看预览 | 画面清晰，无遮挡、坏点、闪烁 |
-| Touch ID | 按页面提示确认 | 可用或明确显示不支持 |
-| 触控板 | 点击、滑动、手势测试 | 点击、移动、滚动响应正常 |
-| 性能压测 | 开始短时压力测试 | 无异常卡死或温度/性能红旗 |
-| 硬盘测速 | 开始读写采样 | 读写结果可显示，未出现异常失败 |
-| 接口逐口实测 | 插拔外设并记录 | 目标接口均可识别外设 |
+| Keyboard | Fullscreen test, press keys individually | Keys light up upon press; no unresponsive, stuck, or ghosting keys |
+| Display | Cycle through pure black, white, RGB, gradients | No dead pixels, stuck subpixels, severe backlight bleed, or banding |
+| Speaker / Headphones | Play test audio sweeps | Left and right channels output distinctly |
+| Microphone | Speak into microphone after granting permission | RMS VU meter reacts with stable input and no abnormal floor noise |
+| Camera | View live preview after granting permission | Image is crisp, unobstructed, with no sensor artifacts |
+| Touch ID | Confirm biometric prompt | Sensor authenticates successfully or reports unsupported on models without Touch ID |
+| Trackpad | Click, drag, swipe, gestures | Cursor follows smoothly; multi-finger gestures and Force Touch pressure register |
+| Performance Stress | Run multi-core load | No crashes; thermal state transitions cleanly (`Nominal` / `Fair` / etc.) |
+| Disk Speed Test | Run read/write benchmark | Direct I/O throughput (MB/s) reports without errors |
+| Port Live Check | Plug in / unplug USB devices | Each physical port detects device insertion and removal events |
 
-## 隐私与截图
+## Privacy & Screenshots
 
-真实截图和报告通常包含序列号、设备名称、系统版本等信息。发布到 GitHub、官网或社交平台前，请先脱敏。
-
-本仓库 `docs/assets` 中的图片为真机测试截图，已对序列号等敏感信息做打码处理。
+Actual screenshots and reports contain serial numbers, device names, and system details. Before posting publicly, ensure all sensitive data is redacted.

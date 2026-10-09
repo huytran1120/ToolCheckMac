@@ -1,8 +1,8 @@
 import SwiftUI
 import Foundation
 
-/// B12：性能压力测试。多核满载计算若干秒，监测热状态（ProcessInfo.thermalState 公开 API，
-/// 无需 SMC 私有 key），识别散热异常/降频。给出相对吞吐评分。
+/// Performance stress test: Runs multi-core load for several seconds and monitors thermal state.
+/// Measures throughput and identifies thermal throttling issues.
 @MainActor
 final class PerformanceCheckModel: ObservableObject {
     @Published var isRunning = false
@@ -12,11 +12,11 @@ final class PerformanceCheckModel: ObservableObject {
     @Published var thermalSamples: [ProcessInfo.ThermalState] = []
     @Published var finished = false
 
-    // SMC 精确温度/风扇
+    // SMC exact temperature and fan speeds
     @Published var currentReading: SMCReading?
     @Published var peakTemp: Double?
     @Published var peakRPM: Double?
-    @Published var idleReading: SMCReading?   // 压测前的静置读数，用于对比升温
+    @Published var idleReading: SMCReading?   // Baseline readings prior to test
 
     private let durationSeconds = 15
     private var task: Task<Void, Never>?
@@ -49,12 +49,12 @@ final class PerformanceCheckModel: ObservableObject {
     private func run() async {
         let cores = coreCount
         let total = durationSeconds
-        // 记录静置基线温度
+        // Record idle baseline temperature
         idleReading = await Task.detached { SMCService.snapshot() }.value
 
         for second in 1...total {
             if Task.isCancelled { break }
-            // 每秒并发跑满所有核心一小段计算，测吞吐
+            // Run multi-core load each second to measure throughput
             let start = DispatchTime.now()
             let ops = await withTaskGroup(of: Double.self) { group -> Double in
                 for _ in 0..<cores {
@@ -70,7 +70,7 @@ final class PerformanceCheckModel: ObservableObject {
             self.opsPerSecond = dt > 0 ? opsCount / dt : 0
             self.thermalSamples.append(ProcessInfo.processInfo.thermalState)
 
-            // 采集 SMC 温度/转速（后台读，避免阻塞）
+            // Sample SMC temperature and fan speeds in background
             let reading = await Task.detached { SMCService.snapshot() }.value
             if let reading {
                 self.currentReading = reading
@@ -85,7 +85,7 @@ final class PerformanceCheckModel: ObservableObject {
         finished = !Task.isCancelled
     }
 
-    /// 纯计算负载（nonisolated，跑在后台线程）。返回一个依赖结果的值防止被优化掉。
+    /// Pure compute workload executed on background thread.
     nonisolated static func busyCompute(iterations: Int) -> Double {
         var acc = 0.0
         var x = 1.000001
@@ -212,7 +212,7 @@ struct PerformanceCheckView: View {
             }
             ProgressView(value: model.progress)
 
-            // SMC 精确温度 / 风扇
+            // SMC temperature / fan
             if model.smcAvailable {
                 DS.Divider()
                 HStack(spacing: DS.Spacing.xl) {

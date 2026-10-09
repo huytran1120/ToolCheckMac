@@ -1,6 +1,6 @@
 import Foundation
 
-/// 一次验机快照。除完整报告外，额外冗余几个可比对的关键指标，便于历史对比直接取用。
+/// A single test snapshot. Stores key comparison metrics alongside the full report for quick historical diffing.
 struct SavedReport: Codable, Identifiable, Sendable {
     var id: UUID
     var savedAt: Date
@@ -12,7 +12,7 @@ struct SavedReport: Codable, Identifiable, Sendable {
     var report: MacCheckReport
 }
 
-/// 历史记录持久化（无状态）。App 非沙盒，存到 Application Support/MacCheck/history.json。
+/// History persistence (stateless). Stored in Application Support/ToolCheckMacBook/history.json.
 enum HistoryStore {
     private static var fileURL: URL {
         let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]

@@ -1,7 +1,7 @@
 import Foundation
 import IOKit
 
-/// SMC 读数快照：精确温度（°C）与风扇转速（RPM）。
+/// SMC readings snapshot: exact temperature (°C) and fan speed (RPM).
 struct SMCReading: Sendable {
     var cpuTemp: Double?
     var gpuTemp: Double?
@@ -13,12 +13,11 @@ struct SMCReading: Sendable {
     }
 }
 
-/// 通过 AppleSMC 读取温度与风扇。
-/// 结构体用扁平字段 + 显式 padding 逐字节对齐内核 SMCKeyData_t（80 字节），
-/// 嵌套结构体会因对齐规则少 4 字节导致调用失败——这是最易踩的坑。
+/// Reads temperature and fan speeds via AppleSMC.
+/// Flat struct with explicit byte padding aligned to kernel SMCKeyData_t (80 bytes).
 enum SMCService {
 
-    // 80 字节，已在 Apple Silicon(M1 Pro) 上验证读到真实温度/转速
+    // 80 bytes struct aligned for Apple Silicon & Intel SMC
     private struct Param {
         var key: UInt32 = 0
         var versMajor: UInt8 = 0
@@ -48,7 +47,7 @@ enum SMCService {
                      UInt8(0),UInt8(0),UInt8(0),UInt8(0),UInt8(0),UInt8(0),UInt8(0),UInt8(0))
     }
 
-    // P 核心 / GPU / 电池温度候选键（Apple Silicon，读取存在的取最大）
+    // P-Core / GPU / Battery candidate temperature keys
     private static let cpuKeys = ["Tp01","Tp05","Tp09","Tp0D","Tp0T","Tp0X","Tp0b","Tp0f","Tp0j","Tp0n"]
     private static let gpuKeys = ["Tg05","Tg0D","Tg0L","Tg0T"]
     private static let batteryKeys = ["TB1T","TB2T","TB0T"]
@@ -106,7 +105,7 @@ enum SMCService {
         keys.compactMap { number(conn, $0) }.filter { $0 > 5 && $0 < 130 }.max()
     }
 
-    /// 读一次完整快照（打开→读→关闭）。nonisolated，可在任意线程调用；耗时亚毫秒级。
+    /// Reads a complete snapshot (open -> read -> close). Sub-millisecond execution.
     static func snapshot() -> SMCReading? {
         guard let conn = openConnection() else { return nil }
         defer { IOServiceClose(conn) }
@@ -119,7 +118,7 @@ enum SMCService {
                 if let rpm = number(conn, "F\(i)Ac"), rpm >= 0 { reading.fanRPMs.append(rpm) }
             }
         }
-        // 台式机/无风扇机型也能返回温度，fanRPMs 为空即可
+        // Desktops and fanless Macs return temperatures with empty fanRPMs
         if reading.cpuTemp == nil && reading.gpuTemp == nil && reading.fanRPMs.isEmpty {
             return nil
         }

@@ -1,11 +1,12 @@
 import Foundation
 import IOKit
 
-/// A1：机器身份信息。所有字段走 IOKit/sysctl 底层读取，不依赖「关于本机」这类可被替换的上层展示。
-/// 序列号额外用 system_profiler 交叉核对（5.5 防篡改原则）。
+/// A1: Machine identity information. All fields read via low-level IOKit/sysctl,
+/// independent of surface-level displays like "About This Mac" which can be spoofed.
+/// Serial numbers are cross-checked with system_profiler (anti-tamper principle).
 enum HardwareProbe {
 
-    // MARK: - IOKit 读取
+    // MARK: - IOKit Read
 
     static func ioPlatformSerialNumber() -> String {
         let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
@@ -27,7 +28,7 @@ enum HardwareProbe {
         return (cfValue.takeRetainedValue() as? String) ?? ""
     }
 
-    // MARK: - sysctl 读取
+    // MARK: - sysctl Read
 
     static func sysctlString(_ name: String) -> String {
         var size = 0
@@ -56,7 +57,7 @@ enum HardwareProbe {
         sysctlString("hw.model")
     }
 
-    // MARK: - system_profiler 交叉核对
+    // MARK: - system_profiler Cross-Check
 
     static func systemProfilerHardwareJSON() -> [String: Any] {
         let output = ShellRunner.run("/usr/sbin/system_profiler", ["SPHardwareDataType", "-json"])
@@ -68,7 +69,7 @@ enum HardwareProbe {
         return first
     }
 
-    // MARK: - 芯片 / 系统版本
+    // MARK: - Chipset / OS Version
 
     static func chipString() -> String {
         let sp = systemProfilerHardwareJSON()
@@ -86,7 +87,7 @@ enum HardwareProbe {
         return s
     }
 
-    /// 首页头部用的结构化机器档案（打开即展示，无需用户操作）。
+    /// Structured machine profile displayed in the header (loaded immediately on launch without user action).
     static func buildProfile() -> DeviceProfile {
         let sp = systemProfilerHardwareJSON()
         let identifier = modelIdentifier()
@@ -107,7 +108,7 @@ enum HardwareProbe {
         )
     }
 
-    /// 从营销名里提取 4 位年份，如 "MacBook Pro（14 英寸，2021）" → "2021"。
+    /// Extracts 4-digit model year from marketing name, e.g. "MacBook Pro (14-inch, 2021)" -> "2021".
     private static func modelYear(from marketingName: String) -> String {
         if let range = marketingName.range(of: #"20\d{2}"#, options: .regularExpression) {
             return String(marketingName[range])
@@ -115,7 +116,7 @@ enum HardwareProbe {
         return ""
     }
 
-    // MARK: - 汇总检测
+    // MARK: - Aggregate Checks
 
     static func runAll() -> [CheckResult] {
         var results: [CheckResult] = []

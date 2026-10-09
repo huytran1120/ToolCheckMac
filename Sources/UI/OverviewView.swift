@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 概览页：打开即见。机器档案头部 + 综合评分 + 红旗区 + 各分类状态一览（可点击跳转）。
+/// Overview page: Displayed on launch. Device profile header + overall score + red flags + category overview (clickable navigation).
 struct OverviewView: View {
     @EnvironmentObject private var model: AppModel
 
@@ -44,7 +44,7 @@ struct OverviewView: View {
         }
     }
 
-    // MARK: - 机器档案头部
+    // MARK: - Device Profile Header
 
     private var deviceHeader: some View {
         Card {
@@ -75,7 +75,7 @@ struct OverviewView: View {
         }
     }
 
-    /// 统一的元信息小胶囊，避免旧版三个 Label 直接换行挤在一起。
+    /// Unified metadata capsule chip.
     private func metaChip(icon: String, text: String) -> some View {
         HStack(spacing: 4) {
             Image(systemName: icon).font(.system(size: 10))
@@ -111,7 +111,7 @@ struct OverviewView: View {
         return "macbook"
     }
 
-    // MARK: - 红旗区
+    // MARK: - Red Flag Section
 
     private var redFlagSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
@@ -132,7 +132,7 @@ struct OverviewView: View {
         }
     }
 
-    // MARK: - 分类状态一览
+    // MARK: - Category Status Overview
 
     private var categorySummary: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
@@ -187,7 +187,7 @@ struct OverviewView: View {
         .buttonStyle(.plain)
     }
 
-    // MARK: - 底部
+    // MARK: - Footer
 
     private var footer: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {

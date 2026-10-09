@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// B9：触控板测试。跟手轨迹绘制 + 多指手势识别 + Force Touch 压感检测。
+/// Trackpad test: Tracking trail drawing + multi-finger gestures + Force Touch pressure detection.
 @MainActor
 final class TrackpadCheckModel: ObservableObject {
     @Published var trail: [CGPoint] = []
@@ -32,7 +32,7 @@ final class TrackpadCheckModel: ObservableObject {
     }
 }
 
-/// 用 NSView 捕获触控板压力与手势事件（SwiftUI 手势拿不到 pressure 与精确 magnify/rotate）。
+/// Uses NSView to capture trackpad pressure and gesture events.
 private struct TrackpadCapture: NSViewRepresentable {
     @ObservedObject var model: TrackpadCheckModel
 
@@ -65,7 +65,7 @@ private struct TrackpadCapture: NSViewRepresentable {
         override func rotate(with event: NSEvent) { model?.note(gesture: "rotate") }
         override func swipe(with event: NSEvent) { model?.note(gesture: "swipe") }
         override func scrollWheel(with event: NSEvent) {
-            // 双指滚动也算一种确认（很多触控板问题表现为滚动失灵）
+            // Two-finger scroll also counts as gesture verification
             model?.note(gesture: "swipe")
         }
     }
@@ -130,7 +130,7 @@ struct TrackpadCheckView: View {
             if model.trail.isEmpty {
                 Text("Move finger in this area").font(DS.Font.body).foregroundStyle(.tertiary)
             }
-            // 压力可视化圆环
+            // Pressure visualization ring
             if model.pressure > 0 {
                 Circle().stroke(Color.orange, lineWidth: 3)
                     .frame(width: 30 + model.pressure * 60, height: 30 + model.pressure * 60)

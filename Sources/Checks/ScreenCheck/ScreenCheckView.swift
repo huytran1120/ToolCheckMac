@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 屏幕坏点/色带/残影测试：全屏轮播纯色与图案，点按或空格切换，随时可标记异常。
+/// Display test: Fullscreen test patterns with pure colors and gradients. Click or press Space to advance.
 struct ScreenCheckView: View {
     @StateObject private var model = ScreenCheckModel()
     @FocusState private var isFocused: Bool

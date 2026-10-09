@@ -1,8 +1,8 @@
 import AppKit
 import Combine
 
-/// 键盘测试状态机。用局部事件监听（不是全局 Accessibility 监听）——
-/// 全屏测试窗口本身是 key window 时就能收到按键事件，无需辅助功能权限。
+/// Keyboard test state machine. Uses local event monitoring rather than global accessibility hooks.
+/// The fullscreen test window receives key events directly as the key window without requiring Accessibility permissions.
 @MainActor
 final class KeyboardTestModel: ObservableObject {
     @Published private(set) var testedKeyCodes: Set<UInt16> = []
@@ -33,11 +33,11 @@ final class KeyboardTestModel: ObservableObject {
     func start() {
         guard monitor == nil else { return }
         monitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .keyUp, .flagsChanged]) { [weak self] event in
-            // 放行任何带 Command 的组合键（Cmd+Q 退出、Cmd+Tab 切换、Cmd+. 取消等），
-            // 保证全屏测试期间用户始终能安全退出，不会被吞键卡住。
+            // Allow Command shortcuts through (Cmd+Q to quit, Cmd+Tab to switch, Cmd+. to cancel)
+            // Ensuring the user can safely exit fullscreen at any time.
             if event.modifierFlags.contains(.command) { return event }
             self?.handle(event)
-            return nil // 其余按键吞掉：不发出提示音、不误触其他控件
+            return nil // Consume other keys: prevent beep sounds and accidental control clicks
         }
         stuckCheckTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             Task { @MainActor in self?.checkForStuckKeys() }
@@ -74,7 +74,7 @@ final class KeyboardTestModel: ObservableObject {
             stuckKeyCodes.remove(code)
 
         case .flagsChanged:
-            // 修饰键没有干净的 down/up 配对，用"是否已按下"做翻转判断。
+            // Modifier keys do not have clean down/up pairs; toggle based on whether already recorded as pressed.
             testedKeyCodes.insert(code)
             if pressedKeyCodes.contains(code) {
                 pressedKeyCodes.remove(code)
@@ -97,7 +97,7 @@ final class KeyboardTestModel: ObservableObject {
         }
     }
 
-    /// 生成本项检测结果：完全测过且无卡键 → pass；有卡键 → warning；未测完就退出 → 按已测覆盖率降级。
+    /// Evaluates test result: all tested and no stuck keys -> pass; stuck keys -> warning; exited early -> evaluate coverage.
     func buildResult() -> CheckResult {
         var details: [String: String] = [
             "Keys Tested": "\(testedKeyCodes.count) / \(totalKeyCount)",

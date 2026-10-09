@@ -1,7 +1,7 @@
 import SwiftUI
 import LocalAuthentication
 
-/// B10：Touch ID 测试。调起一次生物识别认证，验证指纹传感器工作正常。
+/// Touch ID test: Invokes biometric authentication to verify fingerprint sensor functionality.
 struct TouchIDCheckView: View {
     let onComplete: (CheckResult) -> Void
     @State private var statusText = "Click the button below to verify with an enrolled fingerprint."

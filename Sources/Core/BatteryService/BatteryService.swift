@@ -1,8 +1,8 @@
 import Foundation
 import IOKit
 
-/// A2：电池健康。循环次数/容量走 IORegistry `AppleSmartBattery`，
-/// 并用 `ioreg` 命令行输出做第二来源交叉核对（5.5 防篡改：两条独立路径读同一数据，不一致就标红）。
+/// A2: Battery health. Cycle count and capacity via IORegistry `AppleSmartBattery`,
+/// with `ioreg` CLI output as a secondary cross-check source (anti-tamper principle: two independent paths, flag if mismatch).
 enum BatteryService {
 
     private static func openBatteryService() -> io_service_t {
@@ -22,7 +22,7 @@ enum BatteryService {
         return props
     }
 
-    /// 第二来源：直接解析 `ioreg` 命令行文本输出中的 CycleCount，走的是另一条独立的数据管道。
+    /// Secondary source: directly parse CycleCount from `ioreg` CLI text output through an independent pipeline.
     private static func ioregCycleCount() -> Int? {
         let output = ShellRunner.run("/usr/sbin/ioreg", ["-rd1", "-c", "AppleSmartBattery"])
         guard let range = output.range(of: "\"CycleCount\" = ") else { return nil }
@@ -76,7 +76,7 @@ enum BatteryService {
             details["Charger Wattage"] = "\(watts)W"
         }
 
-        // 循环次数交叉核对
+        // Cycle count cross-check
         if let ioregCount = ioregCycleCount(), ioregCount != cycleCount {
             results.append(CheckResult(
                 id: "battery.cycleCount.crosscheck",
@@ -88,7 +88,7 @@ enum BatteryService {
             ))
         }
 
-        // 循环次数本体判断（大白话换算：iPhone/Mac 电池设计寿命常见参考线在 1000 次左右）
+        // Cycle count evaluation (common baseline: iPhone/Mac battery design life ~1000 cycles)
         let cycleStatus: CheckStatus = cycleCount > 1000 ? .warning : .pass
         let usageHint: String
         switch cycleCount {
@@ -106,7 +106,7 @@ enum BatteryService {
             rawDetails: details
         ))
 
-        // 电池健康度
+        // Battery health
         if let health {
             let healthStatus: CheckStatus = health >= 80 ? .pass : (health >= 60 ? .warning : .redFlag)
             let headline: String? = health < 60

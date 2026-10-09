@@ -1,10 +1,10 @@
 import SwiftUI
 import AVFoundation
 
-/// B3：扬声器/耳机口测试。分别播放左右声道扫频音，用户确认左右是否都正常。
+/// Speaker / Headphones test: Plays sweep tones on left and right channels separately.
 @MainActor
 final class AudioCheckModel: ObservableObject {
-    @Published var playingChannel: Int? = nil   // 0 = 左, 1 = 右, nil = 停止
+    @Published var playingChannel: Int? = nil   // 0 = Left, 1 = Right, nil = Stopped
 
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()

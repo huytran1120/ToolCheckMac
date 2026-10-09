@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 侧边栏：概览 + 系统检测 + 硬件测试三段分组，每行显示 SF Symbol 与状态圆点。
+/// Sidebar: Overview + System Checks + Hardware Tests sections, displaying SF Symbols and status dots per row.
 struct SidebarView: View {
     @EnvironmentObject private var model: AppModel
 

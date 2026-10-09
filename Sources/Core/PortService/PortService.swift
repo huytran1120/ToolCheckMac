@@ -1,13 +1,13 @@
 import Foundation
 
-/// B5：接口枚举。列出当前通过 USB / 雷雳(Thunderbolt) 接口连接的设备，帮助用户逐口验证接口连通性。
-/// 说明：这是"当前接了什么"的快照。要完整验证每个物理口，用户需依次插拔，配合首页的实时提示。
+/// Port enumeration: Lists devices currently connected via USB / Thunderbolt.
+/// Note: Provides a snapshot of currently connected devices.
 enum PortService {
 
     private static func flatten(_ items: [[String: Any]], into names: inout [String]) {
         for item in items {
             if let name = item["_name"] as? String {
-                // 过滤掉纯 Hub/控制器根节点噪声，保留具名设备
+                // Filter out bare hubs/controllers, keep named peripherals
                 names.append(name)
             }
             if let children = item["_items"] as? [[String: Any]] {
@@ -37,7 +37,7 @@ enum PortService {
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
               let roots = json["SPThunderboltDataType"] as? [[String: Any]]
         else { return [] }
-        // 雷雳总线本身会作为根节点出现，只统计挂在总线下的外接设备
+        // Thunderbolt bus appears as root; count external connected devices
         var names: [String] = []
         for root in roots {
             if let children = root["_items"] as? [[String: Any]] {

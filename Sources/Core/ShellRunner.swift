@@ -1,7 +1,7 @@
 import Foundation
 
-/// 统一的本地命令执行封装。app 不联网，这是唯一的外部交互面，
-/// 所有调用方都应把输出当作"不可信输入"处理（解析失败要降级而不是崩溃）。
+/// Unified local command execution wrapper. The app is strictly offline; this is the sole external interaction surface.
+/// All callers should treat command output as untrusted input (handle parsing failures gracefully without crashing).
 enum ShellRunner {
     static func run(_ launchPath: String, _ arguments: [String]) -> String {
         let process = Process()

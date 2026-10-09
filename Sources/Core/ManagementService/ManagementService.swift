@@ -1,10 +1,10 @@
 import Foundation
 
-/// A7：监管与锁定检测——二手交易里最容易被忽视、后果最重的一类问题。
-/// 命中任意一项即产生红旗，因为这些问题"重装系统也解决不了"。
+/// Management and device lock checks: Detects MDM, Apple ID, and Activation Lock issues.
+/// Any critical finding triggers a red flag, as system reinstall will not bypass these restrictions.
 enum ManagementService {
 
-    // MARK: - MDM 监管
+    // MARK: - MDM Enrollment
 
     private struct MDMEnrollmentStatus {
         var enrolledViaDEP: Bool?
@@ -30,7 +30,7 @@ enum ManagementService {
 
     private static func installedConfigurationProfilesSummary() -> (count: Int?, rawOutput: String) {
         let output = ShellRunner.run("/usr/bin/profiles", ["list", "-all"])
-        // 无管理员权限时该命令通常直接报错或输出为空，如实降级而不是伪造结果。
+        // Without root privileges, this command may return empty or permission error; handle gracefully.
         let profileLines = output.components(separatedBy: "\n").filter { $0.contains("profileIdentifier") }
         if output.isEmpty || output.lowercased().contains("you need to run this tool as root") {
             return (nil, output)
@@ -38,21 +38,21 @@ enum ManagementService {
         return (profileLines.count, output)
     }
 
-    // MARK: - Apple ID / 查找我的 Mac
+    // MARK: - Apple ID / Find My Mac
 
     private static func isICloudAccountSignedIn() -> Bool {
         let output = ShellRunner.run("/usr/bin/defaults", ["read", "MobileMeAccounts", "Accounts"])
         return !output.isEmpty && output.contains("AccountID")
     }
 
-    // MARK: - 激活锁
+    // MARK: - Activation Lock
 
     private static func activationLockStatus() -> String {
         let sp = HardwareProbe.systemProfilerHardwareJSON()
         return (sp["activation_lock_status"] as? String) ?? ""
     }
 
-    // MARK: - 汇总检测
+    // MARK: - Summary Inspection
 
     static func runAll() -> [CheckResult] {
         var results: [CheckResult] = []
@@ -119,7 +119,7 @@ enum ManagementService {
                 : nil
         ))
 
-        // 激活锁
+        // Activation Lock
         let lockStatus = activationLockStatus()
         let isLocked = lockStatus.lowercased().contains("enabled")
         if !lockStatus.isEmpty {

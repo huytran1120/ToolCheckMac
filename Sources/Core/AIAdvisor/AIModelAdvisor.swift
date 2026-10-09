@@ -1,11 +1,11 @@
 import Foundation
 
-/// 单个大模型的可跑性判定。
+/// Runnability evaluation for an individual AI model.
 enum AIVerdict: String, Sendable {
-    case smooth   // 流畅
-    case runnable // 可跑
-    case tight    // 勉强
-    case no       // 不建议
+    case smooth   // Runs Smoothly
+    case runnable // Runnable
+    case tight    // Barely Runnable
+    case no       // Not Recommended
 
     var label: String {
         switch self {
@@ -28,27 +28,27 @@ enum AIVerdict: String, Sendable {
 struct AIModelSuggestion: Identifiable, Sendable {
     let id = UUID()
     let name: String
-    let params: Double        // 十亿参数
-    let footprintGB: Double    // Q4 量化 + 少量上下文的显存/内存占用估算
+    let params: Double        // Billion parameters (B)
+    let footprintGB: Double    // Estimated VRAM/RAM footprint for Q4 quantization + small context
     let verdict: AIVerdict
 }
 
-/// 本地大模型可跑性顾问。
-/// 判定逻辑核心是**内存**：Apple Silicon 统一内存，GPU/ANE 可共享大部分内存做推理，
-/// 内存是决定"能不能跑多大模型"的第一约束。这里给的是保守估算，供参考。
+/// Local AI Model Runnability Advisor.
+/// The core evaluation factor is **Memory**: Apple Silicon unified memory allows GPU/ANE to share most RAM for inference.
+/// RAM is the primary constraint determining model size capability. Conservative estimates are provided for reference.
 enum AIModelAdvisor {
 
-    /// 留给系统 + App + KV cache 后，可分给模型权重的内存预算（GB）。
+    /// Memory budget (GB) allocated for model weights after reserving for system, apps, and KV cache.
     static func budgetGB(ramGB: Double) -> Double {
         max(2, ramGB - 8)
     }
 
-    /// Q4_K_M 量化经验值：约 0.55 GB / 十亿参数，再加 ~1.5GB 上下文与运行时开销。
+    /// Empirical footprint for Q4_K_M quantization: ~0.55 GB per billion parameters, plus ~1.5 GB for context and runtime overhead.
     static func footprintGB(params: Double) -> Double {
         params * 0.55 + 1.5
     }
 
-    /// 主流开源模型目录（2026，覆盖从小到大的常见档位）。
+    /// Popular open-source models directory (covering various parameter size tiers).
     static let catalog: [(name: String, params: Double)] = [
         ("Llama 3.2 3B", 3),
         ("Gemma 3 4B", 4),
@@ -79,14 +79,14 @@ enum AIModelAdvisor {
         }
     }
 
-    /// 推荐的"甜点档"：能流畅或可跑里参数最大的那个。
+    /// Recommended sweet spot: largest parameter model that can run smoothly or acceptably.
     static func sweetSpot(ramGB: Double) -> AIModelSuggestion? {
         suggestions(ramGB: ramGB)
             .filter { $0.verdict.rank >= AIVerdict.runnable.rank }
             .max { $0.params < $1.params }
     }
 
-    /// 权威参考站点，供用户自行深入对比。
+    /// Authoritative reference sites for further exploration and comparison.
     static let references: [(title: String, subtitle: String, url: String)] = [
         ("Ollama Model Library", "Run locally with a single command, easiest to get started", "https://ollama.com/library"),
         ("LM Studio", "Desktop GUI client for local LLMs", "https://lmstudio.ai"),

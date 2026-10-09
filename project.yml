@@ -1,6 +1,6 @@
 name: ToolCheckMacBook
 options:
-  bundleIdPrefix: com.berryxia.toolcheckmacbook
+  bundleIdPrefix: com.toolcheckmacbook
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
@@ -32,7 +32,7 @@ targets:
         LSApplicationCategoryType: public.app-category.utilities
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.berryxia.toolcheckmacbook
+        PRODUCT_BUNDLE_IDENTIFIER: com.toolcheckmacbook
         INFOPLIST_FILE: Sources/App/Info.plist
         GENERATE_INFOPLIST_FILE: NO
         CODE_SIGN_ENTITLEMENTS: Sources/App/ToolCheckMacBook.entitlements

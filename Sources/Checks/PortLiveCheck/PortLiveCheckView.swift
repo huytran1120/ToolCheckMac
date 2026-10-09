@@ -2,8 +2,8 @@ import SwiftUI
 import IOKit
 import IOKit.usb
 
-/// B5+：接口逐口实测。定时枚举 USB 设备并与上一帧差分，实时输出插入/拔出事件与速率，
-/// 引导用户依次插入每个物理接口逐口验证。用轮询差分而非 C 回调桥接（避开 Swift 6 并发陷阱）。
+/// Live Port Testing: Periodically enumerates USB devices and computes diffs with previous frames,
+/// reporting real-time plug/unplug events and negotiated speeds.
 @MainActor
 final class PortLiveMonitor: ObservableObject {
     struct Event: Identifiable {
@@ -25,7 +25,7 @@ final class PortLiveMonitor: ObservableObject {
     func start() {
         guard timer == nil else { return }
         isMonitoring = true
-        // 先建立基线（当前已连接的设备不算"新插入"）
+        // Establish baseline (devices connected at launch don't count as new insertions)
         previous = Set(Self.enumerate().map(\.key))
         startedBaseline = true
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
@@ -62,17 +62,17 @@ final class PortLiveMonitor: ObservableObject {
         currentDevices = now.map { "\($0.name) · \($0.speed)" }
     }
 
-    /// 事件数（插入）——用于统计验证了多少次接入。
+    /// Number of insertion events.
     var insertCount: Int { events.filter(\.inserted).count }
 
-    // MARK: - IOKit 枚举
+    // MARK: - IOKit Enumeration
 
     private struct Dev { let key: String; let name: String; let speed: String }
 
     private static func enumerate() -> [Dev] {
         var result: [Dev] = []
         var iterator: io_iterator_t = 0
-        // 现代 macOS 用 IOUSBHostDevice
+        // Modern macOS uses IOUSBHostDevice
         guard let matching = IOServiceMatching("IOUSBHostDevice") else { return [] }
         guard IOServiceGetMatchingServices(kIOMainPortDefault, matching, &iterator) == KERN_SUCCESS else { return [] }
         defer { IOObjectRelease(iterator) }
@@ -89,7 +89,7 @@ final class PortLiveMonitor: ObservableObject {
             guard let name, !name.isEmpty else { continue }
             let speed = speedLabel(intProp(service, "Device Speed"))
             let locationID = intProp(service, "locationID") ?? 0
-            // key 用 名称+locationID 保证不同口的同名设备也能区分
+            // Combine name + locationID to differentiate identical devices on different ports
             result.append(Dev(key: "\(name)|\(locationID)", name: name, speed: speed))
         }
         return result

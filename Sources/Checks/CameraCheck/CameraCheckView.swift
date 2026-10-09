@@ -1,7 +1,7 @@
 import SwiftUI
 import AVFoundation
 
-/// B6：摄像头测试。打开预览画面，用户确认画面清晰、无坏点/色斑。
+/// Camera test: Opens live preview for the user to confirm clarity and check for defects.
 @MainActor
 final class CameraCheckModel: ObservableObject {
     @Published var permissionDenied = false
@@ -43,7 +43,7 @@ final class CameraCheckModel: ObservableObject {
     }
 }
 
-/// AVCaptureVideoPreviewLayer 的 SwiftUI 包装。
+/// SwiftUI wrapper around AVCaptureVideoPreviewLayer.
 struct CameraPreview: NSViewRepresentable {
     let session: AVCaptureSession
 

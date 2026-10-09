@@ -2,7 +2,7 @@ import SwiftUI
 import AVFoundation
 import AppKit
 
-/// B4：麦克风测试。实时显示输入电平，用户对着麦克风说话看电平是否跳动。
+/// Microphone test: Displays live input level to verify responsiveness when speaking into the mic.
 @MainActor
 final class MicrophoneCheckModel: ObservableObject {
     @Published var level: Double = 0        // 0...1
@@ -89,7 +89,7 @@ final class MicrophoneCheckModel: ObservableObject {
         }
     }
 
-    /// 纯函数、无隔离：在音频线程安全地算 RMS 电平。
+    /// Pure function without isolation: Safely calculates RMS level on the audio thread.
     nonisolated private static func level(from buffer: AVAudioPCMBuffer) -> Double {
         guard let channel = buffer.floatChannelData?[0] else { return 0 }
         let frames = Int(buffer.frameLength)

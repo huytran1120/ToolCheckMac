@@ -1,6 +1,6 @@
 import Foundation
 
-/// A3：存储/固态硬盘检测。读取 SSD 型号、容量、SMART 健康状态、TRIM，以及剩余可用空间。
+/// A3: Storage / SSD check. Reads SSD model, capacity, SMART health status, TRIM, and available space.
 enum StorageService {
 
     private static func nvmeDrives() -> [[String: Any]] {
@@ -52,7 +52,7 @@ enum StorageService {
             details["Available Space"] = gb(free)
         }
 
-        // SMART "Verified" = 正常；其它值（如 Failing）→ 红旗
+        // SMART "Verified" = Normal; other values (e.g. Failing) -> Red Flag
         let smartOK = smart.lowercased() == "verified"
         if !smart.isEmpty && !smartOK {
             return [CheckResult(

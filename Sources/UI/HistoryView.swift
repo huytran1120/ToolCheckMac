@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 历史记录：保存过的验机快照列表 + 与本机当前状态的对比（重点看电池衰减）。
+/// History: list of saved test snapshots + comparison with current device status (focusing on battery degradation).
 struct HistoryView: View {
     @EnvironmentObject private var model: AppModel
 
@@ -60,14 +60,14 @@ struct HistoryView: View {
 
             DS.Divider()
 
-            // 快照本身的关键指标
+            // Key metrics of the snapshot itself
             HStack(spacing: DS.Spacing.xl) {
                 metric("Battery Cycles", s.batteryCycles.map { "\($0) cycles" } ?? "—")
                 metric("Battery Health", s.batteryHealth ?? "—")
                 Spacer()
             }
 
-            // 与当前对比
+            // Comparison with current state
             if let comparison = comparisonRows(s), !comparison.isEmpty {
                 DS.Divider()
                 Text("Comparison with Current State").font(DS.Font.section).tracking(0.6).foregroundStyle(.secondary)
@@ -98,18 +98,18 @@ struct HistoryView: View {
         let deltaTint: Color
     }
 
-    /// 只对当前是同一台机器（序列号一致）时做对比。
+    /// Compare only if current machine matches the snapshot (matching serial numbers).
     private func comparisonRows(_ s: SavedReport) -> [Row]? {
         guard let profile = model.profile, profile.serialNumber == s.serial else { return nil }
         var rows: [Row] = []
 
-        // 评分
+        // Score
         let scoreDelta = model.report.score - s.score
         rows.append(Row(label: "Overall Score", then: "\(s.score)", now: "\(model.report.score)",
                         delta: scoreDelta == 0 ? nil : (scoreDelta > 0 ? "+\(scoreDelta)" : "\(scoreDelta)"),
                         deltaTint: scoreDelta >= 0 ? .green : .orange))
 
-        // 电池循环（次数只会增加，涨得多说明用得多）
+        // Battery cycles (cycles only increase; large jumps indicate heavy usage)
         if let then = s.batteryCycles, let now = model.currentBatteryCycles() {
             let d = now - then
             rows.append(Row(label: "Battery Cycles", then: "\(then) cycles", now: "\(now) cycles",
@@ -117,7 +117,7 @@ struct HistoryView: View {
                             deltaTint: d > 0 ? .orange : .secondary))
         }
 
-        // 电池健康
+        // Battery health
         if let then = s.batteryHealth, let now = model.currentBatteryHealth() {
             let tp = Int(then.replacingOccurrences(of: "%", with: "")) ?? 0
             let np = Int(now.replacingOccurrences(of: "%", with: "")) ?? 0

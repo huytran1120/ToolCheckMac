@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// 设计系统 —— 遵循 Apple HIG 与 Jony Ive 的克制美学：
-/// 中性底色为主、语义色克制使用、清晰的字号层级、一致的圆角与留白。
-/// 全局统一入口 `DS`，避免各视图各写各的魔法数字。
+/// Design System — following Apple HIG and clean minimalist aesthetics:
+/// Neutral background tones, restrained semantic colors, clear typographic hierarchy, consistent corner radius and whitespace.
+/// Single global entry point `DS` to eliminate magic numbers across views.
 enum DS {
 
     enum Spacing {
@@ -22,7 +22,7 @@ enum DS {
     enum Font {
         static let largeTitle = SwiftUI.Font.system(size: 26, weight: .bold)
         static let title = SwiftUI.Font.system(size: 19, weight: .semibold)
-        static let section = SwiftUI.Font.system(size: 12, weight: .semibold)   // 分区小标题（全大写间距）
+        static let section = SwiftUI.Font.system(size: 12, weight: .semibold)   // Section subtitle (all-caps tracked)
         static let body = SwiftUI.Font.system(size: 13)
         static let bodyEmphasis = SwiftUI.Font.system(size: 13, weight: .semibold)
         static let caption = SwiftUI.Font.system(size: 11)
@@ -36,13 +36,13 @@ enum DS {
         static let secondaryText = SwiftUI.Color.secondary
     }
 
-    /// 细分隔线（Ive 风格常用发丝级分隔而非粗线）。
+    /// Hairline divider.
     static func Divider() -> some View {
         Rectangle().fill(Color.hairline).frame(height: 1)
     }
 }
 
-// MARK: - 状态语义（统一用 SF Symbol + 语义色，不用 emoji，更专业）
+// MARK: - Status Semantics (unified SF Symbols + semantic colors)
 
 extension CheckStatus {
     var symbolName: String {
@@ -75,9 +75,9 @@ extension CheckStatus {
     }
 }
 
-// MARK: - 复用组件
+// MARK: - Reusable Components
 
-/// 状态圆点徽章（侧边栏、卡片右上角用）。
+/// Status dot badge (for sidebar and card top-right).
 struct StatusDot: View {
     let status: CheckStatus
     var body: some View {
@@ -87,7 +87,7 @@ struct StatusDot: View {
     }
 }
 
-/// 交互测试详情页顶部标题块。
+/// Header block for interactive test detail pages.
 struct CheckHeader: View {
     let icon: String
     let title: String
@@ -107,7 +107,7 @@ struct CheckHeader: View {
     }
 }
 
-/// 行内提示条（权限被拒、需注意等）。
+/// Inline notice banner (permission denied, warnings, etc.).
 struct InlineNotice: View {
     let icon: String
     let tint: Color
@@ -124,7 +124,7 @@ struct InlineNotice: View {
     }
 }
 
-/// 分区小标题（全大写字距，Ive/HIG 常见的分组标签样式）。
+/// Section subtitle (all-caps tracked).
 struct SectionLabel: View {
     let text: String
     var body: some View {
@@ -135,7 +135,7 @@ struct SectionLabel: View {
     }
 }
 
-/// 键值信息行。
+/// Key-value information row.
 struct InfoRow: View {
     let key: String
     let value: String
@@ -152,8 +152,7 @@ struct InfoRow: View {
 }
 
 extension View {
-    /// 交互测试页统一容器：套 ScrollView（自动避开标题栏、内容过高可滚动）+ 居中 + 标题。
-    /// 解决交互页不在 ScrollView 里时内容顶到标题栏下方被遮挡的问题。
+    /// Container for interactive test pages: embeds in ScrollView (centered + titled).
     func checkPane(_ title: String) -> some View {
         ScrollView {
             self
@@ -164,7 +163,7 @@ extension View {
     }
 }
 
-/// 统一卡片容器。
+/// Unified card container.
 struct Card<Content: View>: View {
     @ViewBuilder let content: Content
     var body: some View {

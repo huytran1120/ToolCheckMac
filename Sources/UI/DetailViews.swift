@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// 详情面板路由：概览 / 硬件规格 / 各检测分类 / 交互测试。
+/// Detail panel routing: Overview / Hardware Specs / System Categories / Interactive Tests.
 struct DetailRouter: View {
     @EnvironmentObject private var model: AppModel
 
@@ -47,7 +47,7 @@ struct DetailRouter: View {
     }
 }
 
-// MARK: - 硬件规格（基础信息 · 系统 · 购买与保修）
+// MARK: - Hardware Specifications (Basic Info · System · Purchase & Warranty)
 
 struct SpecsView: View {
     @EnvironmentObject private var model: AppModel
@@ -70,7 +70,7 @@ struct SpecsView: View {
         .navigationTitle("Hardware Specifications")
     }
 
-    // 基础信息
+    // Basic Information
     private func basicInfoCard(_ p: DeviceProfile) -> some View {
         Card {
             cardHeader(icon: "laptopcomputer", title: "Basic Information")
@@ -85,7 +85,7 @@ struct SpecsView: View {
         }
     }
 
-    // 系统
+    // System
     private func systemCard(_ p: DeviceProfile) -> some View {
         Card {
             cardHeader(icon: "gearshape", title: "System")
@@ -95,7 +95,7 @@ struct SpecsView: View {
         }
     }
 
-    // 购买与保修
+    // Purchase & Warranty
     private func warrantyCard(_ p: DeviceProfile) -> some View {
         let lock = model.result(id: "management.activationLock")
         return Card {
@@ -153,7 +153,7 @@ struct SpecsView: View {
     }
 }
 
-/// 优雅的键值列表：图标 + 名称在左，值在右，行间发丝分隔。
+/// Clean key-value list: icon + key on the left, value on the right, hairline dividers between rows.
 struct KeyValueList<Content: View>: View {
     @ViewBuilder let content: Content
     var body: some View {
@@ -205,7 +205,7 @@ struct KVRow: View {
     }
 }
 
-// MARK: - 通用分类详情（电池 / 安全 / 存储 / 网络 / 接口）
+// MARK: - General Category Detail (Battery / Security / Storage / Network / Ports)
 
 struct CategoryDetailView: View {
     @EnvironmentObject private var model: AppModel
@@ -268,7 +268,7 @@ struct CategoryDetailView: View {
     }
 }
 
-/// 小型状态药丸标签。
+/// Compact status pill badge.
 struct StatusPill: View {
     let status: CheckStatus
     var body: some View {
@@ -281,7 +281,7 @@ struct StatusPill: View {
     }
 }
 
-// MARK: - 全屏测试启动面板（键盘 / 屏幕）
+// MARK: - Fullscreen Test Launch Pane (Keyboard / Display)
 
 struct FullscreenLaunchPane: View {
     @EnvironmentObject private var model: AppModel

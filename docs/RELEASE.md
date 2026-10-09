@@ -1,33 +1,33 @@
-# 发布说明
+# Release Notes & Distribution Guide
 
-## 版本号
+## Versioning
 
-当前版本号在 `Sources/App/Info.plist` 中维护：
+The version number is maintained in `Sources/App/Info.plist`:
 
-- `CFBundleShortVersionString`: 对外版本号，例如 `1.0`
-- `CFBundleVersion`: 构建号，例如 `1`
+- `CFBundleShortVersionString`: User-facing version string, e.g. `1.2`
+- `CFBundleVersion`: Internal build number, e.g. `3`
 
-发布前请同步更新 `scripts/build_and_notarize.sh` 中的 `VERSION`。
+Prior to tagging a release, make sure `VERSION` in `scripts/build_and_notarize.sh` matches.
 
-## 本地打包
+## Local Packaging
 
 ```bash
 ./scripts/build_and_notarize.sh
 ```
 
-输出文件：
+Output:
 
 ```text
 ~/Desktop/ToolCheckMacBook-1.2.dmg
 ```
 
-## 签名和公证
+## Signing & Notarization
 
-如需正式分发，需要：
+For public distribution, you need:
 
-1. Apple Developer 账号
-2. 钥匙串中安装 `Developer ID Application` 证书
-3. 保存 notarytool 凭证
+1. A paid Apple Developer account
+2. `Developer ID Application` certificate installed in Keychain
+3. Saved `notarytool` credentials profile:
 
 ```bash
 xcrun notarytool store-credentials "toolcheckmacbook-notary" \
@@ -36,7 +36,7 @@ xcrun notarytool store-credentials "toolcheckmacbook-notary" \
   --password "APP_SPECIFIC_PASSWORD"
 ```
 
-可选环境变量：
+Optional environment variables:
 
 ```bash
 export TOOLCHECKMACBOOK_SIGN_ID="Developer ID Application: Your Name (TEAMID)"
@@ -51,25 +51,22 @@ gh release create v1.2 ~/Desktop/ToolCheckMacBook-1.2.dmg \
   --notes "First release: Local Mac hardware check, interactive tests, report export."
 ```
 
-## 发布后检查
+## Post-Release Verification
 
-- Release 页面能看到 DMG 附件
-- 下载 DMG 后 `hdiutil verify` 通过
-- App 可以启动并完成首页扫描
-- README 中的安装和使用说明仍然准确
+- The DMG artifact is visible on the GitHub Release page
+- `hdiutil verify ~/Desktop/ToolCheckMacBook-1.2.dmg` passes
+- The app launches and completes initial system inspection
+- Instructions in README remain accurate
 
-## 用户安装疑难排查
+## Gatekeeper Troubleshooting
 
-如果用户首次打开 ad-hoc 或未公证版本时被 macOS Gatekeeper 拦截，优先建议右键点击 `ToolCheckMacBook.app`，选择“打开”。
-
-如需在系统设置中显示“任何来源”选项，可在终端执行：
-
-```bash
-sudo spctl --master-disable
-```
-
-如果提示 App“已损坏，无法打开”，可在确认 App 来源可信、且 App 已放入 `/Applications` 后执行：
-
-```bash
-sudo xattr -rd com.apple.quarantine /Applications/ToolCheckMacBook.app
-```
+If macOS Gatekeeper blocks opening an ad-hoc or unnotarized build:
+1. Right-click `ToolCheckMacBook.app` in Finder and select **Open**.
+2. To allow apps from Anywhere in System Settings:
+   ```bash
+   sudo spctl --master-disable
+   ```
+3. If macOS says the app is "damaged and can't be opened":
+   ```bash
+   sudo xattr -rd com.apple.quarantine /Applications/ToolCheckMacBook.app
+   ```

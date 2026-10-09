@@ -472,7 +472,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.berryxia.toolcheckmacbook;
+				PRODUCT_BUNDLE_IDENTIFIER = com.toolcheckmacbook;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -556,7 +556,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.berryxia.toolcheckmacbook;
+				PRODUCT_BUNDLE_IDENTIFIER = com.toolcheckmacbook;
 				SDKROOT = macosx;
 			};
 			name = Release;

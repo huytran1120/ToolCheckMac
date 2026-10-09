@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// AI 大模型可跑性建议：按本机内存评估能本地跑哪些主流大模型。
+/// AI Model Feasibility Advisor: evaluates which mainstream models can be run locally based on device memory.
 struct AIModelsView: View {
     @EnvironmentObject private var model: AppModel
 

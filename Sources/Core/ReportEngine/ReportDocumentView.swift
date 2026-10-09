@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 用于导出（PNG 长图 / PDF）的报告版式。固定宽度、自包含、不依赖交互，便于 ImageRenderer 渲染。
+/// Layout designed for export (long PNG / PDF). Fixed width, self-contained, non-interactive, suitable for ImageRenderer.
 struct ReportDocumentView: View {
     let profile: DeviceProfile?
     let report: MacCheckReport
@@ -94,7 +94,7 @@ struct ReportDocumentView: View {
 }
 
 extension CheckStatus {
-    /// 导出图里用文字符号（避免依赖 SF Symbol 渲染差异）。
+    /// Uses text emojis in exported reports (avoids rendering inconsistencies with SF Symbols across environments).
     var exportGlyph: String {
         switch self {
         case .pass: return "✅"
