@@ -1,0 +1,79 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Package macOS App
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build Application (Release)
+        run: |
+          xcodebuild -project ToolCheckMacBook.xcodeproj \
+            -scheme ToolCheckMacBook \
+            -configuration Release \
+            -derivedDataPath build_release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
+            build
+
+      - name: Package DMG and ZIP
+        run: |
+          mkdir -p artifacts
+          APP="build_release/Build/Products/Release/ToolCheckMacBook.app"
+          
+          # Determine version name
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VER="${GITHUB_REF_NAME}"
+          else
+            VER="v1.2.0"
+          fi
+          
+          echo "Packaging for version: ${VER}"
+
+          # Create DMG with /Applications symlink
+          STAGE=$(mktemp -d)
+          cp -R "$APP" "$STAGE/"
+          ln -s /Applications "$STAGE/Applications"
+          hdiutil create -volname "ToolCheckMacBook" -srcfolder "$STAGE" -ov -format UDZO "artifacts/ToolCheckMacBook-${VER}.dmg"
+          rm -rf "$STAGE"
+
+          # Create ZIP
+          (cd build_release/Build/Products/Release && zip -r -y "../../../../artifacts/ToolCheckMacBook-${VER}.zip" ToolCheckMacBook.app)
+
+          echo "Generated artifacts:"
+          ls -lh artifacts/
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToolCheckMacBook-Build-${{ github.ref_name }}
+          path: artifacts/*
+
+      - name: Create or Update GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

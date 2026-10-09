@@ -157,6 +157,12 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 ---
 
+### 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
 <br>
 <hr>
 <br>
@@ -296,4 +302,9 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 - **ToolCheckMacBook** là công cụ hỗ trợ người dùng tự kiểm tra phần cứng, không thay thế cho kết quả thẩm định kỹ thuật chính thức từ các trung tâm bảo hành ủy quyền của Apple.
 - Một số thông tin phụ thuộc máy chủ Apple (như hạn bảo hành chính hãng AppleCare) cần được kiểm tra trực tiếp trên trang web tra cứu chính thức của Apple.
-# ToolCheckMac
+
+---
+
+### 📄 Giấy phép (License)
+
+Dự án được phân phối theo giấy phép mã nguồn mở **MIT License** - xem chi tiết tại file [LICENSE](LICENSE).
