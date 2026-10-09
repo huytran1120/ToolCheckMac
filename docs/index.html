@@ -7,8 +7,8 @@
   <!-- SEO Primary Meta Tags -->
   <title>ToolCheckMacBook — Phần Mềm Test MacBook Cũ & Kiểm Tra Phần Cứng Toàn Diện</title>
   <meta name="title" content="ToolCheckMacBook — Phần Mềm Test MacBook Cũ & Kiểm Tra Phần Cứng Toàn Diện">
-  <meta name="description" content="Công cụ kiểm tra phần cứng MacBook & Mac chạy macOS 100% offline. Test chu kỳ pin, sức khỏe SSD SMART, phát hiện MDM công ty, iCloud ẩn, bàn phím, màn hình, camera, loa và xuất báo cáo thẩm định.">
-  <meta name="keywords" content="kiểm tra macbook, test macbook cũ, phần mềm test macbook, kiểm tra pin macbook, check mdm macbook, icloud ẩn macbook, test màn hình macbook, test bàn phím macbook, tool check macbook, thẩm định macbook, macbook cũ, apple silicon">
+  <meta name="description" content="Công cụ kiểm tra phần cứng MacBook chạy macOS 100% offline. Tải ToolCheckMacBook-v1.2.0.dmg kiểm tra pin, SSD SMART, MDM công ty, iCloud ẩn, bàn phím, màn hình và xuất báo cáo thẩm định.">
+  <meta name="keywords" content="ToolCheckMacBook, ToolCheckMacBook-v1.2.0.dmg, test macbook cũ, kiểm tra macbook, phần mềm test macbook, kiểm tra pin macbook, check mdm macbook, icloud ẩn macbook, test màn hình macbook, test bàn phím macbook, macbook cũ, apple silicon">
   <meta name="author" content="huytran1120">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://huytran1120.github.io/ToolCheckMac/">
@@ -17,7 +17,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://huytran1120.github.io/ToolCheckMac/">
   <meta property="og:title" content="ToolCheckMacBook — Phần Mềm Test MacBook Cũ & Kiểm Tra Phần Cứng Toàn Diện">
-  <meta property="og:description" content="Công cụ kiểm tra phần cứng MacBook & Mac chạy macOS 100% offline. Test chu kỳ pin, sức khỏe SSD SMART, phát hiện MDM công ty, iCloud ẩn, bàn phím, màn hình, camera, loa và xuất báo cáo thẩm định.">
+  <meta property="og:description" content="Tải ToolCheckMacBook-v1.2.0.dmg miễn phí. Kiểm tra pin, SSD SMART, MDM công ty, iCloud ẩn, bàn phím, màn hình và xuất báo cáo thẩm định máy 100% offline.">
   <meta property="og:image" content="https://huytran1120.github.io/ToolCheckMac/assets/overview-demo.png">
   <meta property="og:locale" content="vi_VN">
   <meta property="og:site_name" content="ToolCheckMacBook">
@@ -26,7 +26,7 @@
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://huytran1120.github.io/ToolCheckMac/">
   <meta property="twitter:title" content="ToolCheckMacBook — Phần Mềm Test MacBook Cũ & Kiểm Tra Phần Cứng Toàn Diện">
-  <meta property="twitter:description" content="Công cụ kiểm tra phần cứng MacBook & Mac chạy macOS 100% offline. Test chu kỳ pin, sức khỏe SSD SMART, phát hiện MDM công ty, iCloud ẩn, bàn phím, màn hình, camera, loa và xuất báo cáo thẩm định.">
+  <meta property="twitter:description" content="Tải ToolCheckMacBook-v1.2.0.dmg miễn phí. Kiểm tra pin, SSD SMART, MDM công ty, iCloud ẩn, bàn phím, màn hình và xuất báo cáo thẩm định máy 100% offline.">
   <meta property="twitter:image" content="https://huytran1120.github.io/ToolCheckMac/assets/overview-demo.png">
 
   <!-- Favicon -->
@@ -39,8 +39,10 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "ToolCheckMacBook",
-    "operatingSystem": "macOS 14.0 or later",
+    "softwareVersion": "v1.2.0",
+    "operatingSystem": "macOS 14.0 or later (Apple Silicon & Intel)",
     "applicationCategory": "UtilitiesApplication",
+    "fileSize": "1.15MB",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -62,7 +64,7 @@
       --bg: #090a0f;
       --card-bg: rgba(255, 255, 255, 0.04);
       --card-border: rgba(255, 255, 255, 0.08);
-      --card-hover: rgba(255, 255, 255, 0.07);
+      --card-hover: rgba(255, 255, 255, 0.08);
       --text: #f3f4f6;
       --text-muted: #9ca3af;
       --primary: #2563eb;
@@ -180,7 +182,7 @@
     /* Hero */
     .hero {
       text-align: center;
-      padding: 40px 0 50px;
+      padding: 40px 0 30px;
     }
 
     .badge-pill {
@@ -221,7 +223,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 16px;
-      margin-bottom: 50px;
+      margin-bottom: 30px;
     }
 
     .btn-primary {
@@ -265,6 +267,89 @@
       border-color: rgba(255, 255, 255, 0.18);
     }
 
+    /* Version / Download Hub Card */
+    .download-hub {
+      max-width: 820px;
+      margin: 0 auto 50px;
+      background: linear-gradient(180deg, rgba(37, 99, 235, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 16px;
+      padding: 20px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .download-hub-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .download-hub-tag {
+      font-size: 0.85rem;
+      color: #60a5fa;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .download-hub-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .download-hub-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .download-hub-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-hub-dmg {
+      background: #2563eb;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-hub-dmg:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-hub-zip {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid var(--card-border);
+    }
+
+    .btn-hub-zip:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
     .preview-wrapper {
       max-width: 980px;
       margin: 0 auto 80px;
@@ -300,8 +385,115 @@
     .section-title p {
       color: var(--text-muted);
       font-size: 1.05rem;
-      max-width: 680px;
+      max-width: 720px;
       margin: 0 auto;
+    }
+
+    /* Workflow 5 Steps */
+    .workflow-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 32px;
+    }
+
+    .workflow-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .workflow-card:hover {
+      background: var(--card-hover);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+    }
+
+    .step-badge {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(37, 99, 235, 0.2);
+      color: #93c5fd;
+      margin-bottom: 14px;
+    }
+
+    .workflow-card h3 {
+      font-size: 1.18rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .workflow-card p {
+      color: var(--text-muted);
+      font-size: 0.93rem;
+      line-height: 1.6;
+    }
+
+    /* Score Decision Matrix */
+    .decision-matrix {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 90px;
+    }
+
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .matrix-card {
+      border-radius: 14px;
+      padding: 22px;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .matrix-card.green {
+      border-color: rgba(16, 185, 129, 0.35);
+      background: rgba(16, 185, 129, 0.06);
+    }
+
+    .matrix-card.orange {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.06);
+    }
+
+    .matrix-card.red {
+      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.06);
+    }
+
+    .matrix-score {
+      font-size: 1.8rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .matrix-card.green .matrix-score { color: var(--accent-green); }
+    .matrix-card.orange .matrix-score { color: var(--accent-orange); }
+    .matrix-card.red .matrix-score { color: var(--accent-red); }
+
+    .matrix-card h4 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .matrix-card p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.55;
     }
 
     /* Danger / Red flag alert banner */
@@ -325,7 +517,7 @@
 
     .danger-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 16px;
       margin-top: 20px;
     }
@@ -519,6 +711,10 @@
       .nav-links {
         display: none;
       }
+      .download-hub {
+        flex-direction: column;
+        align-items: stretch;
+      }
     }
   </style>
 </head>
@@ -532,14 +728,15 @@
         ToolCheckMacBook
       </a>
       <nav class="nav-links">
+        <a href="#quy-trinh">Quy trình test chuẩn</a>
         <a href="#tinh-nang">Tính năng</a>
-        <a href="#chan-doan">Chẩn đoán phần cứng</a>
-        <a href="#huong-dan">Cài đặt</a>
+        <a href="#chan-doan">10 bài test</a>
+        <a href="#thang-diem">Thang điểm</a>
         <a href="#faq">Hỏi đáp</a>
         <a href="https://github.com/huytran1120/ToolCheckMac" target="_blank">GitHub</a>
       </nav>
       <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" class="btn-header">
-        Tải bản .DMG
+        Tải bản .DMG (v1.2.0)
       </a>
     </div>
   </header>
@@ -548,16 +745,17 @@
     <!-- HERO SECTION -->
     <section class="hero">
       <div class="badge-pill">
-        🍏 Hỗ trợ macOS 14.0+ • Universal Native (Apple Silicon M1-M6 & Intel)
+        🍏 Phiên bản mới nhất: v1.2.0 • Hỗ trợ Apple Silicon (M1-M6) & Intel • macOS 14.0+
       </div>
-      <h1>Phần Mềm Test MacBook Cũ & Kiểm Tra Phần Cứng Toàn Diện</h1>
+      <h1>Phần Mềm Test MacBook Cũ & Thẩm Định Phần Cứng Chuẩn Startup</h1>
       <p>
-        Công cụ chẩn đoán phần cứng chuyên sâu cho người mua MacBook cũ, cửa hàng bán lẻ và kỹ thuật viên. Đọc thông số phần cứng từ nhân IOKit, phát hiện MDM, iCloud ẩn, kiểm tra pin, SSD và xuất báo cáo thẩm định — <strong>hoạt động 100% offline, bảo mật tuyệt đối</strong>.
+        Công cụ chẩn đoán chuyên sâu dành cho người mua MacBook cũ, chuỗi cửa hàng bán lẻ và thợ sửa chữa. Tự động đọc dữ liệu từ nhân IOKit, phát hiện máy dính MDM, iCloud ẩn, kiểm tra pin, SSD SMART và xuất báo cáo thẩm định chuyên nghiệp — <strong>hoạt động 100% offline, không thu thập dữ liệu</strong>.
       </p>
+
       <div class="hero-actions">
         <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" class="btn-primary">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          Tải Miễn Phí (.dmg) v1.2.0
+          Tải ToolCheckMacBook-v1.2.0.dmg (1.15 MB)
         </a>
         <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.zip" class="btn-secondary">
           Tải file nén (.zip)
@@ -568,12 +766,102 @@
         </a>
       </div>
 
+      <!-- DIRECT DOWNLOAD HUB / VERSION CARD -->
+      <div class="download-hub">
+        <div class="download-hub-info">
+          <div class="download-hub-tag">
+            <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+            Phiên bản chính thức: v1.2.0 (Latest Release)
+          </div>
+          <div class="download-hub-name">ToolCheckMacBook-v1.2.0.dmg</div>
+          <div class="download-hub-meta">
+            Dung lượng: <strong>1.15 MB</strong> • Định dạng: <strong>Apple Disk Image (DMG)</strong> • Tương thích: <strong>macOS 14.0+ (Sonoma, Sequoia)</strong>
+          </div>
+        </div>
+        <div class="download-hub-buttons">
+          <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" class="btn-hub-dmg">
+            Tải trực tiếp (.dmg)
+          </a>
+          <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.zip" class="btn-hub-zip">
+            File .zip (0.73 MB)
+          </a>
+        </div>
+      </div>
+
       <div class="preview-wrapper">
         <img src="assets/overview-demo.png" alt="Giao diện tổng quan phần mềm kiểm tra MacBook ToolCheckMacBook" width="1024" height="576">
       </div>
     </section>
 
-    <!-- RỦI RO THƯỜNG GẶP KHI MUA MACBOOK CŨ -->
+    <!-- QUY TRÌNH SỬ DỤNG CHUẨN STARTUP (5 BƯỚC THẨM ĐỊNH) -->
+    <section id="quy-trinh">
+      <div class="section-title">
+        <h2>Quy Trình Kiểm Tra & Thẩm Định Chuẩn 5 Bước</h2>
+        <p>Quy trình kiểm tra khép kín như kỹ thuật viên Apple Care, giúp bạn tránh 100% rủi ro khi mua máy đã qua sử dụng:</p>
+      </div>
+
+      <div class="workflow-grid">
+        <div class="workflow-card">
+          <span class="step-badge">Bước 1 • 30 Giây</span>
+          <h3>Tải Về & Khởi Chạy Nhanh</h3>
+          <p>Tải file <code>ToolCheckMacBook-v1.2.0.dmg</code> (hoặc copy từ USB). Kéo vào thư mục Applications. Khi mở lần đầu, nhấp <strong>Chuột phải › Open</strong> để vượt qua kiểm tra Gatekeeper của macOS.</p>
+        </div>
+
+        <div class="workflow-card">
+          <span class="step-badge">Bước 2 • Tức Thì</span>
+          <h3>Xem Điểm Số & Cảnh Báo Đỏ</h3>
+          <p>Ứng dụng tự động quét ngay khi mở. Nhìn ngay vùng <strong>Critical Issues</strong> (Cảnh báo đỏ): kiểm tra máy có dính hồ sơ MDM công ty không, Activation Lock có đang bật ngầm không, số Serial IOKit có khớp với hệ thống không.</p>
+        </div>
+
+        <div class="workflow-card">
+          <span class="step-badge">Bước 3 • 2 Phút</span>
+          <h3>Thực Hiện 10 Bài Test Vật Lý</h3>
+          <p>Chuyển qua mục <strong>Hardware Tests</strong>: bấm phím trên bàn phím ảo toàn màn hình để tìm phím liệt, quét màn hình đổi màu để soi điểm chết/ám ố, kiểm tra loa stereo trái/phải, mic, webcam, Touch ID và Trackpad Force Touch.</p>
+        </div>
+
+        <div class="workflow-card">
+          <span class="step-badge">Bước 4 • 1 Phút</span>
+          <h3>Đo Tốc Độ SSD & Ép Tải CPU</h3>
+          <p>Chạy bài <strong>Disk Speed Test</strong> để kiểm tra tốc độ đọc/ghi SSD thực tế bỏ qua bộ đệm cache. Chạy <strong>Performance Test</strong> để ép tải CPU đa nhân, kiểm tra quạt tản nhiệt và xem máy có bị quá nhiệt (thermal throttling) không.</p>
+        </div>
+
+        <div class="workflow-card">
+          <span class="step-badge">Bước 5 • Xuất Báo Cáo</span>
+          <h3>Xuất Báo Cáo & Chốt Giá</h3>
+          <p>Bấm nút <strong>Export Report</strong> để lưu biên bản kiểm tra định dạng PDF hoặc ảnh PNG dài. Dùng các thông số hao mòn pin/SSD làm cơ sở đàm phán giảm giá hoặc lưu trữ bằng chứng tình trạng máy lúc mua.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BẢNG ĐÁNH GIÁ ĐIỂM SỐ (DECISION MATRIX) -->
+    <section id="thang-diem" class="decision-matrix">
+      <div class="section-title" style="margin-bottom: 24px;">
+        <h2>Thang Điểm Thẩm Định & Hướng Dẫn Ra Quyết Định</h2>
+        <p>ToolCheckMacBook tự động chấm điểm tổng thể (Score 0-100) theo thuật toán độc quyền:</p>
+      </div>
+
+      <div class="matrix-grid">
+        <div class="matrix-card green">
+          <div class="matrix-score">90 – 100 Điểm</div>
+          <h4>Máy Xuất Sắc • An Tâm Mua</h4>
+          <p>Máy nguyên bản (Zin), không dính MDM hay iCloud, pin dưới 300 chu kỳ sạc, SSD đạt chuẩn SMART Verified, mọi bài test tương tác đều vượt qua hoàn hảo.</p>
+        </div>
+
+        <div class="matrix-card orange">
+          <div class="matrix-score">70 – 89 Điểm</div>
+          <h4>Hao Mòn Bình Thường • Cần Ép Giá</h4>
+          <p>Máy đã qua sử dụng từ 2-4 năm. Pin hoặc SSD có mức độ chai tự nhiên (pin trên 500 chu kỳ, dung lượng còn 70-80%). Nên thương lượng giảm thêm giá tương ứng chi phí thay pin.</p>
+        </div>
+
+        <div class="matrix-card red">
+          <div class="matrix-score">&lt; 70 Điểm hoặc Cờ Đỏ</div>
+          <h4>Cực Kỳ Nguy Hiểm • Tuyệt Đối Không Mua</h4>
+          <p>Máy dính quản lý từ xa MDM, dính khóa iCloud ẩn, số serial có dấu hiệu can thiệp bất thường, hoặc ổ SSD báo lỗi SMART Failing có nguy cơ mất dữ liệu đột ngột.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 CẠM BẪY LỚN KHI MUA MACBOOK CŨ -->
     <div class="danger-box">
       <h3>⚠️ 4 Cạm Bẫy Lớn Nhất Khi Mua MacBook Đã Qua Sử Dụng</h3>
       <p style="color: var(--text-muted); font-size: 0.95rem;">
@@ -664,32 +952,6 @@
       </div>
     </section>
 
-    <!-- HƯỚNG DẪN CÀI ĐẶT -->
-    <section id="huong-dan" class="install-box">
-      <div class="section-title" style="margin-bottom: 24px; text-align: left;">
-        <h2 style="font-size: 1.6rem;">Hướng Dẫn Cài Đặt & Sử Dụng Nhanh</h2>
-        <p style="margin: 0;">Chỉ mất chưa đến 1 phút để bắt đầu kiểm tra máy:</p>
-      </div>
-
-      <div class="install-steps">
-        <div class="step-card">
-          <div class="step-num">1</div>
-          <h4>Tải file .DMG</h4>
-          <p>Tải bộ cài đặt chính thức <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg" style="color: #60a5fa; font-weight: 600;">ToolCheckMacBook.dmg</a> từ trang GitHub Releases.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">2</div>
-          <h4>Kéo vào Applications</h4>
-          <p>Mở file `.dmg` vừa tải về, kéo biểu tượng <code>ToolCheckMacBook.app</code> thả vào thư mục <strong>Applications</strong> của máy.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">3</div>
-          <h4>Mở ứng dụng</h4>
-          <p>Nếu macOS hiện cảnh báo bảo mật Gatekeeper, bạn chỉ cần <strong>Click chuột phải</strong> (hoặc nhấn giữ phím Control) vào app rồi chọn <strong>Open</strong>.</p>
-        </div>
-      </div>
-    </section>
-
     <!-- CÂU HỎI THƯỜNG GẶP (FAQ) -->
     <section id="faq">
       <div class="section-title">
@@ -711,8 +973,8 @@
           <p>Hỗ trợ tất cả dòng máy Mac chạy macOS 14.0 trở lên, bao gồm MacBook Air, MacBook Pro, Mac mini, iMac, Mac Studio và Mac Pro chạy cả chip Apple Silicon (M1, M2, M3, M4, M5, M6) lẫn Intel.</p>
         </div>
         <div class="faq-card">
-          <h4>Tại sao cần cấp quyền Camera, Micro và Bluetooth?</h4>
-          <p>Ứng dụng cần các quyền này để kích hoạt cảm biến khi bạn chạy bài test kiểm tra tương ứng. Dữ liệu chỉ dùng để hiển thị và không bao giờ được ghi lại hay gửi đi.</p>
+          <h4>Tại sao macOS báo "Nhà phát triển chưa được xác minh"?</h4>
+          <p>Do đây là phần mềm mã nguồn mở ad-hoc miễn phí, macOS Gatekeeper sẽ hiện cảnh báo an toàn. Bạn chỉ cần <strong>Click chuột phải vào app › chọn Open</strong> là có thể sử dụng bình thường vĩnh viễn.</p>
         </div>
       </div>
     </section>
@@ -724,7 +986,7 @@
       Phân phối theo giấy phép <a href="https://github.com/huytran1120/ToolCheckMac/blob/main/LICENSE" target="_blank">MIT License</a>.
     </p>
     <p style="margin-top: 8px; font-size: 0.85rem; color: #6b7280;">
-      100% Offline • Không thu thập dữ liệu • Phát triển bằng Swift 6 & SwiftUI nguyên bản cho macOS.
+      100% Offline • Không thu thập dữ liệu • Tải file <a href="https://github.com/huytran1120/ToolCheckMac/releases/download/v1.2.0/ToolCheckMacBook-v1.2.0.dmg">ToolCheckMacBook-v1.2.0.dmg</a>.
     </p>
   </footer>
 </body>
