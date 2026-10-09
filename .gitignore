@@ -1,0 +1,21 @@
+build/
+build_release/
+DerivedData/
+.DS_Store
+
+# Xcode user state
+*.xcuserstate
+*.xcuserdata/
+xcuserdata/
+
+# Distribution artifacts
+*.dmg
+*.zip
+*.pkg
+
+# Local reports / screenshots with private device data
+MacCheck-验机报告-*.pdf
+MacCheck-验机报告-*.png
+MacCheck-Hardware-Report-*.pdf
+MacCheck-Hardware-Report-*.png
+docs/assets/*-raw.png
