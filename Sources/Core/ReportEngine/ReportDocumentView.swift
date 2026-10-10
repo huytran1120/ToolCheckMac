@@ -19,14 +19,31 @@ struct ReportDocumentView: View {
         .background(Color.white)
     }
 
+    var logoImage: NSImage? = nil
+
+    private var resolvedLogo: NSImage? {
+        if let logo = logoImage { return logo }
+        if let appIcon = NSImage(named: "AppIcon") { return appIcon }
+        if let icon = NSApp?.applicationIconImage { return icon }
+        return nil
+    }
+
     private var header: some View {
-        HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 6) {
+        HStack(alignment: .top, spacing: 14) {
+            if let icon = resolvedLogo {
+                Image(nsImage: icon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 52, height: 52)
+                    .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
+                    .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
+            }
+            VStack(alignment: .leading, spacing: 4) {
                 Text("ToolCheckMacBook Hardware Report")
-                    .font(.system(size: 22, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.black)
                 Text(profile?.marketingName ?? "")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(.black)
                 if let p = profile {
                     Text("\(p.chip) · \(p.memory) · \(p.macOSVersion)")
