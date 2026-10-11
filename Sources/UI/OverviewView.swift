@@ -63,6 +63,9 @@ struct OverviewView: View {
                             .font(DS.Font.body).foregroundStyle(.secondary)
                         HStack(spacing: DS.Spacing.sm) {
                             metaChip(icon: "barcode", text: p.serialNumber.isEmpty ? loc.t("overview.unknownSerial") : p.serialNumber)
+                            if !p.serialNumber.isEmpty {
+                                AppleCareLookupButton(serialNumber: p.serialNumber, compact: true)
+                            }
                             metaChip(icon: "cpu", text: p.architecture)
                             if !p.modelYear.isEmpty {
                                 metaChip(icon: "calendar", text: loc.currentLanguage == .vietnamese ? "Đời \(p.modelYear)" : "\(p.modelYear) Model")

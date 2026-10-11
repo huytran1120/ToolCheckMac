@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 /// Design System — following Apple HIG and clean minimalist aesthetics:
 /// Neutral background tones, restrained semantic colors, clear typographic hierarchy, consistent corner radius and whitespace.
@@ -174,5 +175,61 @@ struct Card<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: DS.Radius.card).fill(DS.Color.cardBackground))
         .overlay(RoundedRectangle(cornerRadius: DS.Radius.card).strokeBorder(DS.Color.hairline))
+    }
+}
+
+/// AppleCare Quick Lookup button: 1-Click copies Serial Number and opens checkcoverage.apple.com.
+struct AppleCareLookupButton: View {
+    @EnvironmentObject private var loc: LocalizationManager
+    let serialNumber: String
+    var compact: Bool = false
+
+    @State private var copied = false
+
+    var body: some View {
+        Button {
+            triggerLookup()
+        } label: {
+            HStack(spacing: 5) {
+                Image(systemName: copied ? "checkmark.circle.fill" : "magnifyingglass")
+                    .font(.system(size: compact ? 10 : 12, weight: .bold))
+                Text(copied ? loc.t("specs.checkAppleCopied") : loc.t("specs.checkAppleQuick"))
+                    .font(compact ? .system(size: 11, weight: .semibold) : DS.Font.bodyEmphasis)
+                if !copied {
+                    Image(systemName: "arrow.up.right")
+                        .font(.system(size: compact ? 8 : 10, weight: .semibold))
+                        .opacity(0.8)
+                }
+            }
+            .padding(.horizontal, compact ? 9 : 14)
+            .padding(.vertical, compact ? 4 : 7)
+            .background(
+                Capsule().fill(copied ? Color.green.opacity(0.2) : Color.accentColor.opacity(0.12))
+            )
+            .overlay(
+                Capsule().strokeBorder(copied ? Color.green.opacity(0.4) : Color.accentColor.opacity(0.25), lineWidth: 1)
+            )
+            .foregroundStyle(copied ? Color.green : Color.accentColor)
+        }
+        .buttonStyle(.plain)
+        .disabled(serialNumber.isEmpty)
+        .help(loc.t("specs.checkAppleHelp"))
+    }
+
+    private func triggerLookup() {
+        guard !serialNumber.isEmpty else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(serialNumber, forType: .string)
+        withAnimation(.easeInOut(duration: 0.15)) {
+            copied = true
+        }
+        if let url = URL(string: "https://checkcoverage.apple.com/") {
+            NSWorkspace.shared.open(url)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                copied = false
+            }
+        }
     }
 }

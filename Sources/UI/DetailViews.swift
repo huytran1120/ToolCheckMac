@@ -78,7 +78,24 @@ struct SpecsView: View {
             cardHeader(icon: "laptopcomputer", title: loc.t("specs.basicInfo"))
             KeyValueList {
                 KVRow(icon: "macbook", key: loc.t("specs.model"), value: p.marketingName)
-                KVRow(icon: "barcode", key: loc.t("specs.serial"), value: p.serialNumber, mono: true, copyable: true)
+                HStack(spacing: DS.Spacing.md) {
+                    Image(systemName: "barcode")
+                        .font(.system(size: 12))
+                        .foregroundStyle(.secondary)
+                        .frame(width: 18)
+                    Text(loc.t("specs.serial")).font(DS.Font.body).foregroundStyle(.secondary)
+                    Spacer(minLength: DS.Spacing.lg)
+                    Text(p.serialNumber)
+                        .font(DS.Font.mono)
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.trailing)
+                        .textSelection(.enabled)
+                    if !p.serialNumber.isEmpty {
+                        AppleCareLookupButton(serialNumber: p.serialNumber, compact: true)
+                    }
+                }
+                .padding(.vertical, DS.Spacing.sm)
+                DS.Divider()
                 KVRow(icon: "tag", key: loc.t("specs.modelIdentifier"), value: p.modelIdentifier, mono: true)
                 KVRow(icon: "cpu", key: loc.t("specs.chip"), value: p.chip)
                 KVRow(icon: "memorychip", key: loc.t("specs.memory"), value: p.memory)
@@ -117,14 +134,7 @@ struct SpecsView: View {
                 text: loc.t("specs.warrantyNotice"))
 
             HStack(spacing: DS.Spacing.md) {
-                Button {
-                    if let url = URL(string: "https://checkcoverage.apple.com/") {
-                        NSWorkspace.shared.open(url)
-                    }
-                } label: {
-                    Label(loc.t("specs.checkApple"), systemImage: "safari")
-                }
-                .buttonStyle(.borderedProminent)
+                AppleCareLookupButton(serialNumber: p.serialNumber, compact: false)
 
                 Button {
                     NSPasteboard.general.clearContents()
