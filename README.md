@@ -21,7 +21,8 @@
   <img src="https://img.shields.io/badge/Platform-macOS%2014.0%2B-blue?style=flat-square&logo=apple" alt="macOS 14+">
   <img src="https://img.shields.io/badge/Binary-Universal%202%20(arm64%20%2B%20x86__64)-success?style=flat-square" alt="Universal 2">
   <img src="https://img.shields.io/badge/Swift-6.0-orange?style=flat-square&logo=swift" alt="Swift 6.0">
-  <img src="https://img.shields.io/badge/Network-100%25%20Offline-green?style=flat-square" alt="100% Offline">
+  <img src="https://img.shields.io/badge/Language-Ti%E1%BA%BFng%20Vi%E1%BB%87t%20%F0%9F%87%BB%F0%9F%87%B3%20%7C%20English%20%F0%9F%87%AC%F0%9F%87%A7-purple?style=flat-square" alt="Bilingual VI/EN">
+  <img src="https://img.shields.io/badge/Network-100%25%20Offline-green?style=flat-square&logo=apple" alt="100% Offline">
   <img src="https://img.shields.io/badge/Privacy-Zero%20Data%20Collection-brightgreen?style=flat-square" alt="Zero Data Collection">
 </p>
 
@@ -82,8 +83,17 @@
 
 #### 4. Reports & History Management
 * **Overall Scoring:** Calculates a weighted 0–100 score, immediately isolating critical **⛔ Red Flag Issues** (MDM enrollment, Activation Lock, serial mismatch).
-* **Export Reports:** Generates standalone high-resolution PNG snapshots or multi-page PDFs.
+* **Export Reports:** Generates standalone high-resolution PNG snapshots or multi-page PDFs with branded 3D logo.
 * **History Comparison:** Automatically stores local snapshots to track wear and compare performance over time.
+
+#### 5. In-App Bilingual Support (VI 🇻🇳 / EN 🇬🇧)
+* **Instant Dynamic Switching:** Toggle between **Tiếng Việt 🇻🇳** and **English 🇬🇧** in Settings with zero latency — no app restart needed.
+* **Domain-Specific Translations:** Clear technical explanations for second-hand device buyers and technicians regarding hardware alerts and risks.
+* **Localized Report Exports:** Exported PNG receipts and PDF diagnostic documents render automatically in your selected language.
+
+#### 6. 1-Click AppleCare Quick Lookup & Copy Serial
+* **1-Click AppleCare Lookup:** Click `[ 🔍 Check AppleCare ↗ ]` next to the Serial Number to automatically copy the serial to clipboard and open Apple's official [checkcoverage.apple.com](https://checkcoverage.apple.com/) portal in your browser. Eliminates manual typing and character confusion (`0` vs `O`, `1` vs `I`).
+* **1-Click Copy Serial Button:** Dedicated `[ 📋 Copy ]` button with real-time `✓ Copied!` visual feedback on both the Overview dashboard and Hardware Specifications panel.
 
 ---
 
@@ -113,7 +123,7 @@
 Verify download integrity:
 ```bash
 shasum -a 256 ToolCheckMacBook.dmg
-# SHA-256 (v1.2.0): 35e80d6035cfbb2e951ea2b1382fa0d461dbe5bd70f43859a35da33b6ffaea4b
+# Release assets provide automatic SHA-256 checksums on the GitHub Releases page
 ```
 
 #### Option 2: Homebrew Cask
@@ -167,7 +177,7 @@ A build and packaging script is included:
 
 Output file:
 ```text
-~/Desktop/ToolCheckMacBook-1.2.dmg
+~/Desktop/ToolCheckMacBook-1.3.0.dmg
 ```
 
 For official Developer ID signing and Apple notarization, configure environment variables prior to running the script:
@@ -190,6 +200,21 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 * **Permission Prompts:**
   When testing the Camera, Microphone, or Bluetooth, macOS will ask for permission. If denied, enable them manually in **System Settings › Privacy & Security**.
+
+---
+
+### 📋 Release History & Changelog
+
+* **v1.3.0** (Build 4) - *Current*
+  * 🌐 **Bilingual In-App Support:** Seamless zero-latency switching between Tiếng Việt 🇻🇳 and English 🇬🇧 without restart.
+  * 🔍 **1-Click AppleCare Quick Lookup:** Instant copy of Serial Number and direct opening of official Apple coverage portal.
+  * 📋 **1-Click Copy Serial Button:** Dedicated copy button with real-time `✓ Copied!` visual indicator.
+  * 🎨 **Official 3D App Icon:** High-resolution multi-scale app icon and branded header on exported reports.
+* **v1.2.0** (Build 3)
+  * Comprehensive interactive test suite (Screen dead pixels, keyboard matrix, sound/mic, camera).
+  * High-resolution PNG and PDF diagnostic report exports.
+* **v1.0.0** (Build 1)
+  * Initial release: 100% offline hardware scanning, battery health, MDM/DEP & iCloud lock detection, SSD benchmark.
 
 ---
 
@@ -242,8 +267,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 #### 4. Xuất báo cáo & Lịch sử kiểm tra
 * **Thang điểm tổng quát:** Tính điểm tổng hợp (0–100 điểm) và gom các lỗi nghiêm trọng vào khu vực **⛔ Red Flag Issues** (máy dính MDM, dính khoá kích hoạt, sai số sê-ri).
-* **Xuất báo cáo 1 chạm:** Xuất toàn bộ kết quả kiểm tra thành ảnh PNG chất lượng cao hoặc file PDF.
+* **Xuất báo cáo 1 chạm:** Xuất toàn bộ kết quả kiểm tra thành ảnh PNG chất lượng cao hoặc file PDF có đính kèm Logo 3D chính thức.
 * **So sánh lịch sử:** Tự động lưu bản ghi chẩn đoán vào bộ nhớ máy để tiện theo dõi độ hao mòn pin và hiệu năng giữa các lần kiểm tra.
+
+#### 5. Hỗ trợ Song ngữ In-App (Tiếng Việt 🇻🇳 / English 🇬🇧)
+* **Chuyển đổi tức thì 1-Click:** Chuyển đổi ngôn ngữ hiển thị giữa **Tiếng Việt 🇻🇳** và **English 🇬🇧** trực tiếp trong mục Cài đặt (Settings) với 0 giây chờ đợi, không cần khởi động lại app.
+* **Bản dịch kỹ thuật chuẩn xác:** Các thuật ngữ phần cứng, giải thích cờ đỏ MDM/iCloud, hướng dẫn các bài test được bản địa hoá tự nhiên, dễ hiểu cho cả thợ kỹ thuật và người dùng phổ thông.
+* **Biên bản báo cáo đa ngôn ngữ:** Ảnh PNG và file PDF xuất ra sẽ hiển thị hoàn toàn theo ngôn ngữ bạn đang chọn.
+
+#### 6. Tra cứu AppleCare & Nút Sao chép Serial 1-Click
+* **Nút Tra cứu AppleCare (`[🔍 Tra cứu AppleCare ↗]`):** Tự động sao chép số Serial vào clipboard và mở ngay trang tra cứu bảo hành chính thức [checkcoverage.apple.com](https://checkcoverage.apple.com/) trên trình duyệt, xoá bỏ hoàn toàn rủi ro gõ nhầm ký tự (`0` với `O`, `1` với `I`).
+* **Nút Sao chép Serial riêng biệt (`[📋 Sao chép]`):** Đặt cạnh số Serial ở trang Tổng quan và trang Thông số máy, phản hồi thị giác màu xanh `✓ Đã sao chép!` tức thì để copy nhanh gửi khách hoặc thợ.
 
 ---
 
@@ -274,7 +308,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 Kiểm tra tính toàn vẹn (Checksum SHA-256):
 ```bash
 shasum -a 256 ToolCheckMacBook.dmg
-# Mã hash chuẩn cho v1.2.0: 35e80d6035cfbb2e951ea2b1382fa0d461dbe5bd70f43859a35da33b6ffaea4b
+# Mã băm SHA-256 được đính kèm tự động trong phần tài sản phát hành trên GitHub Releases
 ```
 
 #### Cách 2: Cài đặt nhanh qua Homebrew Cask
@@ -328,7 +362,7 @@ Dự án có sẵn script đóng gói tự động:
 
 File cài đặt đầu ra:
 ```text
-~/Desktop/ToolCheckMacBook-1.2.dmg
+~/Desktop/ToolCheckMacBook-1.3.0.dmg
 ```
 
 Nếu bạn có tài khoản Apple Developer và muốn ký chứng chỉ Developer ID + công chứng (Notarization) để phân phối rộng rãi:
@@ -351,6 +385,21 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 * **Cấp quyền Camera / Micro / Bluetooth:**
   Trong lần đầu chạy các bài test tương tác, macOS sẽ hiển thị hộp thoại xin cấp quyền. Nếu vô tình bấm Từ chối, bạn có thể cấp lại quyền tại: **Cài đặt hệ thống (System Settings) › Quyền riêng tư & Bảo mật (Privacy & Security)**.
+
+---
+
+### 📋 Lịch sử phiên bản (Changelog)
+
+* **v1.3.0** (Build 4) - *Mới nhất*
+  * 🌐 **Hỗ trợ Song ngữ In-App:** Chuyển đổi mượt mà giữa Tiếng Việt 🇻🇳 và English 🇬🇧 không cần khởi động lại.
+  * 🔍 **Tra cứu nhanh AppleCare 1-Click:** Tự động copy số Serial và mở trực tiếp trang tra cứu bảo hành Apple.
+  * 📋 **Nút Sao chép Serial tiện lợi:** Nút sao chép 1 chạm với thông báo thị giác phản hồi `✓ Đã sao chép!` tức thì.
+  * 🎨 **Biểu tượng App Icon 3D chính thức:** Bộ icon đa độ phân giải phong cách macOS hiện đại cùng nhận diện thương hiệu trên báo cáo.
+* **v1.2.0** (Build 3)
+  * Bộ bài kiểm tra tương tác toàn diện (Điểm chết màn hình, ma trận phím, loa, mic, camera).
+  * Xuất báo cáo biên bản dạng ảnh PNG và tệp PDF chất lượng cao.
+* **v1.0.0** (Build 1)
+  * Bản phát hành đầu tiên: Kiểm tra phần cứng offline, chẩn đoán pin, phát hiện MDM/iCloud ẩn và đo tốc độ SSD.
 
 ---
 

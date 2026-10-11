@@ -19,7 +19,7 @@ cd "$(dirname "$0")/.."
 PROJECT="ToolCheckMacBook.xcodeproj"
 SCHEME="ToolCheckMacBook"
 APP_NAME="ToolCheckMacBook"
-VERSION="1.2"
+VERSION="${TOOLCHECKMACBOOK_VERSION:-$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Sources/App/Info.plist 2>/dev/null || echo "1.3.0")}"
 BUILD_DIR="build_release"
 DMG_OUT="$HOME/Desktop/${APP_NAME}-${VERSION}.dmg"
 
