@@ -91,6 +91,7 @@ struct SpecsView: View {
                         .multilineTextAlignment(.trailing)
                         .textSelection(.enabled)
                     if !p.serialNumber.isEmpty {
+                        CopySerialButton(serialNumber: p.serialNumber, compact: true)
                         AppleCareLookupButton(serialNumber: p.serialNumber, compact: true)
                     }
                 }
@@ -135,15 +136,7 @@ struct SpecsView: View {
 
             HStack(spacing: DS.Spacing.md) {
                 AppleCareLookupButton(serialNumber: p.serialNumber, compact: false)
-
-                Button {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(p.serialNumber, forType: .string)
-                } label: {
-                    Label(loc.t("specs.copySerial"), systemImage: "doc.on.doc")
-                }
-                .buttonStyle(.bordered)
-                .disabled(p.serialNumber.isEmpty)
+                CopySerialButton(serialNumber: p.serialNumber, compact: false)
             }
         }
     }

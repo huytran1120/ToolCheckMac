@@ -64,6 +64,7 @@ struct OverviewView: View {
                         HStack(spacing: DS.Spacing.sm) {
                             metaChip(icon: "barcode", text: p.serialNumber.isEmpty ? loc.t("overview.unknownSerial") : p.serialNumber)
                             if !p.serialNumber.isEmpty {
+                                CopySerialButton(serialNumber: p.serialNumber, compact: true)
                                 AppleCareLookupButton(serialNumber: p.serialNumber, compact: true)
                             }
                             metaChip(icon: "cpu", text: p.architecture)

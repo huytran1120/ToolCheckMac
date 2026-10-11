@@ -233,3 +233,51 @@ struct AppleCareLookupButton: View {
         }
     }
 }
+
+/// Dedicated 1-Click Copy Serial Number button with instant visual feedback.
+struct CopySerialButton: View {
+    @EnvironmentObject private var loc: LocalizationManager
+    let serialNumber: String
+    var compact: Bool = false
+
+    @State private var copied = false
+
+    var body: some View {
+        Button {
+            copySerial()
+        } label: {
+            HStack(spacing: 4) {
+                Image(systemName: copied ? "checkmark" : "doc.on.doc")
+                    .font(.system(size: compact ? 10 : 12, weight: .bold))
+                Text(copied ? loc.t("specs.copied") : loc.t("specs.copy"))
+                    .font(compact ? .system(size: 11, weight: .semibold) : DS.Font.bodyEmphasis)
+            }
+            .padding(.horizontal, compact ? 8 : 12)
+            .padding(.vertical, compact ? 4 : 6)
+            .background(
+                Capsule().fill(copied ? Color.green.opacity(0.18) : Color.secondary.opacity(0.12))
+            )
+            .overlay(
+                Capsule().strokeBorder(copied ? Color.green.opacity(0.35) : Color.secondary.opacity(0.2), lineWidth: 1)
+            )
+            .foregroundStyle(copied ? Color.green : Color.primary)
+        }
+        .buttonStyle(.plain)
+        .disabled(serialNumber.isEmpty)
+        .help(loc.t("specs.copySerialHelp"))
+    }
+
+    private func copySerial() {
+        guard !serialNumber.isEmpty else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(serialNumber, forType: .string)
+        withAnimation(.easeInOut(duration: 0.15)) {
+            copied = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                copied = false
+            }
+        }
+    }
+}
