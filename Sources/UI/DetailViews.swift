@@ -4,6 +4,7 @@ import AppKit
 /// Detail panel routing: Overview / Hardware Specs / System Categories / Interactive Tests.
 struct DetailRouter: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
 
     var body: some View {
         switch model.selection ?? .overview {
@@ -13,12 +14,12 @@ struct DetailRouter: View {
             SpecsView()
         case .keyboard:
             FullscreenLaunchPane(item: .keyboard, test: .keyboard,
-                icon: "keyboard.fill", title: "Keyboard Test",
-                subtitle: "Full-screen key test: keys light up instantly when pressed to detect unresponsive or stuck keys.")
+                icon: "keyboard.fill", title: loc.t("test.keyboard.title"),
+                subtitle: loc.t("test.keyboard.sub"))
         case .screen:
             FullscreenLaunchPane(item: .screen, test: .screen,
-                icon: "display", title: "Display Test",
-                subtitle: "Solid colors, grayscale, and checkerboard patterns to check for dead pixels, bright spots, banding, and backlight bleed.")
+                icon: "display", title: loc.t("test.screen.title"),
+                subtitle: loc.t("test.screen.sub"))
         case .audio:
             AudioCheckView { model.recordTest($0) }
         case .microphone:
@@ -51,6 +52,7 @@ struct DetailRouter: View {
 
 struct SpecsView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
 
     var body: some View {
         ScrollView {
@@ -60,27 +62,27 @@ struct SpecsView: View {
                     systemCard(p)
                     warrantyCard(p)
                 } else {
-                    ProgressView("Reading hardware specifications…")
+                    ProgressView(loc.t("specs.reading"))
                 }
             }
             .padding(DS.Spacing.xl)
             .frame(maxWidth: 720)
             .frame(maxWidth: .infinity, alignment: .center)
         }
-        .navigationTitle("Hardware Specifications")
+        .navigationTitle(loc.t("specs.title"))
     }
 
     // Basic Information
     private func basicInfoCard(_ p: DeviceProfile) -> some View {
         Card {
-            cardHeader(icon: "laptopcomputer", title: "Basic Information")
+            cardHeader(icon: "laptopcomputer", title: loc.t("specs.basicInfo"))
             KeyValueList {
-                KVRow(icon: "macbook", key: "Model", value: p.marketingName)
-                KVRow(icon: "barcode", key: "Serial Number", value: p.serialNumber, mono: true, copyable: true)
-                KVRow(icon: "tag", key: "Model Identifier", value: p.modelIdentifier, mono: true)
-                KVRow(icon: "cpu", key: "Chip", value: p.chip)
-                KVRow(icon: "memorychip", key: "Memory", value: p.memory)
-                KVRow(icon: "square.stack.3d.up", key: "Architecture", value: p.architecture, last: true)
+                KVRow(icon: "macbook", key: loc.t("specs.model"), value: p.marketingName)
+                KVRow(icon: "barcode", key: loc.t("specs.serial"), value: p.serialNumber, mono: true, copyable: true)
+                KVRow(icon: "tag", key: loc.t("specs.modelIdentifier"), value: p.modelIdentifier, mono: true)
+                KVRow(icon: "cpu", key: loc.t("specs.chip"), value: p.chip)
+                KVRow(icon: "memorychip", key: loc.t("specs.memory"), value: p.memory)
+                KVRow(icon: "square.stack.3d.up", key: loc.t("specs.architecture"), value: p.architecture, last: true)
             }
         }
     }
@@ -88,9 +90,9 @@ struct SpecsView: View {
     // System
     private func systemCard(_ p: DeviceProfile) -> some View {
         Card {
-            cardHeader(icon: "gearshape", title: "System")
+            cardHeader(icon: "gearshape", title: loc.t("specs.system"))
             KeyValueList {
-                KVRow(icon: "apple.logo", key: "macOS Version", value: p.macOSVersion, last: true)
+                KVRow(icon: "apple.logo", key: loc.t("specs.macosVersion"), value: p.macOSVersion, last: true)
             }
         }
     }
@@ -99,20 +101,20 @@ struct SpecsView: View {
     private func warrantyCard(_ p: DeviceProfile) -> some View {
         let lock = model.result(id: "management.activationLock")
         return Card {
-            cardHeader(icon: "checkmark.seal", title: "Purchase & Warranty")
+            cardHeader(icon: "checkmark.seal", title: loc.t("specs.warranty"))
             KeyValueList {
-                KVRow(icon: "calendar", key: "Model Year", value: p.modelYear.isEmpty ? "Unknown" : p.modelYear)
-                KVRow(icon: "clock.arrow.circlepath", key: "Estimated Age", value: ageText(p.modelYear))
-                KVRow(icon: "hammer", key: "Production Date", value: p.productionDate)
+                KVRow(icon: "calendar", key: loc.t("specs.modelYear"), value: p.modelYear.isEmpty ? loc.t("specs.unknown") : p.modelYear)
+                KVRow(icon: "clock.arrow.circlepath", key: loc.t("specs.estimatedAge"), value: ageText(p.modelYear))
+                KVRow(icon: "hammer", key: loc.t("specs.productionDate"), value: p.productionDate)
                 KVRow(icon: "lock.shield",
-                      key: "Activation Lock",
-                      value: lock?.summary ?? "See Security & Lock",
+                      key: loc.t("specs.activationLock"),
+                      value: lock?.localizedSummary(in: loc.currentLanguage) ?? loc.t("specs.seeSecurity"),
                       valueTint: lock?.status.tint,
                       last: true)
             }
 
             InlineNotice(icon: "info.circle", tint: .secondary,
-                text: "Warranty status and purchase/activation date must be checked via Apple servers. Since this app runs completely offline, click the button below to check on Apple's official website using your serial number.")
+                text: loc.t("specs.warrantyNotice"))
 
             HStack(spacing: DS.Spacing.md) {
                 Button {
@@ -120,7 +122,7 @@ struct SpecsView: View {
                         NSWorkspace.shared.open(url)
                     }
                 } label: {
-                    Label("Check Warranty on Apple.com", systemImage: "safari")
+                    Label(loc.t("specs.checkApple"), systemImage: "safari")
                 }
                 .buttonStyle(.borderedProminent)
 
@@ -128,7 +130,7 @@ struct SpecsView: View {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(p.serialNumber, forType: .string)
                 } label: {
-                    Label("Copy Serial Number", systemImage: "doc.on.doc")
+                    Label(loc.t("specs.copySerial"), systemImage: "doc.on.doc")
                 }
                 .buttonStyle(.bordered)
                 .disabled(p.serialNumber.isEmpty)
@@ -145,11 +147,11 @@ struct SpecsView: View {
     }
 
     private func ageText(_ yearStr: String) -> String {
-        guard let year = Int(yearStr) else { return "Unknown" }
+        guard let year = Int(yearStr) else { return loc.t("specs.unknown") }
         let now = Calendar.current.component(.year, from: Date())
         let age = now - year
-        if age <= 0 { return "Current year model (< 1 year)" }
-        return "Approx. \(age) years"
+        if age <= 0 { return loc.t("specs.currentYear") }
+        return String(format: loc.t("specs.approxYears"), age)
     }
 }
 
@@ -209,6 +211,7 @@ struct KVRow: View {
 
 struct CategoryDetailView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
     let item: SidebarItem
 
     var body: some View {
@@ -217,9 +220,10 @@ struct CategoryDetailView: View {
                 let results = model.results(for: item)
                 if results.isEmpty {
                     if model.isScanning {
-                        ProgressView("Testing…")
+                        ProgressView(loc.t("status.scanning"))
                     } else {
-                        InlineNotice(icon: "minus.circle", tint: .secondary, text: "No data available for this device or unsupported.")
+                        InlineNotice(icon: "minus.circle", tint: .secondary,
+                            text: loc.currentLanguage == .vietnamese ? "Không có dữ liệu hoặc thiết bị không hỗ trợ mục này." : "No data available for this device or unsupported.")
                     }
                 } else {
                     ForEach(results) { result in
@@ -231,7 +235,7 @@ struct CategoryDetailView: View {
             .frame(maxWidth: 720)
             .frame(maxWidth: .infinity, alignment: .center)
         }
-        .navigationTitle(item.title)
+        .navigationTitle(item.localizedTitle(in: loc.currentLanguage))
     }
 
     private func resultCard(_ result: CheckResult) -> some View {
@@ -241,15 +245,15 @@ struct CategoryDetailView: View {
                     .font(.system(size: 20)).foregroundStyle(result.status.tint)
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                     HStack(spacing: DS.Spacing.sm) {
-                        Text(result.title).font(DS.Font.bodyEmphasis)
+                        Text(result.localizedTitle(in: loc.currentLanguage)).font(DS.Font.bodyEmphasis)
                         StatusPill(status: result.status)
                     }
-                    Text(result.summary).font(DS.Font.body).foregroundStyle(.secondary)
+                    Text(result.localizedSummary(in: loc.currentLanguage)).font(DS.Font.body).foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer()
             }
-            if let headline = result.isRedFlagHeadline {
+            if let headline = result.localizedHeadline(in: loc.currentLanguage) {
                 Text(headline)
                     .font(DS.Font.body)
                     .padding(DS.Spacing.md)
@@ -270,9 +274,10 @@ struct CategoryDetailView: View {
 
 /// Compact status pill badge.
 struct StatusPill: View {
+    @EnvironmentObject private var loc: LocalizationManager
     let status: CheckStatus
     var body: some View {
-        Text(status.label)
+        Text(status.localizedLabel(in: loc.currentLanguage))
             .font(.system(size: 10, weight: .semibold))
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, 2)
@@ -285,6 +290,7 @@ struct StatusPill: View {
 
 struct FullscreenLaunchPane: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
     let item: SidebarItem
     let test: FullscreenTest
     let icon: String
@@ -303,10 +309,10 @@ struct FullscreenLaunchPane: View {
                                 .font(.system(size: 20)).foregroundStyle(result.status.tint)
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: DS.Spacing.sm) {
-                                    Text("Previous Result").font(DS.Font.bodyEmphasis)
+                                    Text(loc.t("test.prevResult")).font(DS.Font.bodyEmphasis)
                                     StatusPill(status: result.status)
                                 }
-                                Text(result.summary).font(DS.Font.body).foregroundStyle(.secondary)
+                                Text(result.localizedSummary(in: loc.currentLanguage)).font(DS.Font.body).foregroundStyle(.secondary)
                             }
                             Spacer()
                         }
@@ -316,7 +322,7 @@ struct FullscreenLaunchPane: View {
                 Button {
                     model.fullscreenTest = test
                 } label: {
-                    Label(model.result(id: item.resultIDs.first ?? "") == nil ? "Start Test" : "Retest",
+                    Label(model.result(id: item.resultIDs.first ?? "") == nil ? loc.t("test.start") : loc.t("test.retest"),
                           systemImage: "play.fill")
                         .frame(minWidth: 160)
                 }
@@ -324,7 +330,7 @@ struct FullscreenLaunchPane: View {
                 .controlSize(.large)
 
                 InlineNotice(icon: "info.circle", tint: .secondary,
-                    text: "The test will enter full screen. Long press Esc or press Cmd+Q at any time to safely exit.")
+                    text: loc.t("test.fullscreenNotice"))
             }
             .padding(DS.Spacing.xl)
             .frame(maxWidth: 720)

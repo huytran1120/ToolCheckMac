@@ -2,6 +2,7 @@ import SwiftUI
 
 struct RootView: View {
     @StateObject private var model = AppModel()
+    @StateObject private var loc = LocalizationManager.shared
     @AppStorage("appTheme") private var themeRawValue = AppTheme.system.rawValue
 
     private var preferredScheme: ColorScheme? {
@@ -24,6 +25,7 @@ struct RootView: View {
             }
         }
         .environmentObject(model)
+        .environmentObject(loc)
         .preferredColorScheme(preferredScheme)
         .animation(.easeInOut(duration: 0.2), value: model.fullscreenTest?.id)
         .task { await model.scanIfNeeded() }

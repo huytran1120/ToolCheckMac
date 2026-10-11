@@ -4,6 +4,7 @@ import AppKit
 /// AI Model Feasibility Advisor: evaluates which mainstream models can be run locally based on device memory.
 struct AIModelsView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
 
     private var ramGB: Double {
         guard let mem = model.profile?.memory else { return 0 }
@@ -19,12 +20,13 @@ struct AIModelsView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 CheckHeader(
                     icon: "sparkles",
-                    title: "AI Model Feasibility",
-                    subtitle: "In the AI era, running local LLMs depends primarily on memory. Below is an estimate of mainstream open-source models based on device memory to help gauge AI capabilities."
+                    title: loc.t("ai.headerTitle"),
+                    subtitle: loc.t("ai.headerSubtitle")
                 )
 
                 if ramGB <= 0 {
-                    InlineNotice(icon: "hourglass", tint: .secondary, text: "Reading memory information…")
+                    InlineNotice(icon: "hourglass", tint: .secondary,
+                                 text: loc.currentLanguage == .vietnamese ? "Đang đọc thông số bộ nhớ RAM…" : "Reading memory information…")
                 } else {
                     summaryCard
                     if !appleSilicon { intelNotice }
@@ -37,22 +39,24 @@ struct AIModelsView: View {
             .frame(maxWidth: 720)
             .frame(maxWidth: .infinity, alignment: .center)
         }
-        .navigationTitle("AI Models")
+        .navigationTitle(loc.t("ai.title"))
     }
 
     private var summaryCard: some View {
         Card {
             HStack(spacing: DS.Spacing.xl) {
-                stat("Device Memory", String(format: "%.0f GB", ramGB))
-                stat("Chip", model.profile?.chip ?? "—")
-                stat("Model Memory Budget", String(format: "≈ %.0f GB", AIModelAdvisor.budgetGB(ramGB: ramGB)))
+                stat(loc.t("ai.deviceMemory"), String(format: "%.0f GB", ramGB))
+                stat(loc.t("ai.chip"), model.profile?.chip ?? "—")
+                stat(loc.t("ai.budget"), String(format: "≈ %.0f GB", AIModelAdvisor.budgetGB(ramGB: ramGB)))
             }
             if let sweet = AIModelAdvisor.sweetSpot(ramGB: ramGB) {
                 DS.Divider()
                 HStack(spacing: DS.Spacing.sm) {
                     Image(systemName: "star.fill").foregroundStyle(.orange)
-                    Text("Recommended Sweet Spot:").font(DS.Font.bodyEmphasis)
-                    Text("\(sweet.name) (approx. \(Int(sweet.footprintGB)) GB, Q4 quantized) runs smoothly locally")
+                    Text(loc.t("ai.sweetSpot")).font(DS.Font.bodyEmphasis)
+                    Text(loc.currentLanguage == .vietnamese
+                         ? "\(sweet.name) (khoảng \(Int(sweet.footprintGB)) GB, lượng tử hóa Q4) chạy mượt mà trên máy"
+                         : "\(sweet.name) (approx. \(Int(sweet.footprintGB)) GB, Q4 quantized) runs smoothly locally")
                         .font(DS.Font.body).foregroundStyle(.secondary)
                 }
             }
@@ -61,12 +65,14 @@ struct AIModelsView: View {
 
     private var intelNotice: some View {
         InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-            text: "This Mac has an Intel processor without unified memory or a high-performance GPU. Local model inference will be noticeably slower. Testing models under 8B is recommended.")
+            text: loc.currentLanguage == .vietnamese
+                ? "Máy Mac này chạy chip Intel, không có bộ nhớ Unified Memory hoặc GPU đồ họa chuyên dụng tốc độ cao. Tốc độ sinh chữ của mô hình AI sẽ chậm hơn đáng kể. Khuyến nghị chỉ thử nghiệm các mô hình dưới 8B."
+                : "This Mac has an Intel processor without unified memory or a high-performance GPU. Local model inference will be noticeably slower. Testing models under 8B is recommended.")
     }
 
     private var modelListCard: some View {
         Card {
-            SectionLabel(text: "Mainstream Model Evaluation (Q4 Quantization)")
+            SectionLabel(text: loc.currentLanguage == .vietnamese ? "Đánh giá các mô hình phổ biến (Lượng tử hóa Q4)" : "Mainstream Model Evaluation (Q4 Quantization)")
             ForEach(Array(AIModelAdvisor.suggestions(ramGB: ramGB).enumerated()), id: \.element.id) { index, s in
                 HStack(spacing: DS.Spacing.md) {
                     Text(s.name).font(DS.Font.body).frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +95,7 @@ struct AIModelsView: View {
             case .no: return .secondary
             }
         }()
-        return Text(v.label)
+        return Text(v.localizedLabel(in: loc.currentLanguage))
             .font(.system(size: 11, weight: .semibold))
             .padding(.horizontal, DS.Spacing.sm)
             .padding(.vertical, 3)
@@ -99,7 +105,7 @@ struct AIModelsView: View {
 
     private var referencesCard: some View {
         Card {
-            SectionLabel(text: "Authoritative Resources & Benchmarks")
+            SectionLabel(text: loc.currentLanguage == .vietnamese ? "Tài liệu tham khảo & Tiêu chuẩn hiệu năng" : "Authoritative Resources & Benchmarks")
             ForEach(Array(AIModelAdvisor.references.enumerated()), id: \.offset) { index, ref in
                 Button {
                     if let url = URL(string: ref.url) { NSWorkspace.shared.open(url) }
@@ -123,7 +129,9 @@ struct AIModelsView: View {
     }
 
     private var disclaimer: some View {
-        Text("Note: The above estimates are conservative based on Q4 quantization. Actual performance also depends on quantization level, context window length, and concurrent workloads. Very large models (e.g. 400B+) require server-grade hardware.")
+        Text(loc.currentLanguage == .vietnamese
+             ? "Lưu ý: Các ước tính trên mang tính tương đối dựa trên lượng tử hóa Q4. Hiệu năng thực tế còn phụ thuộc vào ngữ cảnh context window và các tác vụ khác đang chạy."
+             : "Note: The above estimates are conservative based on Q4 quantization. Actual performance also depends on quantization level, context window length, and concurrent workloads. Very large models (e.g. 400B+) require server-grade hardware.")
             .font(DS.Font.caption).foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
     }

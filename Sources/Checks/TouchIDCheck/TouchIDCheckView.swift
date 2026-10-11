@@ -3,8 +3,9 @@ import LocalAuthentication
 
 /// Touch ID test: Invokes biometric authentication to verify fingerprint sensor functionality.
 struct TouchIDCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     let onComplete: (CheckResult) -> Void
-    @State private var statusText = "Click the button below to verify with an enrolled fingerprint."
+    @State private var statusOverride: String?
     @State private var available = true
     @State private var reason = ""
 
@@ -12,19 +13,19 @@ struct TouchIDCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "touchid",
-                title: "Touch ID Test",
-                subtitle: "Verify whether the fingerprint sensor functions properly."
+                title: loc.t("test.touchID.title"),
+                subtitle: loc.t("test.touchID.sub")
             )
 
             if !available {
                 InlineNotice(icon: "info.circle.fill", tint: .secondary,
-                    text: reason.isEmpty ? "This Mac does not support Touch ID, or no fingerprints are enrolled." : reason)
+                    text: reason.isEmpty ? loc.t("test.touchID.unsupported") : reason)
             } else {
-                Text(statusText).font(DS.Font.body).foregroundStyle(.secondary)
+                Text(statusOverride ?? loc.t("test.touchID.prompt")).font(DS.Font.body).foregroundStyle(.secondary)
                 Button {
                     authenticate()
                 } label: {
-                    Label("Start Fingerprint Verification", systemImage: "touchid")
+                    Label(loc.t("test.touchID.start"), systemImage: "touchid")
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
@@ -32,14 +33,14 @@ struct TouchIDCheckView: View {
 
             DS.Divider()
 
-            Button("Skip Test") {
+            Button(loc.t("test.skip")) {
                 onComplete(CheckResult(id: "touchID", title: "Touch ID", status: .skipped,
                     summary: "User skipped the Touch ID test"))
             }
             .buttonStyle(.bordered)
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Touch ID")
+        .checkPane(loc.t("test.touchID.title"))
         .onAppear { checkAvailability() }
     }
 
@@ -49,7 +50,7 @@ struct TouchIDCheckView: View {
         if !context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
             available = false
             if context.biometryType == .none {
-                reason = "This Mac does not support Touch ID, or no fingerprints are enrolled."
+                reason = loc.t("test.touchID.unsupported")
             }
         }
     }
@@ -57,9 +58,9 @@ struct TouchIDCheckView: View {
     private func authenticate() {
         let context = LAContext()
         context.localizedFallbackTitle = ""
-        statusText = "Place your finger on Touch ID…"
+        statusOverride = loc.t("test.touchID.placeFinger")
         context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics,
-                               localizedReason: "Verify whether Touch ID sensor functions properly") { success, authError in
+                               localizedReason: "Verify Touch ID sensor") { success, authError in
             Task { @MainActor in
                 if success {
                     onComplete(CheckResult(id: "touchID", title: "Touch ID", status: .pass,
@@ -67,9 +68,9 @@ struct TouchIDCheckView: View {
                 } else {
                     let code = (authError as? LAError)?.code
                     if code == .userCancel || code == .systemCancel {
-                        statusText = "Cancelled, you may try again."
+                        statusOverride = loc.t("test.touchID.cancelled")
                     } else {
-                        statusText = "Recognition failed, you may retry or skip."
+                        statusOverride = loc.t("test.touchID.failed")
                     }
                 }
             }

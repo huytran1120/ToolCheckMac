@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Visual keyboard test: Keys light up when pressed to verify individual key switches.
 struct KeyboardCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = KeyboardTestModel()
     let onFinish: (CheckResult) -> Void
 
@@ -26,15 +27,15 @@ struct KeyboardCheckView: View {
 
     private var header: some View {
         VStack(spacing: 8) {
-            Text("Keyboard Test")
+            Text(loc.t("test.keyboard.title"))
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(.white)
-            Text("Press each key in sequence; keys light up when tested. Hold Esc for 1.2s to exit at any time.")
+            Text(loc.t("test.keyboard.hint"))
                 .font(.system(size: 14))
                 .foregroundStyle(.white.opacity(0.7))
             ProgressView(value: model.progress)
                 .frame(width: 360)
-            Text("\(model.testedKeyCodes.count) / \(model.totalKeyCount) Tested")
+            Text(String(format: loc.t("test.keyboard.testedCount"), model.testedKeyCodes.count, model.totalKeyCount))
                 .font(.system(size: 13))
                 .foregroundStyle(.white.opacity(0.6))
         }
@@ -71,10 +72,10 @@ struct KeyboardCheckView: View {
 
     private var footer: some View {
         HStack(spacing: 16) {
-            Button("Finish & Save Result") { finish() }
+            Button(loc.t("test.keyboard.finish")) { finish() }
                 .keyboardShortcut(.cancelAction)
             if model.isComplete {
-                Text("All keys tested successfully ✅").foregroundStyle(.green)
+                Text(loc.t("test.keyboard.allPass")).foregroundStyle(.green)
             }
         }
         .buttonStyle(.bordered)

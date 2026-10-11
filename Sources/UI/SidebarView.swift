@@ -3,6 +3,7 @@ import SwiftUI
 /// Sidebar: Overview + System Checks + Hardware Tests sections, displaying SF Symbols and status dots per row.
 struct SidebarView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
 
     var body: some View {
         List(selection: $model.selection) {
@@ -10,12 +11,12 @@ struct SidebarView: View {
             row(.history)
             row(.settings)
 
-            Section("System Checks") {
+            Section(loc.t("section.systemChecks")) {
                 ForEach(SidebarItem.autoCategories) { row($0) }
                 row(.aiModels)
             }
 
-            Section("Hardware Tests") {
+            Section(loc.t("section.hardwareTests")) {
                 ForEach(SidebarItem.interactiveTests) { row($0) }
             }
         }
@@ -27,7 +28,7 @@ struct SidebarView: View {
     private func row(_ item: SidebarItem) -> some View {
         Label {
             HStack {
-                Text(item.title)
+                Text(item.localizedTitle(in: loc.currentLanguage))
                 Spacer()
                 if let status = model.status(for: item) {
                     StatusDot(status: status)
@@ -49,10 +50,10 @@ struct SidebarView: View {
             HStack(spacing: DS.Spacing.sm) {
                 if model.isScanning {
                     ProgressView().controlSize(.small)
-                    Text("Scanning…").font(DS.Font.caption).foregroundStyle(.secondary)
+                    Text(loc.t("status.scanning")).font(DS.Font.caption).foregroundStyle(.secondary)
                 } else {
                     Image(systemName: "checkmark.seal.fill").foregroundStyle(.green).font(.system(size: 12))
-                    Text("System scan complete").font(DS.Font.caption).foregroundStyle(.secondary)
+                    Text(loc.t("status.scanComplete")).font(DS.Font.caption).foregroundStyle(.secondary)
                 }
                 Spacer()
                 Button {
@@ -62,7 +63,7 @@ struct SidebarView: View {
                 }
                 .buttonStyle(.borderless)
                 .disabled(model.isScanning)
-                .help("Rescan")
+                .help(loc.t("status.rescan"))
             }
             .padding(.horizontal, DS.Spacing.md)
             .padding(.vertical, DS.Spacing.sm)

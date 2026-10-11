@@ -3,16 +3,20 @@ import Foundation
 enum ScreenStage: Int, CaseIterable {
     case black, white, red, green, blue, grayGradient, checkerboard
 
-    var title: String {
+    func localizedTitle(in language: AppLanguage) -> String {
         switch self {
-        case .black: return "Solid Black — Check for bright spots/backlight bleed"
-        case .white: return "Solid White — Check for dead/dark spots"
-        case .red: return "Solid Red — Check for defective subpixels"
-        case .green: return "Solid Green — Check for defective subpixels"
-        case .blue: return "Solid Blue — Check for defective subpixels"
-        case .grayGradient: return "Grayscale Gradient — Check for banding/color gradation"
-        case .checkerboard: return "Checkerboard — Check for image retention/uniformity"
+        case .black: return LocalizationManager.translate(key: "test.screen.black", language: language)
+        case .white: return LocalizationManager.translate(key: "test.screen.white", language: language)
+        case .red: return LocalizationManager.translate(key: "test.screen.red", language: language)
+        case .green: return LocalizationManager.translate(key: "test.screen.green", language: language)
+        case .blue: return LocalizationManager.translate(key: "test.screen.blue", language: language)
+        case .grayGradient: return LocalizationManager.translate(key: "test.screen.gradient", language: language)
+        case .checkerboard: return LocalizationManager.translate(key: "test.screen.checkerboard", language: language)
         }
+    }
+
+    var title: String {
+        localizedTitle(in: .english)
     }
 }
 

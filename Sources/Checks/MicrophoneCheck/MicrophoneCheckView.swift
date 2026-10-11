@@ -114,6 +114,7 @@ final class MicrophoneCheckModel: ObservableObject {
 }
 
 struct MicrophoneCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = MicrophoneCheckModel()
     let onComplete: (CheckResult) -> Void
 
@@ -121,26 +122,26 @@ struct MicrophoneCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "mic.fill",
-                title: "Microphone Test",
-                subtitle: "Speak into the microphone or make a sound, and observe if the audio level bar reacts."
+                title: loc.t("test.mic.title"),
+                subtitle: loc.t("test.mic.sub")
             )
 
             if model.permissionDenied {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-                        text: model.errorText ?? "Microphone permission denied. Please allow ToolCheckMacBook in \"System Settings › Privacy & Security › Microphone\".")
+                        text: model.errorText ?? loc.t("test.mic.permission"))
                     HStack(spacing: DS.Spacing.md) {
                         Button {
                             model.openPrivacySettings()
                         } label: {
-                            Label("Open Microphone Settings", systemImage: "gearshape")
+                            Label(loc.t("test.mic.openSettings"), systemImage: "gearshape")
                         }
                         .buttonStyle(.borderedProminent)
 
                         Button {
                             model.retry()
                         } label: {
-                            Label("Retry Check", systemImage: "arrow.clockwise")
+                            Label(loc.t("test.mic.retry"), systemImage: "arrow.clockwise")
                         }
                         .buttonStyle(.bordered)
                     }
@@ -155,14 +156,14 @@ struct MicrophoneCheckView: View {
             DS.Divider()
 
             HStack(spacing: DS.Spacing.md) {
-                Text("Test Result:").font(DS.Font.body).foregroundStyle(.secondary)
-                Button("Level Responding Normally") {
+                Text(loc.t("test.result")).font(DS.Font.body).foregroundStyle(.secondary)
+                Button(loc.t("test.mic.pass")) {
                     model.stop()
                     onComplete(CheckResult(id: "microphone", title: "Microphone", status: .pass,
                         summary: "Microphone picks up audio normally, level meter reacts to sound"))
                 }
                 .buttonStyle(.borderedProminent)
-                Button("No Response / Abnormal") {
+                Button(loc.t("test.mic.fail")) {
                     model.stop()
                     onComplete(CheckResult(id: "microphone", title: "Microphone", status: .warning,
                         summary: "Microphone level does not react or is abnormal, recommend further inspection"))
@@ -171,7 +172,7 @@ struct MicrophoneCheckView: View {
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Microphone")
+        .checkPane(loc.t("test.mic.title"))
         .onAppear { model.start() }
         .onDisappear { model.stop() }
     }

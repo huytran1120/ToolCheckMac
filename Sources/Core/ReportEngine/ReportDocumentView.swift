@@ -4,6 +4,7 @@ import SwiftUI
 struct ReportDocumentView: View {
     let profile: DeviceProfile?
     let report: MacCheckReport
+    var language: AppLanguage = .vietnamese
 
     private let width: CGFloat = 720
 
@@ -39,7 +40,7 @@ struct ReportDocumentView: View {
                     .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
             }
             VStack(alignment: .leading, spacing: 4) {
-                Text("ToolCheckMacBook Hardware Report")
+                Text(language == .vietnamese ? "Biên Bản Kiểm Định Phần Cứng ToolCheckMacBook" : "ToolCheckMacBook Hardware Report")
                     .font(.system(size: 20, weight: .bold))
                     .foregroundStyle(.black)
                 Text(profile?.marketingName ?? "")
@@ -48,7 +49,7 @@ struct ReportDocumentView: View {
                 if let p = profile {
                     Text("\(p.chip) · \(p.memory) · \(p.macOSVersion)")
                         .font(.system(size: 12)).foregroundStyle(.gray)
-                    Text("Serial Number: \(p.serialNumber) · \(p.modelIdentifier)")
+                    Text("\(language == .vietnamese ? "Số Sê-ri" : "Serial Number"): \(p.serialNumber) · \(p.modelIdentifier)")
                         .font(.system(size: 11, design: .monospaced)).foregroundStyle(.gray)
                 }
             }
@@ -57,7 +58,7 @@ struct ReportDocumentView: View {
                 Text("\(report.score)")
                     .font(.system(size: 40, weight: .heavy))
                     .foregroundStyle(scoreColor)
-                Text("Overall Score").font(.system(size: 11)).foregroundStyle(.gray)
+                Text(language == .vietnamese ? "Điểm Tổng Thể" : "Overall Score").font(.system(size: 11)).foregroundStyle(.gray)
             }
         }
     }
@@ -70,9 +71,9 @@ struct ReportDocumentView: View {
 
     private var redFlags: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("⛔ Critical Issues").font(.system(size: 14, weight: .bold)).foregroundStyle(.red)
+            Text(language == .vietnamese ? "⛔ Vấn Đề Nghiêm Trọng · Cần Kiểm Tra Kỹ" : "⛔ Critical Issues").font(.system(size: 14, weight: .bold)).foregroundStyle(.red)
             ForEach(report.redFlags) { flag in
-                Text(flag.isRedFlagHeadline ?? flag.summary)
+                Text(flag.localizedHeadline(in: language) ?? flag.localizedSummary(in: language))
                     .font(.system(size: 12)).foregroundStyle(.black)
                     .padding(10)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -84,14 +85,14 @@ struct ReportDocumentView: View {
 
     private var resultsTable: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Test Details").font(.system(size: 14, weight: .bold)).foregroundStyle(.black)
+            Text(language == .vietnamese ? "Chi Tiết Các Bài Kiểm Tra" : "Test Details").font(.system(size: 14, weight: .bold)).foregroundStyle(.black)
                 .padding(.bottom, 8)
             ForEach(report.results) { r in
                 HStack(alignment: .top, spacing: 8) {
                     Text(r.status.exportGlyph).font(.system(size: 12))
-                    Text(r.title).font(.system(size: 12, weight: .semibold)).foregroundStyle(.black)
-                        .frame(width: 140, alignment: .leading)
-                    Text(r.summary).font(.system(size: 12)).foregroundStyle(.gray)
+                    Text(r.localizedTitle(in: language)).font(.system(size: 12, weight: .semibold)).foregroundStyle(.black)
+                        .frame(width: 150, alignment: .leading)
+                    Text(r.localizedSummary(in: language)).font(.system(size: 12)).foregroundStyle(.gray)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer()
                 }
@@ -103,8 +104,12 @@ struct ReportDocumentView: View {
 
     private var footer: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text("Test Time: \(report.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(report.appVersion)")
-            Text("This report was generated locally by ToolCheckMacBook. Fully offline, no data uploaded. For reference only; does not constitute a warranty.")
+            Text(language == .vietnamese
+                 ? "Thời gian kiểm tra: \(report.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(report.appVersion)"
+                 : "Test Time: \(report.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(report.appVersion)")
+            Text(language == .vietnamese
+                 ? "Biên bản được tạo cục bộ trên máy bởi ToolCheckMacBook. Hoàn toàn ngoại tuyến 100%, không tải lên dữ liệu. Dùng cho mục đích tham khảo kỹ thuật."
+                 : "This report was generated locally by ToolCheckMacBook. Fully offline, no data uploaded. For reference only; does not constitute a warranty.")
         }
         .font(.system(size: 10)).foregroundStyle(.gray)
     }

@@ -15,6 +15,21 @@ enum AIVerdict: String, Sendable {
         case .no: return "Not Recommended"
         }
     }
+
+    func localizedLabel(in language: AppLanguage) -> String {
+        switch language {
+        case .vietnamese:
+            switch self {
+            case .smooth: return "Chạy mượt"
+            case .runnable: return "Chạy được"
+            case .tight: return "Vừa đủ"
+            case .no: return "Không khuyến nghị"
+            }
+        case .english:
+            return self.label
+        }
+    }
+
     var rank: Int {
         switch self {
         case .smooth: return 3

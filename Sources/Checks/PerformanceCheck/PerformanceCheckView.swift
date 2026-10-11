@@ -159,6 +159,7 @@ extension ProcessInfo.ThermalState {
 }
 
 struct PerformanceCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = PerformanceCheckModel()
     let onComplete: (CheckResult) -> Void
 
@@ -166,46 +167,48 @@ struct PerformanceCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "gauge.with.dots.needle.67percent",
-                title: "Performance Stress Test",
-                subtitle: "Runs all \(model.coreCount) cores at full load for ~15 seconds while reading exact temperature (°C) and fan speed (RPM) to monitor thermal throttling. Detects degraded thermal paste or cooling issues."
+                title: loc.t("test.performance.title"),
+                subtitle: loc.t("test.performance.sub")
             )
 
             gauge
 
             if model.finished {
+                let statusMsg = model.worstThermal.severity >= 2 ? loc.t("test.perf.coolingWarn") : loc.t("test.perf.coolingGood")
+                let notice = String(format: loc.t("test.perf.peakNotice"), model.worstThermal.label, statusMsg)
                 InlineNotice(icon: model.worstThermal.severity >= 2 ? "exclamationmark.triangle.fill" : "checkmark.circle.fill",
                              tint: model.worstThermal.tint,
-                             text: "Peak thermal state: \(model.worstThermal.label). " + (model.worstThermal.severity >= 2 ? "Reached serious thermal state or above; monitor cooling performance." : "Cooling performance is good."))
+                             text: notice)
             }
 
             DS.Divider()
 
             HStack(spacing: DS.Spacing.md) {
                 if model.isRunning {
-                    Button("Stop") { model.cancel() }.buttonStyle(.bordered)
+                    Button(loc.t("test.stop")) { model.cancel() }.buttonStyle(.bordered)
                     ProgressView().controlSize(.small)
-                    Text("Stress testing \(model.elapsed)s…").font(DS.Font.caption).foregroundStyle(.secondary)
+                    Text(String(format: loc.t("test.perf.stressTesting"), model.elapsed)).font(DS.Font.caption).foregroundStyle(.secondary)
                 } else {
-                    Button(model.finished ? "Retest Stress" : "Start Stress Test") { model.start() }
+                    Button(model.finished ? loc.t("test.perf.retest") : loc.t("test.perf.start")) { model.start() }
                         .buttonStyle(.borderedProminent)
                     if model.finished {
-                        Button("Save Result") { onComplete(model.buildResult()) }
+                        Button(loc.t("test.saveResult")) { onComplete(model.buildResult()) }
                             .buttonStyle(.bordered)
                     }
                 }
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Performance Test")
+        .checkPane(loc.t("test.performance.title"))
         .onDisappear { model.cancel() }
     }
 
     private var gauge: some View {
         Card {
             HStack(spacing: DS.Spacing.xl) {
-                stat(title: "Progress", value: "\(Int(model.progress * 100))%")
-                stat(title: "Throughput", value: model.opsPerSecond > 0 ? String(format: "%.0f M/s", model.opsPerSecond / 1_000_000) : "—")
-                stat(title: "Current Thermal State",
+                stat(title: loc.t("test.perf.progress"), value: "\(Int(model.progress * 100))%")
+                stat(title: loc.t("test.perf.throughput"), value: model.opsPerSecond > 0 ? String(format: "%.0f M/s", model.opsPerSecond / 1_000_000) : "—")
+                stat(title: loc.t("test.perf.thermal"),
                      value: (model.thermalSamples.last ?? .nominal).label,
                      tint: (model.thermalSamples.last ?? .nominal).tint)
                 Spacer()
@@ -216,15 +219,15 @@ struct PerformanceCheckView: View {
             if model.smcAvailable {
                 DS.Divider()
                 HStack(spacing: DS.Spacing.xl) {
-                    stat(title: "SoC Temperature",
+                    stat(title: loc.t("test.perf.socTemp"),
                          value: model.currentReading?.maxTemp.map { String(format: "%.0f °C", $0) } ?? "—",
                          tint: tempTint(model.currentReading?.maxTemp))
                     if let rpm = model.currentReading?.fanRPMs, !rpm.isEmpty {
-                        stat(title: rpm.count > 1 ? "Fan Speed" : "Fan",
+                        stat(title: rpm.count > 1 ? loc.t("test.perf.fan") : loc.t("test.perf.fan"),
                              value: rpm.map { String(format: "%.0f", $0) }.joined(separator: " / ") + " RPM")
                     }
                     if let peak = model.peakTemp {
-                        stat(title: "Peak Temperature", value: String(format: "%.0f °C", peak), tint: tempTint(peak))
+                        stat(title: loc.t("test.perf.peakTemp"), value: String(format: "%.0f °C", peak), tint: tempTint(peak))
                     }
                     Spacer()
                 }

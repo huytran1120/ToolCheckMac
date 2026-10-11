@@ -62,6 +62,7 @@ struct CameraPreview: NSViewRepresentable {
 }
 
 struct CameraCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = CameraCheckModel()
     let onComplete: (CheckResult) -> Void
 
@@ -69,13 +70,13 @@ struct CameraCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "camera.fill",
-                title: "Camera Test",
-                subtitle: "Observe the preview below: check for clarity, dead pixels, discoloration, or distortion."
+                title: loc.t("test.camera.title"),
+                subtitle: loc.t("test.camera.sub")
             )
 
             if model.permissionDenied {
                 InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-                    text: "Camera permission denied. Please allow ToolCheckMacBook in \"System Settings › Privacy & Security › Camera\".")
+                    text: loc.t("test.camera.permission"))
             } else {
                 CameraPreview(session: model.session)
                     .frame(height: 320)
@@ -86,14 +87,14 @@ struct CameraCheckView: View {
             DS.Divider()
 
             HStack(spacing: DS.Spacing.md) {
-                Text("Test Result:").font(DS.Font.body).foregroundStyle(.secondary)
-                Button("Clear & Normal") {
+                Text(loc.t("test.result")).font(DS.Font.body).foregroundStyle(.secondary)
+                Button(loc.t("test.camera.pass")) {
                     model.stop()
                     onComplete(CheckResult(id: "camera", title: "Camera", status: .pass,
                         summary: "Camera preview is clear with no defects or abnormalities"))
                 }
                 .buttonStyle(.borderedProminent)
-                Button("Image Anomaly Detected") {
+                Button(loc.t("test.camera.fail")) {
                     model.stop()
                     onComplete(CheckResult(id: "camera", title: "Camera", status: .warning,
                         summary: "Camera display anomaly reported, recommend inspecting camera sensor"))
@@ -102,7 +103,7 @@ struct CameraCheckView: View {
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Camera")
+        .checkPane(loc.t("test.camera.title"))
         .onAppear { model.start() }
         .onDisappear { model.stop() }
     }

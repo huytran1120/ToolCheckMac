@@ -3,6 +3,7 @@ import SwiftUI
 /// Overview page: Displayed on launch. Device profile header + overall score + red flags + category overview (clickable navigation).
 struct OverviewView: View {
     @EnvironmentObject private var model: AppModel
+    @EnvironmentObject private var loc: LocalizationManager
 
     var body: some View {
         ScrollView {
@@ -17,27 +18,27 @@ struct OverviewView: View {
             .frame(maxWidth: 780)
             .frame(maxWidth: .infinity, alignment: .center)
         }
-        .navigationTitle("Overview")
+        .navigationTitle(loc.t("nav.overview"))
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button {
                     model.saveCurrentToHistory()
                 } label: {
-                    Label("Save to History", systemImage: "square.and.arrow.down")
+                    Label(loc.t("overview.saveHistory"), systemImage: "square.and.arrow.down")
                 }
                 .disabled(model.isScanning || model.profile == nil)
-                .help("Save current test snapshot for future comparison (e.g. battery degradation)")
+                .help(loc.currentLanguage == .vietnamese ? "Lưu kết quả kiểm tra để so sánh độ chai pin và hiệu năng sau này" : "Save current test snapshot for future comparison (e.g. battery degradation)")
             }
             ToolbarItem(placement: .primaryAction) {
                 Menu {
                     Button {
-                        ReportExporter.export(profile: model.profile, report: model.report, format: .png)
-                    } label: { Label("Export as Image (PNG)", systemImage: "photo") }
+                        ReportExporter.export(profile: model.profile, report: model.report, format: .png, language: loc.currentLanguage)
+                    } label: { Label(loc.t("overview.exportPNG"), systemImage: "photo") }
                     Button {
-                        ReportExporter.export(profile: model.profile, report: model.report, format: .pdf)
-                    } label: { Label("Export as PDF", systemImage: "doc.richtext") }
+                        ReportExporter.export(profile: model.profile, report: model.report, format: .pdf, language: loc.currentLanguage)
+                    } label: { Label(loc.t("overview.exportPDF"), systemImage: "doc.richtext") }
                 } label: {
-                    Label("Export Report", systemImage: "square.and.arrow.up")
+                    Label(loc.t("overview.exportReport"), systemImage: "square.and.arrow.up")
                 }
                 .disabled(model.isScanning)
             }
@@ -54,17 +55,17 @@ struct OverviewView: View {
                     .foregroundStyle(.tint)
                     .frame(width: 64)
                 VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                    Text(model.profile?.marketingName ?? "Identifying model…")
+                    Text(model.profile?.marketingName ?? loc.t("overview.modelIdentifying"))
                         .font(DS.Font.largeTitle)
                         .fixedSize(horizontal: false, vertical: true)
                     if let p = model.profile {
                         Text("\(p.chip) · \(p.memory) · \(p.macOSVersion)")
                             .font(DS.Font.body).foregroundStyle(.secondary)
                         HStack(spacing: DS.Spacing.sm) {
-                            metaChip(icon: "barcode", text: p.serialNumber.isEmpty ? "Unknown Serial Number" : p.serialNumber)
+                            metaChip(icon: "barcode", text: p.serialNumber.isEmpty ? loc.t("overview.unknownSerial") : p.serialNumber)
                             metaChip(icon: "cpu", text: p.architecture)
                             if !p.modelYear.isEmpty {
-                                metaChip(icon: "calendar", text: "\(p.modelYear) Model")
+                                metaChip(icon: "calendar", text: loc.currentLanguage == .vietnamese ? "Đời \(p.modelYear)" : "\(p.modelYear) Model")
                             }
                         }
                     }
@@ -93,7 +94,7 @@ struct OverviewView: View {
                 .font(.system(size: 40, weight: .heavy))
                 .foregroundStyle(scoreColor)
                 .contentTransition(.numericText())
-            Text("Overall Score").font(DS.Font.caption).foregroundStyle(.secondary)
+            Text(loc.t("overview.overallScore")).font(DS.Font.caption).foregroundStyle(.secondary)
         }
     }
 
@@ -115,11 +116,11 @@ struct OverviewView: View {
 
     private var redFlagSection: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.md) {
-            Label("Critical Issues · Please Review First", systemImage: "exclamationmark.octagon.fill")
+            Label(loc.t("overview.criticalIssues"), systemImage: "exclamationmark.octagon.fill")
                 .font(DS.Font.title).foregroundStyle(.red)
             ForEach(model.report.redFlags) { flag in
                 HStack(alignment: .top, spacing: DS.Spacing.sm) {
-                    Text(flag.isRedFlagHeadline ?? flag.summary)
+                    Text(flag.localizedHeadline(in: loc.currentLanguage) ?? flag.localizedSummary(in: loc.currentLanguage))
                         .font(DS.Font.body)
                         .fixedSize(horizontal: false, vertical: true)
                     Spacer()
@@ -136,7 +137,7 @@ struct OverviewView: View {
 
     private var categorySummary: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            SectionLabel(text: "System Checks")
+            SectionLabel(text: loc.t("section.systemChecks"))
             Card {
                 ForEach(Array(SidebarItem.autoCategories.enumerated()), id: \.element) { index, item in
                     summaryRow(item)
@@ -149,9 +150,11 @@ struct OverviewView: View {
     private var testSummary: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             HStack {
-                SectionLabel(text: "Hardware Tests")
+                SectionLabel(text: loc.t("section.hardwareTests"))
                 Spacer()
-                Text("\(model.completedTestCount) / \(SidebarItem.interactiveTests.count) Tested")
+                Text(loc.currentLanguage == .vietnamese
+                     ? "\(loc.t("overview.tested")): \(model.completedTestCount) / \(SidebarItem.interactiveTests.count)"
+                     : "\(model.completedTestCount) / \(SidebarItem.interactiveTests.count) \(loc.t("overview.tested"))")
                     .font(DS.Font.caption).foregroundStyle(.secondary)
             }
             Card {
@@ -169,15 +172,15 @@ struct OverviewView: View {
         } label: {
             HStack(spacing: DS.Spacing.md) {
                 Image(systemName: item.icon).frame(width: 22).foregroundStyle(.tint)
-                Text(item.title).font(DS.Font.bodyEmphasis)
+                Text(item.localizedTitle(in: loc.currentLanguage)).font(DS.Font.bodyEmphasis)
                 Spacer()
                 if let status = model.status(for: item) {
-                    Text(model.results(for: item).first?.summary ?? status.label)
+                    Text(model.results(for: item).first?.localizedSummary(in: loc.currentLanguage) ?? status.localizedLabel(in: loc.currentLanguage))
                         .font(DS.Font.caption).foregroundStyle(.secondary)
                         .lineLimit(1).truncationMode(.tail).frame(maxWidth: 320, alignment: .trailing)
                     StatusDot(status: status)
                 } else {
-                    Text(item.isInteractive ? "Not Tested" : "—")
+                    Text(item.isInteractive ? loc.t("overview.notTested") : "—")
                         .font(DS.Font.caption).foregroundStyle(.tertiary)
                     Image(systemName: "chevron.right").font(.system(size: 10)).foregroundStyle(.tertiary)
                 }
@@ -192,8 +195,8 @@ struct OverviewView: View {
     private var footer: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
             DS.Divider()
-            Text("Test Time: \(model.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(model.report.appVersion)")
-            Text("Runs completely locally without network connection or data collection. Results are for reference only and do not constitute a warranty.")
+            Text("\(loc.t("overview.testTime")) \(model.generatedAt.formatted(date: .abbreviated, time: .shortened)) · ToolCheckMacBook v\(model.report.appVersion)")
+            Text(loc.t("overview.footerNotice"))
         }
         .font(DS.Font.caption).foregroundStyle(.secondary)
         .padding(.top, DS.Spacing.sm)

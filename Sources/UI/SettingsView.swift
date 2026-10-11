@@ -33,6 +33,7 @@ enum AppTheme: String, CaseIterable, Identifiable {
 }
 
 struct SettingsView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @AppStorage("appTheme") private var themeRawValue = AppTheme.system.rawValue
 
     private var selectedTheme: Binding<AppTheme> {
@@ -48,10 +49,38 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.lg) {
                 CheckHeader(
                     icon: "gearshape.fill",
-                    title: "Settings",
-                    subtitle: "Adjust ToolCheckMacBook display preferences. Theme settings are saved locally and applied on next launch."
+                    title: loc.t("settings.title"),
+                    subtitle: loc.t("settings.subtitle")
                 )
 
+                // Language selection card
+                Card {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        Image(systemName: "globe")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.tint)
+                            .frame(width: 28)
+
+                        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                            Text(loc.t("settings.language.title")).font(DS.Font.bodyEmphasis)
+                            Text(loc.t("settings.language.subtitle"))
+                                .font(DS.Font.body)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+
+                            Picker("Language", selection: $loc.currentLanguage) {
+                                ForEach(AppLanguage.allCases) { lang in
+                                    Text(lang.title).tag(lang)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .labelsHidden()
+                            .padding(.top, DS.Spacing.xs)
+                        }
+                    }
+                }
+
+                // Appearance Theme card
                 Card {
                     HStack(alignment: .top, spacing: DS.Spacing.md) {
                         Image(systemName: "paintpalette.fill")
@@ -60,15 +89,15 @@ struct SettingsView: View {
                             .frame(width: 28)
 
                         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-                            Text("Appearance Theme").font(DS.Font.bodyEmphasis)
-                            Text("Follow system appearance, or select light or dark mode.")
+                            Text(loc.t("settings.theme.title")).font(DS.Font.bodyEmphasis)
+                            Text(loc.t("settings.theme.subtitle"))
                                 .font(DS.Font.body)
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
 
                             Picker("Appearance Theme", selection: selectedTheme) {
                                 ForEach(AppTheme.allCases) { theme in
-                                    Label(theme.title, systemImage: theme.icon)
+                                    Label(themeTitle(theme), systemImage: theme.icon)
                                         .tag(theme)
                                 }
                             }
@@ -78,11 +107,41 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                // About card
+                Card {
+                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                        Image(systemName: "info.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundStyle(.tint)
+                            .frame(width: 28)
+
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            Text(loc.t("settings.about.title")).font(DS.Font.bodyEmphasis)
+                            Text(loc.t("settings.about.desc"))
+                                .font(DS.Font.body)
+                                .foregroundStyle(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text("ToolCheckMacBook • 100% Offline • Zero Telemetry")
+                                .font(DS.Font.caption)
+                                .foregroundStyle(.secondary)
+                                .padding(.top, 4)
+                        }
+                    }
+                }
             }
             .padding(DS.Spacing.xl)
             .frame(maxWidth: 720)
             .frame(maxWidth: .infinity, alignment: .center)
         }
-        .navigationTitle("Settings")
+        .navigationTitle(loc.t("settings.title"))
+    }
+
+    private func themeTitle(_ theme: AppTheme) -> String {
+        switch theme {
+        case .system: return loc.t("settings.theme.system")
+        case .light: return loc.t("settings.theme.light")
+        case .dark: return loc.t("settings.theme.dark")
+        }
     }
 }

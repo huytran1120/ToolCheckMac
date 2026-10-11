@@ -7,8 +7,8 @@ enum ReportExporter {
 
     enum Format { case png, pdf }
 
-    static func export(profile: DeviceProfile?, report: MacCheckReport, format: Format) {
-        let doc = ReportDocumentView(profile: profile, report: report)
+    static func export(profile: DeviceProfile?, report: MacCheckReport, format: Format, language: AppLanguage = .vietnamese) {
+        let doc = ReportDocumentView(profile: profile, report: report, language: language)
         let renderer = ImageRenderer(content: doc)
         renderer.scale = 2.0   // Retina sharpness
 

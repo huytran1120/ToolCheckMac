@@ -72,6 +72,7 @@ private struct TrackpadCapture: NSViewRepresentable {
 }
 
 struct TrackpadCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = TrackpadCheckModel()
     let onComplete: (CheckResult) -> Void
 
@@ -79,25 +80,25 @@ struct TrackpadCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "rectangle.and.hand.point.up.left.fill",
-                title: "Trackpad Test",
-                subtitle: "Move your finger in the area below to test tracking responsiveness, test two-finger zoom/rotate/scroll, and press firmly to test Force Touch pressure."
+                title: loc.t("test.trackpad.title"),
+                subtitle: loc.t("test.trackpad.sub")
             )
 
             canvas
 
             HStack(spacing: DS.Spacing.lg) {
-                metric("Pressure", String(format: "%.2f", model.pressure), model.pressure > 0)
-                metric("Force Touch", model.didForceClick ? "Triggered" : "Not Triggered", model.didForceClick)
-                metric("Multi-touch Gestures", "\(model.gesturesSeen.count)/3", !model.gesturesSeen.isEmpty)
+                metric(loc.t("test.trackpad.pressure"), String(format: "%.2f", model.pressure), model.pressure > 0)
+                metric(loc.t("test.trackpad.forceTouch"), model.didForceClick ? loc.t("test.trackpad.triggered") : loc.t("test.trackpad.notTriggered"), model.didForceClick)
+                metric(loc.t("test.trackpad.gestures"), "\(model.gesturesSeen.count)/3", !model.gesturesSeen.isEmpty)
                 Spacer()
-                Button("Clear") { model.reset() }.buttonStyle(.bordered)
+                Button(loc.t("test.trackpad.clear")) { model.reset() }.buttonStyle(.bordered)
             }
 
             DS.Divider()
 
             HStack(spacing: DS.Spacing.md) {
-                Text("Test Result:").font(DS.Font.body).foregroundStyle(.secondary)
-                Button("Tracking, Gestures & Force Touch Normal") {
+                Text(loc.t("test.result")).font(DS.Font.body).foregroundStyle(.secondary)
+                Button(loc.t("test.trackpad.pass")) {
                     onComplete(CheckResult(id: "trackpad", title: "Trackpad", status: .pass,
                         summary: "Tracking responsiveness, multi-touch gestures, and Force Touch all normal",
                         rawDetails: ["Track Points": "\(model.trail.count)",
@@ -105,7 +106,7 @@ struct TrackpadCheckView: View {
                                      "Force Touch": model.didForceClick ? "Triggered" : "Not Triggered"]))
                 }
                 .buttonStyle(.borderedProminent)
-                Button("Anomaly Detected") {
+                Button(loc.t("test.trackpad.fail")) {
                     onComplete(CheckResult(id: "trackpad", title: "Trackpad", status: .warning,
                         summary: "Trackpad anomaly reported, recommend further inspection"))
                 }
@@ -113,7 +114,7 @@ struct TrackpadCheckView: View {
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Trackpad")
+        .checkPane(loc.t("test.trackpad.title"))
     }
 
     private var canvas: some View {
@@ -128,7 +129,7 @@ struct TrackpadCheckView: View {
             }
             .allowsHitTesting(false)
             if model.trail.isEmpty {
-                Text("Move finger in this area").font(DS.Font.body).foregroundStyle(.tertiary)
+                Text(loc.t("test.trackpad.hint")).font(DS.Font.body).foregroundStyle(.tertiary)
             }
             // Pressure visualization ring
             if model.pressure > 0 {

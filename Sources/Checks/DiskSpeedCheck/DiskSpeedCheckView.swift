@@ -130,6 +130,7 @@ final class DiskSpeedCheckModel: ObservableObject {
 }
 
 struct DiskSpeedCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var model = DiskSpeedCheckModel()
     let onComplete: (CheckResult) -> Void
 
@@ -137,19 +138,20 @@ struct DiskSpeedCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "speedometer",
-                title: "Disk Speed Test",
-                subtitle: "Sequentially writes and reads 1GB to measure real disk speeds (bypassing system cache). Detects slow external drives, fake capacity drives, or performance issues."
+                title: loc.t("test.diskSpeed.title"),
+                subtitle: loc.t("test.diskSpeed.sub")
             )
 
             Card {
                 HStack(spacing: DS.Spacing.xl) {
-                    speedStat(title: "Sequential Write", value: model.writeMBps)
-                    speedStat(title: "Sequential Read", value: model.readMBps)
+                    speedStat(title: loc.t("test.diskSpeed.write"), value: model.writeMBps)
+                    speedStat(title: loc.t("test.diskSpeed.read"), value: model.readMBps)
                     Spacer()
                 }
                 if model.isRunning {
                     ProgressView(value: model.progress) {
-                        Text("\(model.phase) \(Int(model.progress * 100))%")
+                        let phaseText = model.phase == "Writing" ? loc.t("test.diskSpeed.writing") : (model.phase == "Reading" ? loc.t("test.diskSpeed.reading") : model.phase)
+                        Text("\(phaseText) \(Int(model.progress * 100))%")
                             .font(DS.Font.caption).foregroundStyle(.secondary)
                     }
                 }
@@ -163,19 +165,19 @@ struct DiskSpeedCheckView: View {
 
             HStack(spacing: DS.Spacing.md) {
                 if model.isRunning {
-                    Button("Stop") { model.cancel() }.buttonStyle(.bordered)
+                    Button(loc.t("test.stop")) { model.cancel() }.buttonStyle(.bordered)
                 } else {
-                    Button(model.finished ? "Retest Speed" : "Start Speed Test") { model.start() }
+                    Button(model.finished ? loc.t("test.diskSpeed.retest") : loc.t("test.diskSpeed.start")) { model.start() }
                         .buttonStyle(.borderedProminent)
                     if model.finished {
-                        Button("Save Result") { onComplete(model.buildResult()) }
+                        Button(loc.t("test.saveResult")) { onComplete(model.buildResult()) }
                             .buttonStyle(.bordered)
                     }
                 }
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Disk Speed Test")
+        .checkPane(loc.t("test.diskSpeed.title"))
         .onDisappear { model.cancel() }
     }
 

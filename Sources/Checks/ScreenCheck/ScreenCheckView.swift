@@ -44,16 +44,18 @@ struct ScreenCheckView: View {
         }
     }
 
+    @EnvironmentObject private var loc: LocalizationManager
+
     private var overlayBar: some View {
         VStack(spacing: 10) {
-            Text(model.currentStage.title)
+            Text(model.currentStage.localizedTitle(in: loc.currentLanguage))
                 .font(.system(size: 16, weight: .semibold))
-            Text("Screen \(model.currentIndex + 1) of \(model.stages.count) · Click or press Space for next · Press F to flag anomaly · Esc to exit")
+            Text(String(format: loc.t("test.screen.hint"), model.currentIndex + 1, model.stages.count))
                 .font(.system(size: 12))
                 .opacity(0.75)
             HStack(spacing: 12) {
-                Button("Flag Anomaly") { model.flagCurrent() }
-                Button(model.isLastStage ? "Complete Test" : "Next") {
+                Button(loc.t("test.screen.flag")) { model.flagCurrent() }
+                Button(model.isLastStage ? loc.t("test.screen.finish") : loc.t("test.screen.next")) {
                     if model.isLastStage {
                         finish(exitedEarly: false)
                     } else {

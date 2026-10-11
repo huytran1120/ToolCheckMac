@@ -132,6 +132,7 @@ final class PortLiveMonitor: ObservableObject {
 }
 
 struct PortLiveCheckView: View {
+    @EnvironmentObject private var loc: LocalizationManager
     @StateObject private var monitor = PortLiveMonitor()
     let onComplete: (CheckResult) -> Void
 
@@ -139,20 +140,20 @@ struct PortLiveCheckView: View {
         VStack(alignment: .leading, spacing: DS.Spacing.lg) {
             CheckHeader(
                 icon: "cable.connector.horizontal",
-                title: "Port Live Test",
-                subtitle: "Insert a USB drive, card reader, or cable into each USB-C or card slot in sequence. Connected devices and speeds will display in real time. Normal recognition on each port verifies port functionality."
+                title: loc.t("test.portsLive.title"),
+                subtitle: loc.t("test.portsLive.sub")
             )
 
             Card {
                 HStack {
                     Circle().fill(monitor.isMonitoring ? .green : .secondary).frame(width: 8, height: 8)
-                    Text(monitor.isMonitoring ? "Monitoring, please insert a device…" : "Not Started")
+                    Text(monitor.isMonitoring ? loc.t("test.portsLive.monitoring") : loc.t("test.portsLive.notStarted"))
                         .font(DS.Font.body).foregroundStyle(.secondary)
                     Spacer()
-                    Text("Captured \(monitor.insertCount) insertion(s)").font(DS.Font.caption).foregroundStyle(.secondary)
+                    Text(String(format: loc.t("test.portsLive.captured"), monitor.insertCount)).font(DS.Font.caption).foregroundStyle(.secondary)
                 }
                 if monitor.events.isEmpty {
-                    Text("No plug/unplug events yet").font(DS.Font.caption).foregroundStyle(.tertiary)
+                    Text(loc.t("test.portsLive.noEvents")).font(DS.Font.caption).foregroundStyle(.tertiary)
                         .frame(maxWidth: .infinity, alignment: .center).padding(.vertical, DS.Spacing.md)
                 } else {
                     ForEach(monitor.events.prefix(12)) { e in
@@ -160,7 +161,7 @@ struct PortLiveCheckView: View {
                             Image(systemName: e.inserted ? "arrow.down.circle.fill" : "arrow.up.circle")
                                 .foregroundStyle(e.inserted ? .green : .secondary)
                             Text(e.time).font(DS.Font.mono).foregroundStyle(.secondary)
-                            Text(e.inserted ? "Connected" : "Disconnected").font(DS.Font.bodyEmphasis)
+                            Text(e.inserted ? loc.t("test.portsLive.connected") : loc.t("test.portsLive.disconnected")).font(DS.Font.bodyEmphasis)
                             Text(e.name).font(DS.Font.body).lineLimit(1)
                             Spacer()
                             if !e.speed.isEmpty {
@@ -175,20 +176,20 @@ struct PortLiveCheckView: View {
 
             HStack(spacing: DS.Spacing.md) {
                 if monitor.isMonitoring {
-                    Button("Stop Monitoring") { monitor.stop() }.buttonStyle(.bordered)
-                    Button("Clear Log") { monitor.reset() }.buttonStyle(.bordered)
+                    Button(loc.t("test.portsLive.stop")) { monitor.stop() }.buttonStyle(.bordered)
+                    Button(loc.t("test.portsLive.clear")) { monitor.reset() }.buttonStyle(.bordered)
                 } else {
-                    Button("Start Monitoring") { monitor.start() }.buttonStyle(.borderedProminent)
+                    Button(loc.t("test.portsLive.start")) { monitor.start() }.buttonStyle(.borderedProminent)
                 }
                 Spacer()
-                Button("All Ports Recognized Normally") {
+                Button(loc.t("test.portsLive.pass")) {
                     finish(pass: true)
                 }.buttonStyle(.borderedProminent).disabled(monitor.insertCount == 0)
-                Button("Unresponsive Port Detected") { finish(pass: false) }.buttonStyle(.bordered)
+                Button(loc.t("test.portsLive.fail")) { finish(pass: false) }.buttonStyle(.bordered)
             }
         }
         .padding(DS.Spacing.xl)
-        .checkPane("Port Live Test")
+        .checkPane(loc.t("test.portsLive.title"))
         .onDisappear { monitor.stop() }
     }
 

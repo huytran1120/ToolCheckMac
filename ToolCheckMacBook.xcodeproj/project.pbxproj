@@ -10,6 +10,7 @@
 		07AF7D36B885C3E99949AB2D /* ManagementService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE30C09EAF82B3A81BE59D5 /* ManagementService.swift */; };
 		09D09D335CA31194038BA4D6 /* TrackpadCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA959A812E8822CB4304552D /* TrackpadCheckView.swift */; };
 		0A292CFD1DFDC522A7C7B996 /* DetailViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513E4D056941C4B9B00FF03B /* DetailViews.swift */; };
+		12ADC6BAD11CB81FC9822F2A /* LocalizationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF2AD034202388B485AAF9E2 /* LocalizationManager.swift */; };
 		14F0DBEA9712D3655EB523D7 /* PortService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9ED55FDCA416B262DDE4B13 /* PortService.swift */; };
 		1B7E279B081DAD1B49E8F1DF /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E45C1E25A4567DA76F80E47 /* NetworkService.swift */; };
 		27C6A3CD8B84E3C57B277010 /* ScreenCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CE744492421212B075D087 /* ScreenCheckView.swift */; };
@@ -85,6 +86,7 @@
 		BA6D3E5C53977C6ED0CCCEF8 /* DiskSpeedCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskSpeedCheckView.swift; sourceTree = "<group>"; };
 		C3FE85E4421D7B7E08E077AC /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		CC1D470AED57BE267F4AC195 /* CameraCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraCheckView.swift; sourceTree = "<group>"; };
+		CF2AD034202388B485AAF9E2 /* LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationManager.swift; sourceTree = "<group>"; };
 		D3ACCDB13BBBF4E6957F7CD5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D9ED55FDCA416B262DDE4B13 /* PortService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortService.swift; sourceTree = "<group>"; };
 		DA959A812E8822CB4304552D /* TrackpadCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadCheckView.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				A95F5A707E9D2A7FDCB305E9 /* AIAdvisor */,
 				6B1171A73C1C62B7C59A1A86 /* BatteryService */,
 				12F5924ABC440572E226775E /* HardwareProbe */,
+				C145A07B63468BBBEC89F0AA /* Localization */,
 				93A85725585EA27C7BF5503C /* ManagementService */,
 				29535B27A3C41FDA5C194F53 /* NetworkService */,
 				11CB264D74BD71A88C499419 /* PortService */,
@@ -322,6 +325,14 @@
 				E14571681700E2EF49E71F0D /* ReportModel.swift */,
 			);
 			path = ReportEngine;
+			sourceTree = "<group>";
+		};
+		C145A07B63468BBBEC89F0AA /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				CF2AD034202388B485AAF9E2 /* LocalizationManager.swift */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		C9067B5752A1AFD1A3C9C499 /* PerformanceCheck */ = {
@@ -435,6 +446,7 @@
 				E8501907B21A29DA94B410B0 /* KeyboardCheckView.swift in Sources */,
 				C64F42A4C5C9ED6CFD6CB97A /* KeyboardLayout.swift in Sources */,
 				DB962F520267CD9C3EF2CEF2 /* KeyboardTestModel.swift in Sources */,
+				12ADC6BAD11CB81FC9822F2A /* LocalizationManager.swift in Sources */,
 				07AF7D36B885C3E99949AB2D /* ManagementService.swift in Sources */,
 				578CDEEA86D2B559FE1CC40F /* MicrophoneCheckView.swift in Sources */,
 				1B7E279B081DAD1B49E8F1DF /* NetworkService.swift in Sources */,
