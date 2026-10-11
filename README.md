@@ -1,4 +1,7 @@
-# ToolCheckMacBook 🍏🔍
+<p align="center">
+  <img src="Sources/Assets.xcassets/AppIcon.appiconset/icon_256.png" width="128" height="128" alt="ToolCheckMacBook App Icon">
+  <h1 align="center">ToolCheckMacBook 🍏🔍</h1>
+</p>
 
 <p align="center">
   <strong>All-in-one native macOS hardware diagnostic, inspection, and verification tool.</strong><br>
@@ -7,16 +10,29 @@
 
 <p align="center">
   <a href="https://huytran1120.github.io/ToolCheckMac/"><strong>🌐 Official Website</strong></a> •
+  <a href="https://github.com/huytran1120/ToolCheckMac/releases/latest"><strong>💾 Latest Releases</strong></a> •
   <a href="#english"><strong>English</strong></a> •
   <a href="#tiếng-việt"><strong>Tiếng Việt</strong></a>
 </p>
 
 <p align="center">
+  <a href="https://github.com/huytran1120/ToolCheckMac/actions/workflows/build-and-release.yml"><img src="https://github.com/huytran1120/ToolCheckMac/actions/workflows/build-and-release.yml/badge.svg" alt="Build & Release Status"></a>
+  <a href="https://github.com/huytran1120/ToolCheckMac/releases/latest"><img src="https://img.shields.io/github/v/release/huytran1120/ToolCheckMac?style=flat-square&color=blue" alt="Latest Release"></a>
   <img src="https://img.shields.io/badge/Platform-macOS%2014.0%2B-blue?style=flat-square&logo=apple" alt="macOS 14+">
-  <img src="https://img.shields.io/badge/Architecture-Apple%20Silicon%20%7C%20Intel-success?style=flat-square" alt="Universal">
+  <img src="https://img.shields.io/badge/Binary-Universal%202%20(arm64%20%2B%20x86__64)-success?style=flat-square" alt="Universal 2">
   <img src="https://img.shields.io/badge/Swift-6.0-orange?style=flat-square&logo=swift" alt="Swift 6.0">
   <img src="https://img.shields.io/badge/Network-100%25%20Offline-green?style=flat-square" alt="100% Offline">
   <img src="https://img.shields.io/badge/Privacy-Zero%20Data%20Collection-brightgreen?style=flat-square" alt="Zero Data Collection">
+</p>
+
+<p align="center">
+  <a href="https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.dmg">
+    <img src="https://img.shields.io/badge/Download-.DMG%20Installer-007AFF?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG">
+  </a>
+  &nbsp;
+  <a href="https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.zip">
+    <img src="https://img.shields.io/badge/Download-.ZIP%20Portable-34C759?style=for-the-badge&logo=finder&logoColor=white" alt="Download ZIP">
+  </a>
 </p>
 
 ---
@@ -85,7 +101,25 @@
 * **Operating System:** macOS 14.0 (Sonoma) or later
 * **Hardware:** Apple Silicon (M1/M2/M3/M4 series) or Intel Mac
 * **Xcode:** Xcode 16.0+ (if compiling from source)
-* **Optional:** `xcodegen` (for regenerating the Xcode project file)
+---
+
+### 📥 Installation
+
+#### Option 1: Direct DMG Download (Recommended)
+1. Download **[ToolCheckMacBook.dmg](https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.dmg)** from the latest release.
+2. Open the `.dmg` disk image and drag **ToolCheckMacBook.app** into your `/Applications` folder.
+3. *First launch:* Right-click the app in Finder and choose **Open** to pass macOS Gatekeeper.
+
+Verify download integrity:
+```bash
+shasum -a 256 ToolCheckMacBook.dmg
+# SHA-256 (v1.2.0): 35e80d6035cfbb2e951ea2b1382fa0d461dbe5bd70f43859a35da33b6ffaea4b
+```
+
+#### Option 2: Homebrew Cask
+```bash
+brew install --cask https://raw.githubusercontent.com/huytran1120/ToolCheckMac/main/Casks/toolcheckmacbook.rb
+```
 
 ---
 
@@ -93,18 +127,19 @@
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/<your-username>/ToolCheckMacBook.git
-cd ToolCheckMacBook
+git clone https://github.com/huytran1120/ToolCheckMac.git
+cd ToolCheckMac
 
 # 2. (Optional) Regenerate Xcode project with XcodeGen
 brew install xcodegen
 xcodegen generate
 
-# 3. Build Release binary
+# 3. Build Universal Release binary (Apple Silicon + Intel)
 xcodebuild \
   -project ToolCheckMacBook.xcodeproj \
   -scheme ToolCheckMacBook \
   -configuration Release \
+  -destination "generic/platform=macOS" \
   -derivedDataPath ./build \
   CODE_SIGN_IDENTITY="-" \
   CODE_SIGNING_REQUIRED=NO
@@ -226,7 +261,26 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 * **Hệ điều hành:** macOS 14.0 (Sonoma) trở lên
 * **Phần cứng:** Apple Silicon (M1/M2/M3/M4) hoặc Mac chạy chip Intel
 * **Môi trường phát triển:** Xcode 16.0+ (nếu muốn build từ mã nguồn)
-* **Tiện ích bổ trợ:** `xcodegen` (để sinh lại file Xcode project khi cần)
+
+---
+
+### 📥 Hướng dẫn Cài đặt & Sử dụng
+
+#### Cách 1: Tải trực tiếp file .DMG (Khuyên dùng)
+1. Tải bản mới nhất **[ToolCheckMacBook.dmg](https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.dmg)** từ mục Releases.
+2. Mở file `.dmg` và kéo biểu tượng **ToolCheckMacBook.app** vào thư mục `Applications`.
+3. *Lần mở đầu tiên:* Nhấp **Chuột phải › Open** để vượt qua cảnh báo kiểm tra Gatekeeper của macOS.
+
+Kiểm tra tính toàn vẹn (Checksum SHA-256):
+```bash
+shasum -a 256 ToolCheckMacBook.dmg
+# Mã hash chuẩn cho v1.2.0: 35e80d6035cfbb2e951ea2b1382fa0d461dbe5bd70f43859a35da33b6ffaea4b
+```
+
+#### Cách 2: Cài đặt nhanh qua Homebrew Cask
+```bash
+brew install --cask https://raw.githubusercontent.com/huytran1120/ToolCheckMac/main/Casks/toolcheckmacbook.rb
+```
 
 ---
 
@@ -234,18 +288,19 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ```bash
 # 1. Clone repository về máy
-git clone https://github.com/<your-username>/ToolCheckMacBook.git
-cd ToolCheckMacBook
+git clone https://github.com/huytran1120/ToolCheckMac.git
+cd ToolCheckMac
 
 # 2. (Tuỳ chọn) Tạo file project Xcode bằng XcodeGen
 brew install xcodegen
 xcodegen generate
 
-# 3. Build bản Release
+# 3. Build bản Universal Release (chạy mượt trên cả Apple Silicon & Intel)
 xcodebuild \
   -project ToolCheckMacBook.xcodeproj \
   -scheme ToolCheckMacBook \
   -configuration Release \
+  -destination "generic/platform=macOS" \
   -derivedDataPath ./build \
   CODE_SIGN_IDENTITY="-" \
   CODE_SIGNING_REQUIRED=NO

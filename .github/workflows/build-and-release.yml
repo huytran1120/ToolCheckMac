@@ -14,11 +14,24 @@ permissions:
 jobs:
   build:
     name: Build & Package macOS App
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          if [ -d "/Applications/Xcode_16.2.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+          fi
+          xcodebuild -version
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -26,20 +39,25 @@ jobs:
       - name: Generate Xcode Project
         run: xcodegen generate
 
-      - name: Build Application (Release)
+      - name: Build Application (Universal 2 Release)
         run: |
           xcodebuild -project ToolCheckMacBook.xcodeproj \
             -scheme ToolCheckMacBook \
             -configuration Release \
+            -destination "generic/platform=macOS" \
             -derivedDataPath build_release \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY="-" \
             build
 
-      - name: Package DMG and ZIP
+      - name: Package DMG, ZIP and Checksums
         run: |
           mkdir -p artifacts
           APP="build_release/Build/Products/Release/ToolCheckMacBook.app"
+          
+          # Verify Universal binary
+          echo "Verifying compiled binary architecture:"
+          lipo -info "$APP/Contents/MacOS/ToolCheckMacBook"
           
           # Determine version name
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
@@ -55,13 +73,19 @@ jobs:
           cp -R "$APP" "$STAGE/"
           ln -s /Applications "$STAGE/Applications"
           hdiutil create -volname "ToolCheckMacBook" -srcfolder "$STAGE" -ov -format UDZO "artifacts/ToolCheckMacBook-${VER}.dmg"
+          cp "artifacts/ToolCheckMacBook-${VER}.dmg" "artifacts/ToolCheckMacBook.dmg"
           rm -rf "$STAGE"
 
           # Create ZIP
           (cd build_release/Build/Products/Release && zip -r -y "../../../../artifacts/ToolCheckMacBook-${VER}.zip" ToolCheckMacBook.app)
+          cp "artifacts/ToolCheckMacBook-${VER}.zip" "artifacts/ToolCheckMacBook.zip"
+
+          # Generate SHA-256 Checksums
+          (cd artifacts && shasum -a 256 *.dmg *.zip > checksums.txt)
 
           echo "Generated artifacts:"
           ls -lh artifacts/
+          cat artifacts/checksums.txt
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4

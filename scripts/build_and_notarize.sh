@@ -30,13 +30,15 @@ NOTARY_PROFILE="${TOOLCHECKMACBOOK_NOTARY_PROFILE:-toolcheckmacbook-notary}"
 echo "▸ Generating Xcode project"
 command -v xcodegen >/dev/null && xcodegen generate
 
-echo "▸ Release Build"
+echo "▸ Release Build (Universal 2: Apple Silicon + Intel)"
 rm -rf "$BUILD_DIR"
 xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration Release \
+  -destination "generic/platform=macOS" \
   -derivedDataPath "$BUILD_DIR" \
   CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO | tail -1
 
 APP="$BUILD_DIR/Build/Products/Release/${APP_NAME}.app"
+lipo -info "$APP/Contents/MacOS/${APP_NAME}"
 
 HAS_CERT=$(security find-identity -v -p codesigning 2>/dev/null | grep -c "Developer ID Application" || true)
 if [ "$HAS_CERT" -gt 0 ]; then

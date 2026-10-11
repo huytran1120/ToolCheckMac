@@ -26,6 +26,7 @@
 		61169B7A6D4762D070E9733C /* DeviceNaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C56217088C3B42E5668024 /* DeviceNaming.swift */; };
 		65A19BBF3696428A4D740B1D /* ReportExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25EC8521ABBEF00AD5D49369 /* ReportExporter.swift */; };
 		71513F302F1E7B15742BCFE3 /* HistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F5767CF86A3ADF5509D3AEBA /* HistoryStore.swift */; };
+		8BBAF25F7946D3886DB75F69 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5795322754DD5552CB7F2765 /* AppIcon.icns */; };
 		90C239FF17B0E1CDAF390462 /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3072F105F487A34291017F7D /* AppModel.swift */; };
 		942885CAF0442F878D7FB6C1 /* AIModelAdvisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D259982592FDF6BE69099B /* AIModelAdvisor.swift */; };
 		95A8C06ADED14772FB70BA13 /* AudioCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19642E7C5AD069D220A3D682 /* AudioCheckView.swift */; };
@@ -63,6 +64,7 @@
 		35F8D8EB7A34E926C88D91E1 /* KeyboardTestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardTestModel.swift; sourceTree = "<group>"; };
 		3D6C0DB715084E426923086E /* KeyboardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardLayout.swift; sourceTree = "<group>"; };
 		513E4D056941C4B9B00FF03B /* DetailViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViews.swift; sourceTree = "<group>"; };
+		5795322754DD5552CB7F2765 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		6574F83E97A0A3F6C6BFAABE /* OverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
 		68357B61F4A89B90CAD46AB7 /* ReportDocumentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDocumentView.swift; sourceTree = "<group>"; };
 		70CE744492421212B075D087 /* ScreenCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCheckView.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 		64773A27D2E3936C4B470993 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				5795322754DD5552CB7F2765 /* AppIcon.icns */,
 				D3ACCDB13BBBF4E6957F7CD5 /* Assets.xcassets */,
 				2711D798B5FBE920254D4887 /* App */,
 				2EEFD39FA162C61804E0077E /* Checks */,
@@ -373,7 +376,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					EE5EB26A496B366308E11F76 = {
 						ProvisioningStyle = Automatic;
@@ -404,6 +407,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BBAF25F7946D3886DB75F69 /* AppIcon.icns in Resources */,
 				C003D6D142B38D3327FE2D27 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,6 +485,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -535,6 +540,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"ONLY_ACTIVE_ARCH[config=Release]" = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -565,6 +571,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -612,6 +619,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"ONLY_ACTIVE_ARCH[config=Release]" = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
