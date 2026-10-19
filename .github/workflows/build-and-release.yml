@@ -1,0 +1,133 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [ "main" ]
+    tags: [ "v*" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Package macOS App
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: |
+          if [ -d "/Applications/Xcode_16.2.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.2.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.1.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.1.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_16.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+          fi
+          xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Run Automated Unit Tests
+        run: |
+          xcodebuild test \
+            -project ToolCheckMacBook.xcodeproj \
+            -scheme ToolCheckMacBook \
+            -destination "platform=macOS,arch=$(uname -m)" \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            -resultBundlePath TestResults.xcresult
+
+      - name: Upload Test Results on Failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TestResults
+          path: TestResults.xcresult
+
+      - name: Build Application (Universal 2 Release)
+        run: |
+          xcodebuild -project ToolCheckMacBook.xcodeproj \
+            -scheme ToolCheckMacBook \
+            -configuration Release \
+            -destination "generic/platform=macOS" \
+            -derivedDataPath build_release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
+            build
+
+      - name: Package DMG, ZIP and Checksums
+        run: |
+          mkdir -p artifacts
+          APP="build_release/Build/Products/Release/ToolCheckMacBook.app"
+          
+          # Verify Universal binary
+          echo "Verifying compiled binary architecture:"
+          lipo -info "$APP/Contents/MacOS/ToolCheckMacBook"
+          ARCHITECTURES=$(lipo -archs "$APP/Contents/MacOS/ToolCheckMacBook")
+          if [[ " $ARCHITECTURES " != *" x86_64 "* || " $ARCHITECTURES " != *" arm64 "* ]]; then
+            echo "::error::Release binary must contain both x86_64 and arm64"
+            exit 1
+          fi
+          
+          APP_VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist")
+          VER="v${APP_VERSION}"
+          if [[ "${GITHUB_REF}" == refs/tags/v* && "${GITHUB_REF_NAME}" != "$VER" ]]; then
+            echo "::error::Release tag ${GITHUB_REF_NAME} does not match app version ${VER}"
+            exit 1
+          fi
+          
+          echo "Packaging for version: ${VER}"
+
+          # Create DMG with /Applications symlink
+          STAGE=$(mktemp -d)
+          cp -R "$APP" "$STAGE/"
+          ln -s /Applications "$STAGE/Applications"
+          hdiutil create -volname "ToolCheckMacBook" -srcfolder "$STAGE" -ov -format UDZO "artifacts/ToolCheckMacBook-${VER}.dmg"
+          cp "artifacts/ToolCheckMacBook-${VER}.dmg" "artifacts/ToolCheckMacBook.dmg"
+          rm -rf "$STAGE"
+
+          # Create ZIP
+          (cd build_release/Build/Products/Release && zip -r -y "../../../../artifacts/ToolCheckMacBook-${VER}.zip" ToolCheckMacBook.app)
+          cp "artifacts/ToolCheckMacBook-${VER}.zip" "artifacts/ToolCheckMacBook.zip"
+
+          # Generate SHA-256 Checksums
+          (cd artifacts && shasum -a 256 *.dmg *.zip > checksums.txt)
+
+          echo "Generated artifacts:"
+          ls -lh artifacts/
+          cat artifacts/checksums.txt
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ToolCheckMacBook-Build-${{ github.ref_name }}
+          path: artifacts/*
+
+      - name: Create or Update GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true
+          body: |
+            Universal 2 for Intel and Apple Silicon. Requires macOS 14 or later.
+
+            Download the DMG or ZIP below. `checksums.txt` contains SHA-256 checksums for both versioned files and the stable `ToolCheckMacBook.dmg` / `ToolCheckMacBook.zip` aliases.
+
+            **Signing notice:** These CI binaries are not Developer ID signed or notarized by Apple. macOS may block them. Do not disable Gatekeeper or ignore malware warnings; review [Apple's guidance](https://support.apple.com/102445) and build from source if this distribution does not meet your security requirements.
+
+            See the [changelog and installation documentation](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md).
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
