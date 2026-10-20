@@ -24,14 +24,12 @@ final class MicrophoneCheckModel: ObservableObject {
             beginTap()
         case .notDetermined:
             statusText = "Waiting for microphone permission…"
-            AVCaptureDevice.requestAccess(for: .audio) { [weak self] granted in
-                Task { @MainActor in
-                    guard let self else { return }
-                    if granted {
-                        self.beginTap()
-                    } else {
-                        self.showPermissionDenied()
-                    }
+            Task {
+                let granted = await AVCaptureDevice.requestAccess(for: .audio)
+                if granted {
+                    self.beginTap()
+                } else {
+                    self.showPermissionDenied()
                 }
             }
         case .denied, .restricted:

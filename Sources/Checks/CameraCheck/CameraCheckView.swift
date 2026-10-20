@@ -9,11 +9,22 @@ final class CameraCheckModel: ObservableObject {
     let session = AVCaptureSession()
 
     func start() {
-        AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-            Task { @MainActor in
-                guard let self else { return }
-                if granted { self.configure() } else { self.permissionDenied = true }
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            configure()
+        case .notDetermined:
+            Task {
+                let granted = await AVCaptureDevice.requestAccess(for: .video)
+                if granted {
+                    self.configure()
+                } else {
+                    self.permissionDenied = true
+                }
             }
+        case .denied, .restricted:
+            permissionDenied = true
+        @unknown default:
+            permissionDenied = true
         }
     }
 
