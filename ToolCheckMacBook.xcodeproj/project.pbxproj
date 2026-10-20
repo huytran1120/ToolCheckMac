@@ -19,6 +19,7 @@
 		2E45B034F9BE198D2AFCDB8D /* CameraCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1D470AED57BE267F4AC195 /* CameraCheckView.swift */; };
 		37E60F8B9E4472BB2C6ED588 /* HardwareProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 262B45B7E07828FEDE5BB604 /* HardwareProbe.swift */; };
 		3D56F7D97C0152F7BCCB58AC /* SerialDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE14E64718BC3929338C6494 /* SerialDecoder.swift */; };
+		3FB63A20AD4DB91E119AC6B9 /* CaptureCheckModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE582E7768FDA0A1482E348C /* CaptureCheckModel.swift */; };
 		400E163D8582CC0F077776DF /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6574F83E97A0A3F6C6BFAABE /* OverviewView.swift */; };
 		486BDCBA71711B3D3E8F0BE1 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E407E23C3678547390960AD2 /* DesignSystem.swift */; };
 		4E29DFCD4B500E3574A531E8 /* PortLiveCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00521759598511146BD4F9E /* PortLiveCheckView.swift */; };
@@ -36,6 +37,7 @@
 		942885CAF0442F878D7FB6C1 /* AIModelAdvisor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95D259982592FDF6BE69099B /* AIModelAdvisor.swift */; };
 		95A8C06ADED14772FB70BA13 /* AudioCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19642E7C5AD069D220A3D682 /* AudioCheckView.swift */; };
 		9C6454826FF775EF76391144 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA128582DB7BD22B3BDDADE /* RootView.swift */; };
+		9CF93FA282081BF27EAD40A6 /* CaptureCheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B0E618EA902A65E3953B8D9 /* CaptureCheckTests.swift */; };
 		A9108E5E01CD6C8BD9014A9C /* ManagementServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720D4C40954E67E3904659E6 /* ManagementServiceTests.swift */; };
 		B560FD57E272AF6B88360F26 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9D3A7ABD2206F2D38D207B /* StorageService.swift */; };
 		B717118F89D1D03B7366F122 /* ReportExporterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6237778D1E4C6FF1EBA96A6 /* ReportExporterTests.swift */; };
@@ -102,6 +104,7 @@
 		82A4725BA11D0B4282DA82B9 /* AIModelsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIModelsView.swift; sourceTree = "<group>"; };
 		897F533A6D065CDCD4161FE3 /* TouchIDCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchIDCheckView.swift; sourceTree = "<group>"; };
 		8A442AA26FEA0ED250FE03B1 /* DeviceNamingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceNamingTests.swift; sourceTree = "<group>"; };
+		8B0E618EA902A65E3953B8D9 /* CaptureCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCheckTests.swift; sourceTree = "<group>"; };
 		8B33F50795DD467B858A6A61 /* ToolCheckMacBookApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolCheckMacBookApp.swift; sourceTree = "<group>"; };
 		8E45C1E25A4567DA76F80E47 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		958982A541AF54D937CE1519 /* ScreenCheckModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenCheckModel.swift; sourceTree = "<group>"; };
@@ -122,6 +125,7 @@
 		D654F333FF83F55A514F4E2D /* AIAdvisorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIAdvisorTests.swift; sourceTree = "<group>"; };
 		D9ED55FDCA416B262DDE4B13 /* PortService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortService.swift; sourceTree = "<group>"; };
 		DA959A812E8822CB4304552D /* TrackpadCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackpadCheckView.swift; sourceTree = "<group>"; };
+		DE582E7768FDA0A1482E348C /* CaptureCheckModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureCheckModel.swift; sourceTree = "<group>"; };
 		E0FB98D8A721BEB590A3AA0B /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		E14571681700E2EF49E71F0D /* ReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModel.swift; sourceTree = "<group>"; };
 		E407E23C3678547390960AD2 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 		2EEFD39FA162C61804E0077E /* Checks */ = {
 			isa = PBXGroup;
 			children = (
+				DE582E7768FDA0A1482E348C /* CaptureCheckModel.swift */,
 				7DA84B5DC292F25A36D9C220 /* AudioCheck */,
 				A26ABCC6A8FA6D085AC2B96E /* CameraCheck */,
 				E3BEB07DD6D6DE6C66AE903A /* DiskSpeedCheck */,
@@ -229,6 +234,7 @@
 			children = (
 				D654F333FF83F55A514F4E2D /* AIAdvisorTests.swift */,
 				EB0F7AA9D3E1EA1EF04453B3 /* BenchmarkTests.swift */,
+				8B0E618EA902A65E3953B8D9 /* CaptureCheckTests.swift */,
 				8A442AA26FEA0ED250FE03B1 /* DeviceNamingTests.swift */,
 				33D1AC61093A8B0660E239F2 /* DiagnosticProbeTests.swift */,
 				6FAB1D2B9A39C3A18DF6B04D /* HistoryStoreTests.swift */,
@@ -510,6 +516,7 @@
 			files = (
 				263D2F64723434B916F995FD /* AIAdvisorTests.swift in Sources */,
 				FB59BEA8B4EB25819653AEE1 /* BenchmarkTests.swift in Sources */,
+				9CF93FA282081BF27EAD40A6 /* CaptureCheckTests.swift in Sources */,
 				1282E99D09226A136CC7A687 /* DeviceNamingTests.swift in Sources */,
 				E09D918F5C16E5C44EB8629E /* DiagnosticProbeTests.swift in Sources */,
 				FB69ECFF1D6FC10BB7AF6B8D /* HistoryStoreTests.swift in Sources */,
@@ -533,6 +540,7 @@
 				95A8C06ADED14772FB70BA13 /* AudioCheckView.swift in Sources */,
 				FBBCD69DD84191B7E60E333F /* BatteryService.swift in Sources */,
 				2E45B034F9BE198D2AFCDB8D /* CameraCheckView.swift in Sources */,
+				3FB63A20AD4DB91E119AC6B9 /* CaptureCheckModel.swift in Sources */,
 				486BDCBA71711B3D3E8F0BE1 /* DesignSystem.swift in Sources */,
 				0A292CFD1DFDC522A7C7B996 /* DetailViews.swift in Sources */,
 				61169B7A6D4762D070E9733C /* DeviceNaming.swift in Sources */,

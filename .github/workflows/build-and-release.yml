@@ -39,6 +39,9 @@ jobs:
       - name: Generate Xcode Project
         run: xcodegen generate
 
+      - name: Test App Signing Validation
+        run: bash scripts/test_app_signing.sh
+
       - name: Run Automated Unit Tests
         run: |
           xcodebuild test \
@@ -67,6 +70,10 @@ jobs:
             CODE_SIGN_IDENTITY="-" \
             build
 
+      - name: Sign and Verify Complete App Bundle
+        run: |
+          bash scripts/sign_app.sh "build_release/Build/Products/Release/ToolCheckMacBook.app"
+
       - name: Package DMG, ZIP and Checksums
         run: |
           mkdir -p artifacts
@@ -93,6 +100,7 @@ jobs:
           # Create DMG with /Applications symlink
           STAGE=$(mktemp -d)
           cp -R "$APP" "$STAGE/"
+          bash scripts/verify_app_signature.sh "$STAGE/ToolCheckMacBook.app"
           ln -s /Applications "$STAGE/Applications"
           hdiutil create -volname "ToolCheckMacBook" -srcfolder "$STAGE" -ov -format UDZO "artifacts/ToolCheckMacBook-${VER}.dmg"
           cp "artifacts/ToolCheckMacBook-${VER}.dmg" "artifacts/ToolCheckMacBook.dmg"
@@ -126,7 +134,7 @@ jobs:
 
             Download the DMG or ZIP below. `checksums.txt` contains SHA-256 checksums for both versioned files and the stable `ToolCheckMacBook.dmg` / `ToolCheckMacBook.zip` aliases.
 
-            **Signing notice:** These CI binaries are not Developer ID signed or notarized by Apple. macOS may block them. Do not disable Gatekeeper or ignore malware warnings; review [Apple's guidance](https://support.apple.com/102445) and build from source if this distribution does not meet your security requirements.
+            **Signing notice:** These CI app bundles have verified ad-hoc signatures and microphone/camera entitlements, but are not Developer ID signed or notarized by Apple. Permissions may need to be granted again after an update, and macOS may block these builds. Do not disable Gatekeeper or ignore malware warnings; review [Apple's guidance](https://support.apple.com/102445) and build from source if this distribution does not meet your security requirements.
 
             See the [changelog and installation documentation](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md).
         env:

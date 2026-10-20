@@ -225,6 +225,19 @@ public final class LocalizationManager: ObservableObject {
         "test.stop": "Dừng",
         "test.saveResult": "Lưu kết quả",
         "test.skip": "Bỏ qua bài test này",
+        "test.capture.idle": "Đã dừng",
+        "test.capture.permission": "Đang chờ quyết định cấp quyền từ macOS…",
+        "test.capture.starting": "Đã có quyền. Đang khởi động thiết bị…",
+        "test.capture.running": "Thiết bị đang hoạt động",
+        "test.capture.stopping": "Đang dừng và giải phóng thiết bị…",
+        "test.capture.denied": "Chưa được cấp quyền truy cập",
+        "test.capture.failed": "Không thể khởi động thiết bị",
+        "test.capture.noDevice": "Không tìm thấy thiết bị đầu vào khả dụng.",
+        "test.capture.invalidFormat": "Thiết bị không cung cấp định dạng đầu vào được hỗ trợ.",
+        "test.capture.notRunning": "Thiết bị không hoạt động sau yêu cầu khởi động.",
+        "test.capture.busy": "Lượt kiểm tra trước vẫn đang sử dụng hoặc giải phóng thiết bị. Hãy thử lại sau.",
+        "test.capture.timedOut": "Khởi động thiết bị quá thời gian chờ. Bạn có thể rời bài test; chỉ thử lại sau khi hệ thống hoàn tất dọn dẹp. Nếu vẫn bị kẹt, hãy thoát ứng dụng.",
+        "test.capture.startFailed": "Không thể khởi động thiết bị:",
 
         // Audio Test
         "test.audio.left": "Phát loa Trái",
@@ -236,6 +249,7 @@ public final class LocalizationManager: ObservableObject {
         "test.camera.permission": "Quyền truy cập Camera bị từ chối. Vui lòng cho phép ToolCheckMacBook trong \"Cài đặt hệ thống › Quyền riêng tư & Bảo mật › Camera\".",
         "test.camera.pass": "Rõ nét & Bình thường",
         "test.camera.fail": "Phát hiện hình ảnh bất thường",
+        "test.camera.openSettings": "Mở Cài đặt Camera",
 
         // Microphone Test
         "test.mic.listening": "Đang lắng nghe…",
@@ -491,6 +505,19 @@ public final class LocalizationManager: ObservableObject {
         "test.stop": "Stop",
         "test.saveResult": "Save Result",
         "test.skip": "Skip Test",
+        "test.capture.idle": "Stopped",
+        "test.capture.permission": "Waiting for a macOS permission decision…",
+        "test.capture.starting": "Permission granted. Starting device…",
+        "test.capture.running": "Device is active",
+        "test.capture.stopping": "Stopping and releasing device…",
+        "test.capture.denied": "Access permission not granted",
+        "test.capture.failed": "Unable to start device",
+        "test.capture.noDevice": "No available input device was found.",
+        "test.capture.invalidFormat": "The device does not provide a supported input format.",
+        "test.capture.notRunning": "The device did not become active after the start request.",
+        "test.capture.busy": "A previous test is still using or releasing the device. Try again after it finishes.",
+        "test.capture.timedOut": "Device startup timed out. You can leave this test; retry only after system cleanup finishes. If it remains stuck, quit the application.",
+        "test.capture.startFailed": "Unable to start device:",
 
         // Audio Test
         "test.audio.left": "Play Left Channel",
@@ -502,6 +529,7 @@ public final class LocalizationManager: ObservableObject {
         "test.camera.permission": "Camera permission denied. Please allow ToolCheckMacBook in \"System Settings › Privacy & Security › Camera\".",
         "test.camera.pass": "Clear & Normal",
         "test.camera.fail": "Image Anomaly Detected",
+        "test.camera.openSettings": "Open Camera Settings",
 
         // Microphone Test
         "test.mic.listening": "Listening…",

@@ -19,12 +19,12 @@ cd "$(dirname "$0")/.."
 PROJECT="ToolCheckMacBook.xcodeproj"
 SCHEME="ToolCheckMacBook"
 APP_NAME="ToolCheckMacBook"
-VERSION="${TOOLCHECKMACBOOK_VERSION:-$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Sources/App/Info.plist 2>/dev/null || echo "1.3.0")}"
+VERSION="${TOOLCHECKMACBOOK_VERSION:-$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" Sources/App/Info.plist)}"
 BUILD_DIR="build_release"
 DMG_OUT="$HOME/Desktop/${APP_NAME}-${VERSION}.dmg"
 
 # -- Customize as needed: your Developer ID and notarytool profile --
-SIGN_ID="${TOOLCHECKMACBOOK_SIGN_ID:-Developer ID Application}"   # Leave empty to skip signing
+SIGN_ID="${TOOLCHECKMACBOOK_SIGN_ID:-Developer ID Application}"
 NOTARY_PROFILE="${TOOLCHECKMACBOOK_NOTARY_PROFILE:-toolcheckmacbook-notary}"
 
 echo "▸ Generating Xcode project"
@@ -35,20 +35,19 @@ rm -rf "$BUILD_DIR"
 xcodebuild -project "$PROJECT" -scheme "$SCHEME" -configuration Release \
   -destination "generic/platform=macOS" \
   -derivedDataPath "$BUILD_DIR" \
-  CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO | tail -1
+  CODE_SIGNING_ALLOWED=NO CODE_SIGN_IDENTITY="-" | tail -1
 
 APP="$BUILD_DIR/Build/Products/Release/${APP_NAME}.app"
 lipo -info "$APP/Contents/MacOS/${APP_NAME}"
 
-HAS_CERT=$(security find-identity -v -p codesigning 2>/dev/null | grep -c "Developer ID Application" || true)
-if [ "$HAS_CERT" -gt 0 ]; then
+IDENTITIES=$(security find-identity -v -p codesigning)
+if [[ "$SIGN_ID" != "-" ]] && { [[ -n "${TOOLCHECKMACBOOK_SIGN_ID:-}" ]] || grep -q "Developer ID Application" <<< "$IDENTITIES"; }; then
   echo "▸ Developer ID Signing (Hardened Runtime)"
-  codesign --force --deep --options runtime --timestamp \
-    --sign "$SIGN_ID" "$APP"
-  codesign --verify --strict --verbose=2 "$APP"
+  bash scripts/sign_app.sh "$APP" "$SIGN_ID"
   SIGNED=1
 else
-  echo "⚠ No Developer ID certificate found. Generating ad-hoc DMG (run locally; right-click Open if distributing)."
+  echo "⚠ Using ad-hoc signing for local testing only; this build will not be notarized."
+  bash scripts/sign_app.sh "$APP"
   SIGNED=0
 fi
 

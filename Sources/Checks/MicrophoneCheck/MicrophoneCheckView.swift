@@ -4,46 +4,13 @@ import AppKit
 
 /// Microphone test: Displays live input level to verify responsiveness when speaking into the mic.
 @MainActor
-final class MicrophoneCheckModel: ObservableObject {
-    @Published var level: Double = 0        // 0...1
-    @Published var peak: Double = 0
-    @Published var isRunning = false
-    @Published var permissionDenied = false
-    @Published var statusText = "Preparing…"
-    @Published var errorText: String?
+final class MicrophoneCheckModel: CaptureCheckModel {
+    @Published private(set) var level: Double = 0
+    @Published private(set) var peak: Double = 0
+    private let worker = CaptureWorker.microphone
 
-    private let engine = AVAudioEngine()
-
-    func start() {
-        guard !isRunning else { return }
-        permissionDenied = false
-        errorText = nil
-
-        switch AVCaptureDevice.authorizationStatus(for: .audio) {
-        case .authorized:
-            beginTap()
-        case .notDetermined:
-            statusText = "Waiting for microphone permission…"
-            Task {
-                let granted = await AVCaptureDevice.requestAccess(for: .audio)
-                if granted {
-                    self.beginTap()
-                } else {
-                    self.showPermissionDenied()
-                }
-            }
-        case .denied, .restricted:
-            showPermissionDenied()
-        @unknown default:
-            showPermissionDenied()
-        }
-    }
-
-    private func showPermissionDenied() {
-        permissionDenied = true
-        isRunning = false
-        statusText = "Microphone permission not granted"
-        errorText = "Please allow ToolCheckMacBook to access the microphone in System Settings, then reopen this test."
+    init() {
+        super.init(permission: .microphone)
     }
 
     func openPrivacySettings() {
@@ -52,62 +19,75 @@ final class MicrophoneCheckModel: ObservableObject {
         }
     }
 
-    func retry() {
-        stop()
-        start()
-    }
-
-    private func beginTap() {
-        let input = engine.inputNode
-        let format = input.inputFormat(forBus: 0)
-        guard format.channelCount > 0 else {
-            errorText = "No available microphone input device detected."
-            statusText = "Unable to start listening"
-            return
-        }
-
-        input.removeTap(onBus: 0)
-        let block: @Sendable (AVAudioPCMBuffer, AVAudioTime) -> Void = { [weak self] buffer, _ in
-            let normalized = MicrophoneCheckModel.level(from: buffer)
-            DispatchQueue.main.async {
-                self?.updateLevel(normalized)
+    override func beginCapture(id: UUID) async throws {
+        let onLevel: @Sendable (Double) -> Void = { [weak self] value in
+            Task { @MainActor [weak self] in
+                guard let self, self.activeID == id, self.isRunning else { return }
+                self.level = value
+                self.peak = max(self.peak * 0.92, value)
             }
         }
-        input.installTap(onBus: 0, bufferSize: 1024, format: format, block: block)
-        do {
-            engine.prepare()
-            try engine.start()
-            isRunning = true
-            statusText = "Listening…"
-        } catch {
-            input.removeTap(onBus: 0)
-            isRunning = false
-            statusText = "Unable to start listening"
-            errorText = "Failed to start microphone listening: \(error.localizedDescription)"
-        }
+        try await worker.start(id: id) { MicrophoneInput(onLevel: onLevel) }
     }
 
-    /// Pure function without isolation: Safely calculates RMS level on the audio thread.
-    nonisolated private static func level(from buffer: AVAudioPCMBuffer) -> Double {
+    override func endCapture(id: UUID) async {
+        await worker.stop(id: id)
+    }
+
+    override func stop() {
+        super.stop()
+        level = 0
+        peak = 0
+    }
+}
+
+private final class MicrophoneInput: CaptureDevice {
+    private let engine = AVAudioEngine()
+    private let onLevel: @Sendable (Double) -> Void
+    private var hasTap = false
+
+    init(onLevel: @escaping @Sendable (Double) -> Void) {
+        self.onLevel = onLevel
+    }
+
+    func start() throws {
+        let input = engine.inputNode
+        let format = input.outputFormat(forBus: 0)
+        guard format.channelCount > 0 else { throw CaptureFailure.noDevice }
+        guard format.sampleRate.isFinite, format.sampleRate > 0,
+              format.commonFormat == .pcmFormatFloat32 else { throw CaptureFailure.invalidFormat }
+        try Task.checkCancellation()
+
+        let block: @Sendable (AVAudioPCMBuffer, AVAudioTime) -> Void = { [onLevel] buffer, _ in
+            onLevel(MicrophoneInput.level(from: buffer))
+        }
+        input.installTap(onBus: 0, bufferSize: 1024, format: format, block: block)
+        hasTap = true
+        try Task.checkCancellation()
+        engine.prepare()
+        try Task.checkCancellation()
+        try engine.start()
+        guard engine.isRunning else { throw CaptureFailure.notRunning }
+    }
+
+    private static func level(from buffer: AVAudioPCMBuffer) -> Double {
         guard let channel = buffer.floatChannelData?[0] else { return 0 }
         let frames = Int(buffer.frameLength)
         var sum: Float = 0
-        for i in 0..<frames { sum += channel[i] * channel[i] }
+        for i in 0..<frames {
+            let sample = channel[i * buffer.stride]
+            sum += sample * sample
+        }
         let rms = frames > 0 ? sqrt(sum / Float(frames)) : 0
-        return min(1.0, Double(rms) * 8)
-    }
-
-    private func updateLevel(_ value: Double) {
-        level = value
-        peak = max(peak * 0.92, value)
+        return rms.isFinite ? min(1.0, Double(rms) * 8) : 0
     }
 
     func stop() {
-        if isRunning {
+        if hasTap {
             engine.inputNode.removeTap(onBus: 0)
-            engine.stop()
-            isRunning = false
+            hasTap = false
         }
+        engine.stop()
     }
 }
 
@@ -127,7 +107,7 @@ struct MicrophoneCheckView: View {
             if model.permissionDenied {
                 VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
-                        text: model.errorText ?? loc.t("test.mic.permission"))
+                        text: loc.t("test.mic.permission"))
                     HStack(spacing: DS.Spacing.md) {
                         Button {
                             model.openPrivacySettings()
@@ -137,17 +117,23 @@ struct MicrophoneCheckView: View {
                         .buttonStyle(.borderedProminent)
 
                         Button {
-                            model.retry()
+                            model.start()
                         } label: {
                             Label(loc.t("test.mic.retry"), systemImage: "arrow.clockwise")
                         }
                         .buttonStyle(.bordered)
+                        .disabled(!model.canStart)
                     }
                 }
             } else {
                 levelMeter
-                if let error = model.errorText {
-                    InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange, text: error)
+                if let failure = model.failure {
+                    InlineNotice(icon: "exclamationmark.triangle.fill", tint: .orange,
+                        text: failure.localized(using: loc))
+                }
+                if model.canStart {
+                    Button(loc.t("test.mic.retry")) { model.start() }
+                        .buttonStyle(.bordered)
                 }
             }
 
@@ -161,13 +147,21 @@ struct MicrophoneCheckView: View {
                         summary: "Microphone picks up audio normally, level meter reacts to sound"))
                 }
                 .buttonStyle(.borderedProminent)
+                .disabled(!model.canRecordResult)
                 Button(loc.t("test.mic.fail")) {
                     model.stop()
                     onComplete(CheckResult(id: "microphone", title: "Microphone", status: .warning,
                         summary: "Microphone level does not react or is abnormal, recommend further inspection"))
                 }
                 .buttonStyle(.bordered)
+                .disabled(!model.canRecordResult)
             }
+            Button(loc.t("test.skip")) {
+                model.stop()
+                onComplete(CheckResult(id: "microphone", title: "Microphone", status: .skipped,
+                    summary: "Microphone test skipped"))
+            }
+            .buttonStyle(.bordered)
         }
         .padding(DS.Spacing.xl)
         .checkPane(loc.t("test.mic.title"))
@@ -187,7 +181,7 @@ struct MicrophoneCheckView: View {
                 }
             }
             .frame(height: 28)
-            Text(model.statusText)
+            Text(loc.t(model.isRunning ? "test.mic.listening" : "test.capture.\(model.phase.rawValue)"))
                 .font(DS.Font.caption).foregroundStyle(.secondary)
         }
     }

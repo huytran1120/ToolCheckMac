@@ -201,7 +201,7 @@ A build and packaging script is included:
 
 Output file:
 ```text
-~/Desktop/ToolCheckMacBook-1.3.3.dmg
+~/Desktop/ToolCheckMacBook-1.3.4.dmg
 ```
 
 For official Developer ID signing and Apple notarization, configure environment variables prior to running the script:
@@ -220,12 +220,18 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 * **Permission Prompts:**
   When testing the Camera, Microphone, or Bluetooth, macOS will ask for permission. If denied, enable them manually in **System Settings › Privacy & Security**.
+  Microphone and camera startup runs away from the UI thread. Waiting for permission and starting the device are separate states; leaving or skipping a test prevents a late permission answer from starting capture. If native startup times out, the app remains responsive but retries wait for cleanup; quitting the app may be necessary if the system audio service never returns.
+  Repeated prompts in v1.3.3 can be caused by an incompletely signed app bundle. The corrected packaging pipeline signs and verifies the entire Universal 2 bundle, including microphone/camera entitlements. Ad-hoc signatures are for local testing, do not provide Developer ID trust/notarization, and may require permission again after an update. Do not disable macOS security or reset all applications' permissions as a workaround.
 
 ---
 
 ### 📋 Release History & Changelog
 
-* **v1.3.3** (Build 7) - *Current*
+* **v1.3.4** (Build 8) - *Current*
+  * **Capture lifecycle:** Serial background device startup/cleanup, shared pending permission requests, stale-result rejection, startup timeouts, and no pass/fail result before capture starts.
+  * **Release signatures:** Complete app-bundle signing with capture entitlements; verify both Intel and ARM signatures before packaging. Developer ID signing remains a separate distribution option.
+  * **Regression coverage:** Permission denial, cancellation during device creation/startup, stalled cleanup, late completions, bilingual states, and invalid bundle signatures.
+* **v1.3.3** (Build 7)
   * **Critical Concurrency Fix:** Replaced legacy completion handlers with Swift async/await (`await AVCaptureDevice.requestAccess`) in Microphone and Camera tests, resolving `EXC_BREAKPOINT` / `SIGTRAP` crash on macOS 15+ Sequoia.
   * **First-Time Launch Guide:** Added explicit step-by-step Gatekeeper instructions (Control-Click / Open Anyway) in documentation and GitHub Pages.
 * **v1.3.2** (Build 6)
@@ -420,7 +426,7 @@ Dự án có sẵn script đóng gói tự động:
 
 File cài đặt đầu ra:
 ```text
-~/Desktop/ToolCheckMacBook-1.3.3.dmg
+~/Desktop/ToolCheckMacBook-1.3.4.dmg
 ```
 
 Nếu bạn có tài khoản Apple Developer và muốn ký chứng chỉ Developer ID + công chứng (Notarization) để phân phối rộng rãi:
@@ -439,12 +445,18 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 * **Cấp quyền Camera / Micro / Bluetooth:**
   Trong lần đầu chạy các bài test tương tác, macOS sẽ hiển thị hộp thoại xin cấp quyền. Nếu vô tình bấm Từ chối, bạn có thể cấp lại quyền tại: **Cài đặt hệ thống (System Settings) › Quyền riêng tư & Bảo mật (Privacy & Security)**.
+  Khởi động microphone/camera chạy ngoài luồng giao diện; trạng thái chờ cấp quyền được tách khỏi khởi động thiết bị. Rời hoặc bỏ qua bài test sẽ ngăn câu trả lời cấp quyền đến muộn bật lại thiết bị. Nếu khởi động quá hạn, giao diện vẫn phản hồi nhưng chỉ cho thử lại sau khi dọn dẹp xong; có thể phải thoát app nếu dịch vụ âm thanh hệ thống không trả về.
+  Hộp thoại hỏi lại liên tục ở v1.3.3 có thể do app chưa được ký đầy đủ. Quy trình đóng gói đã sửa sẽ ký và xác minh toàn bộ app Universal 2 cùng entitlement microphone/camera. Chữ ký ad-hoc chỉ dành cho thử nghiệm cục bộ, không thay thế Developer ID/notarization và có thể phải xin quyền lại sau khi cập nhật. Không tắt bảo mật macOS hoặc reset quyền của tất cả ứng dụng để xử lý lỗi này.
 
 ---
 
 ### 📋 Lịch sử phiên bản (Changelog)
 
-* **v1.3.3** (Build 7) - *Mới nhất*
+* **v1.3.4** (Build 8) - *Mới nhất*
+  * **Vòng đời microphone/camera:** Khởi động và dọn dẹp trên hàng đợi nền riêng, dùng chung yêu cầu cấp quyền đang chờ, bỏ kết quả đến muộn, giới hạn thời gian khởi động và không cho đánh giá đạt/lỗi khi chưa bật được thiết bị.
+  * **Chữ ký bản dựng:** Ký đầy đủ app cùng entitlement microphone/camera; xác minh chữ ký Intel và ARM trước đóng gói. Ký Developer ID vẫn là lựa chọn phân phối riêng.
+  * **Kiểm thử hồi quy:** Từ chối quyền, hủy khi tạo/khởi động thiết bị, dọn dẹp bị kẹt, kết quả đến muộn, trạng thái song ngữ và chữ ký gói không hợp lệ.
+* **v1.3.3** (Build 7)
   * **Sửa lỗi văng app nghiêm trọng (Concurrency Crash):** Chuyển toàn bộ cơ chế xin quyền Camera và Microphone sang chuẩn `async/await` hiện đại của Swift 6, khắc phục triệt để lỗi xung đột luồng `MainActor` (`EXC_BREAKPOINT / SIGTRAP`) trên macOS 15+ Sequoia.
   * **Hướng dẫn vượt Gatekeeper cho người mới:** Bổ sung hướng dẫn chi tiết cách mở ứng dụng lần đầu (Chuột phải / Control+Click hoặc bấm Vẫn mở trong Cài đặt).
 * **v1.3.2** (Build 6)

@@ -14,18 +14,21 @@ Run `bash scripts/run_tests.sh` from the repository root. The suite uses synthet
 | SSD benchmark | Complete reads/writes succeed; short writes are handled; early EOF, write errors, and flush failures cannot produce a successful result; interrupted flushes retry; cancellation prevents publishing partial results or overlapping restarts |
 | Performance test | Duration and progress use monotonic elapsed time, not a loop counter; a cancelled test cannot report a full-duration pass |
 | Keyboard | Both Command keys are recorded while Command shortcuts pass through; keys outside the layout do not inflate coverage |
+| Microphone and camera lifecycle | Denied/restricted access never opens hardware; repeated starts and view changes share pending permissions; late permission/start results cannot resurrect capture; device creation/start/stop run on a dedicated serial executor; timeouts and blocking cleanup keep UI responsive and prevent overlapping retries or passing results |
 | Localization | Intel without T2 is not translated as having T2; inconclusive MDM/SIP probes remain inconclusive in both languages; legacy Vietnamese hosts/SIP headlines render correctly in English without claiming proven bypass |
 | History | Missing files differ from unreadable/corrupt files; migration preserves the original; failed writes/deletes do not mutate the displayed history; unreadable history is protected until reloaded successfully |
 | Report export | PNG/PDF rendering includes the complete bilingual MDM advisory; PNG height expands for the advisory; empty data and destination write errors are rejected; failed writes preserve existing files |
 
 These tests do not certify physical hardware health. Verify Intel and Apple Silicon MacBooks on supported macOS versions, including models with and without Touch ID or fans.
 
+Run `bash scripts/test_app_signing.sh` for packaging regression coverage. It builds a small synthetic Universal 2 app without launching it, rejects unsigned/modified/missing-entitlement bundles, and accepts complete signatures containing both capture entitlements.
+
 ## Pre-Release Verification
 
 ```bash
 xcodebuild -project ToolCheckMacBook.xcodeproj -scheme ToolCheckMacBook -configuration Release -derivedDataPath build_release CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=NO
 ./scripts/build_and_notarize.sh
-hdiutil verify ~/Desktop/ToolCheckMacBook-1.2.dmg
+hdiutil verify ~/Desktop/ToolCheckMacBook-1.3.4.dmg
 ```
 
 Verification items:
@@ -41,6 +44,11 @@ Verification items:
 - MDM advisories appear in both the Security detail view and exported PNG/PDF without clipping
 - Erase/setup guidance requires owner consent and backups, and distinguishes Apple Silicon/Intel with T2 from Intel without T2; do not erase any device merely to run this checklist
 - DMG mounts cleanly with `ToolCheckMacBook.app` and Applications symlink
+- Extract the packaged app and run `bash scripts/verify_app_signature.sh /path/to/ToolCheckMacBook.app`
+- In a test account, exercise microphone and camera with permission undecided, allowed, denied, and restricted; no hardware pass/fail should be saved before capture actually starts
+- Leave or skip the test while permission/startup is pending, then answer the system prompt; capture must not restart in the abandoned view
+- Repeat opening/closing both capture pages; stop/cleanup must finish before a retry, with no repeated permission prompts for the same unchanged signed build
+- During a simulated slow/unavailable device startup, distinguish waiting for permission from starting/stopping; do not force-kill `coreaudiod`, change system security, or erase global TCC permissions for testing
 
 ## Automated Detection Modules
 

@@ -4,6 +4,24 @@ import XCTest
 @MainActor
 final class LocalizationTests: XCTestCase {
 
+    func testCaptureStatesAndErrorsAreLocalizedInBothLanguages() {
+        let loc = LocalizationManager.shared
+        let original = loc.currentLanguage
+        defer { loc.currentLanguage = original }
+        for language in [AppLanguage.english, .vietnamese] {
+            loc.currentLanguage = language
+            for phase in [CapturePhase.idle, .permission, .starting, .running, .stopping, .denied, .failed] {
+                let key = "test.capture.\(phase.rawValue)"
+                XCTAssertNotEqual(loc.t(key), key)
+            }
+            for error in [CaptureFailure.noDevice, .invalidFormat, .notRunning, .busy, .timedOut, .startFailed("Device error")] {
+                XCTAssertFalse(error.localized(using: loc).contains("test.capture."))
+            }
+            XCTAssertNotEqual(loc.t("test.capture.permission"), loc.t("test.capture.starting"))
+            XCTAssertTrue(CaptureFailure.startFailed("Device error").localized(using: loc).contains("Device error"))
+        }
+    }
+
     func testDictionarySymmetry() {
         let viKeys = Set(LocalizationManager.vietnameseStrings.keys)
         let enKeys = Set(LocalizationManager.englishStrings.keys)
