@@ -122,9 +122,15 @@ Offline checks cannot certify release from an organization. Before transfer, obt
 #### Option 1: Direct DMG Download (Recommended)
 1. Download **[ToolCheckMacBook.dmg](https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.dmg)** from the latest release.
 2. Open the `.dmg` disk image and drag **ToolCheckMacBook.app** into your `/Applications` folder.
-3. *Signing notice:* CI downloads are not Developer ID signed or notarized by Apple. macOS may block them; review [Apple's safety guidance](https://support.apple.com/102445) before use. Do not disable Gatekeeper or ignore malware warnings.
 
-Verify download integrity:
+> **💡 First-Time Launch Guide (macOS Gatekeeper):**  
+> Because ToolCheckMacBook is an open-source tool built via GitHub Actions and not signed with a paid Apple Developer certificate, macOS Gatekeeper may show a warning: *"ToolCheckMacBook cannot be opened because Apple cannot check it for malicious software"* or *"Unidentified Developer"*.  
+> To open the app safely using official [Apple guidance](https://support.apple.com/102445):
+> - **Method 1 (Quickest):** In Finder, open your **Applications** folder, **Right-click** (or hold **`Control`** and click) **ToolCheckMacBook** › choose **Open** › click **Open** on the confirmation dialog.
+> - **Method 2:** Go to **Apple Menu  › System Settings › Privacy & Security**, scroll down to the **Security** section, and click **Open Anyway**.
+> - **Permissions:** When prompted, allow Camera and Microphone permissions so interactive hardware tests can verify sensor functionality.
+
+Verify download integrity (Optional):
 ```bash
 shasum -a 256 ToolCheckMacBook.dmg
 # Release assets provide automatic SHA-256 checksums on the GitHub Releases page
@@ -332,7 +338,13 @@ Kiểm tra ngoại tuyến không chứng minh máy đã được gỡ khỏi t�
 #### Cách 1: Tải trực tiếp file .DMG (Khuyên dùng)
 1. Tải bản mới nhất **[ToolCheckMacBook.dmg](https://github.com/huytran1120/ToolCheckMac/releases/latest/download/ToolCheckMacBook.dmg)** từ mục Releases.
 2. Mở file `.dmg` và kéo biểu tượng **ToolCheckMacBook.app** vào thư mục `Applications`.
-3. *Lưu ý bảo mật:* Bản CI chưa được ký Developer ID hoặc công chứng bởi Apple; macOS có thể chặn mở. Xem [hướng dẫn của Apple](https://support.apple.com/102445), không tắt Gatekeeper hoặc bỏ qua cảnh báo mã độc.
+
+> **💡 Hướng dẫn mở ứng dụng lần đầu cho người mới (Vượt cảnh báo Gatekeeper):**  
+> Vì **ToolCheckMacBook** là phần mềm mã nguồn mở miễn phí chưa mua chứng chỉ trả phí Apple Developer ($99/năm), macOS sẽ hiển thị cảnh báo: *"Không thể mở ứng dụng vì Apple không thể kiểm tra phần mềm độc hại"* hoặc *"Nhà phát triển chưa được xác minh"*.  
+> Để mở ứng dụng an toàn theo đúng [hướng dẫn chính thức của Apple](https://support.apple.com/102445):
+> - **Cách 1 (Nhanh nhất • 3 giây):** Vào thư mục **Applications (Ứng dụng)** trong Finder, **nhấp chuột phải** (hoặc giữ phím **`Control`** + click) vào **ToolCheckMacBook** › chọn **Mở (Open)** › bấm tiếp nút **Mở (Open)** ở hộp thoại xác nhận.
+> - **Cách 2:** Mở **Cài đặt hệ thống (System Settings) › Quyền riêng tư & Bảo mật (Privacy & Security)** › cuộn xuống mục **Bảo mật** › bấm nút **Vẫn mở (Open Anyway)**.
+> - **Cấp quyền kiểm tra phần cứng:** Khi chạy bài test Webcam hoặc Microphone lần đầu, hãy bấm **OK / Cho phép** để ứng dụng có thể kiểm tra tín hiệu cảm biến.
 
 Kiểm tra tính toàn vẹn (Checksum SHA-256):
 ```bash
