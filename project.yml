@@ -28,8 +28,8 @@ targets:
       path: Sources/App/Info.plist
       properties:
         CFBundleDisplayName: ToolCheckMacBook
-        CFBundleShortVersionString: "1.3.2"
-        CFBundleVersion: "6"
+        CFBundleShortVersionString: "1.3.3"
+        CFBundleVersion: "7"
         NSCameraUsageDescription: Used for camera testing to verify video clarity and check for sensor defects.
         NSMicrophoneUsageDescription: Used for microphone testing to verify audio recording functionality.
         NSBluetoothAlwaysUsageDescription: Used for Bluetooth testing to scan nearby devices and verify RF functionality.

@@ -201,7 +201,7 @@ A build and packaging script is included:
 
 Output file:
 ```text
-~/Desktop/ToolCheckMacBook-1.3.2.dmg
+~/Desktop/ToolCheckMacBook-1.3.3.dmg
 ```
 
 For official Developer ID signing and Apple notarization, configure environment variables prior to running the script:
@@ -225,7 +225,10 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 ### 📋 Release History & Changelog
 
-* **v1.3.2** (Build 6) - *Current*
+* **v1.3.3** (Build 7) - *Current*
+  * **Critical Concurrency Fix:** Replaced legacy completion handlers with Swift async/await (`await AVCaptureDevice.requestAccess`) in Microphone and Camera tests, resolving `EXC_BREAKPOINT` / `SIGTRAP` crash on macOS 15+ Sequoia.
+  * **First-Time Launch Guide:** Added explicit step-by-step Gatekeeper instructions (Control-Click / Open Anyway) in documentation and GitHub Pages.
+* **v1.3.2** (Build 6)
   * **MDM evidence:** Exact hostname parsing with IPv4/IPv6 support, explicit hosts read errors, and independent enrollment results without duplicate score deductions.
   * **SIP and localization:** Preserves enabled, disabled, and unknown/custom states; bilingual warnings describe evidence without claiming certain bypass.
   * **Complete reports:** Includes MDM advisories in PNG/PDF, with consent, backup, and Intel-without-T2 guidance.
@@ -417,7 +420,7 @@ Dự án có sẵn script đóng gói tự động:
 
 File cài đặt đầu ra:
 ```text
-~/Desktop/ToolCheckMacBook-1.3.2.dmg
+~/Desktop/ToolCheckMacBook-1.3.3.dmg
 ```
 
 Nếu bạn có tài khoản Apple Developer và muốn ký chứng chỉ Developer ID + công chứng (Notarization) để phân phối rộng rãi:
@@ -441,7 +444,10 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 
 ### 📋 Lịch sử phiên bản (Changelog)
 
-* **v1.3.2** (Build 6) - *Mới nhất*
+* **v1.3.3** (Build 7) - *Mới nhất*
+  * **Sửa lỗi văng app nghiêm trọng (Concurrency Crash):** Chuyển toàn bộ cơ chế xin quyền Camera và Microphone sang chuẩn `async/await` hiện đại của Swift 6, khắc phục triệt để lỗi xung đột luồng `MainActor` (`EXC_BREAKPOINT / SIGTRAP`) trên macOS 15+ Sequoia.
+  * **Hướng dẫn vượt Gatekeeper cho người mới:** Bổ sung hướng dẫn chi tiết cách mở ứng dụng lần đầu (Chuột phải / Control+Click hoặc bấm Vẫn mở trong Cài đặt).
+* **v1.3.2** (Build 6)
   * **Bằng chứng MDM:** Phân tích đúng hostname và IPv4/IPv6, thông báo lỗi đọc hosts, tách enrollment để không trừ điểm hai lần.
   * **SIP và bản dịch:** Giữ đúng trạng thái bật, tắt, chưa xác định/cấu hình tùy chỉnh; cảnh báo song ngữ không khẳng định chắc chắn bypass.
   * **Báo cáo đầy đủ:** PNG/PDF có lưu ý MDM, yêu cầu đồng ý/sao lưu và hướng dẫn dành cho Intel không có T2.

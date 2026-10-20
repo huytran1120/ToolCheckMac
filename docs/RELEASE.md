@@ -4,8 +4,8 @@
 
 The version is configured in `project.yml`. Run `xcodegen generate` after changing it and commit the generated `Sources/App/Info.plist` and Xcode project:
 
-- `CFBundleShortVersionString`: User-facing version string, e.g. `1.3.2`
-- `CFBundleVersion`: Internal build number, e.g. `6`
+- `CFBundleShortVersionString`: User-facing version string, e.g. `1.3.3`
+- `CFBundleVersion`: Internal build number, e.g. `7`
 
 The packaging script reads this version automatically. The GitHub workflow reads it from the built app and rejects a release tag that does not match.
 
@@ -18,7 +18,7 @@ The packaging script reads this version automatically. The GitHub workflow reads
 Output:
 
 ```text
-~/Desktop/ToolCheckMacBook-1.3.2.dmg
+~/Desktop/ToolCheckMacBook-1.3.3.dmg
 ```
 
 ## Signing & Notarization
@@ -48,8 +48,8 @@ export TOOLCHECKMACBOOK_NOTARY_PROFILE="toolcheckmacbook-notary"
 After committing and validating the release changes, tag the intended commit:
 
 ```bash
-git tag -a v1.3.2 -m "Release ToolCheckMacBook v1.3.2"
-git push origin v1.3.2
+git tag -a v1.3.3 -m "Release ToolCheckMacBook v1.3.3"
+git push origin v1.3.3
 ```
 
 The `Build & Release` workflow runs tests, builds both `x86_64` and `arm64`, and publishes a public release only for `v*` tags. It uploads versioned DMG/ZIP files, stable `ToolCheckMacBook.dmg` / `ToolCheckMacBook.zip` aliases, and `checksums.txt`.
@@ -65,7 +65,7 @@ Pages download buttons use `/releases/latest/download/ToolCheckMacBook.dmg` and 
 - The release is public, latest, and points at the intended commit
 - Both versioned files and stable download aliases work without authentication
 - Downloaded files match `checksums.txt`
-- `hdiutil verify ToolCheckMacBook-v1.3.2.dmg` passes
+- `hdiutil verify ToolCheckMacBook-v1.3.3.dmg` passes
 - The packaged app's version matches the tag and its binary contains both architectures
 - The app launches and completes initial system inspection
 - Instructions in README remain accurate
