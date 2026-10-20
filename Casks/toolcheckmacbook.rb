@@ -1,6 +1,6 @@
 cask "toolcheckmacbook" do
-  version "1.3.3"
-  sha256 :no_check
+  version "1.3.4"
+  sha256 "68a483984f278454287c71d243d7bf9a56220ce3560dbc8f72254a876c8dd962"
 
   url "https://github.com/huytran1120/ToolCheckMac/releases/download/v#{version}/ToolCheckMacBook-v#{version}.dmg"
   name "ToolCheckMacBook"
